@@ -1,0 +1,575 @@
+{% extends 'base.html' %}
+<title> {% block title %}Expenses . Dunistech Academy Kitchen {% endblock title %}</title>
+{% block content %}
+<div class="wrapper">
+    {% include 'incs/sidenav.html' %}
+    {% include 'incs/topnav.html' %}
+    <div class="content-page">
+        <div class="container-fluid">
+            <form method="post" action='' enctype="multipart/form-data">
+                {#{{ form.csrf_token }} #}
+                {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col-xl-3 col-lg-4">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="header-title">
+                                <h4 class="card-title">
+                                    {{user.name or user.username}} 
+                                    {% for x in user.role %} {{x.name}} {% endfor %} </h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                                <div class="form-group">
+
+                                    <div class="crm-profile-img-edit position-relative">
+                                        <img id="selectedAvatar" class="crm-profile-pic rounded avatar-100"
+                                            src="{{url_for('static', filename='images/user/'~ current_user.photo|string or '1.png' )}}" 
+                                            alt="profile-pic">
+                                        <div class="crm-p-image bg-primary">
+                                            <i class="las la-pen upload-button"></i>
+                                            <!--Avatar-->
+                                                <script>function displaySelectedImage(event, elementId) {
+                                                    const selectedImage = document.getElementById(elementId);
+                                                    const fileInput = event.target;
+                                                
+                                                    if (fileInput.files && fileInput.files[0]) {
+                                                        const reader = new FileReader();
+                                                
+                                                        reader.onload = function(e) {
+                                                            selectedImage.src = e.target.result;
+                                                        };
+                                                
+                                                        reader.readAsDataURL(fileInput.files[0]);
+                                                    }
+                                                }
+                                            </script>
+                                            {#<input class="file-upload" type="file" name="photo" accept="image/*"  
+                                            onchange="displaySelectedImage(event, 'selectedAvatar')", accept="image/*"> #}
+                                            
+                                                {{ form.photo(class="file-upload", 
+                                                type="file", 
+                                                onchange="displaySelectedImage(event, 'selectedAvatar')", 
+                                                accept="image/*") }}
+                                                
+                                                {% if form.photo.errors %}
+                                                <div class="invalid-feedback alert alert-danger"> 
+                                                    {% for error in form.photo.errors %}
+                                                        {{ error }} ! 
+                                                    {% endfor %}</div>
+                                                {% endif %}
+                                                
+                                            <!------->
+                                        </div>
+                                    </div>
+
+                                    <div class="img-extension mt-3">
+                                        <div class="d-inline-block align-items-center">
+                                            <span>Only</span>
+                                            <a href="javascript:void();">.jpg</a>
+                                            <a href="javascript:void();">.png</a>
+                                            <a href="javascript:void();">.jpeg</a>
+                                            <span>allowed</span> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--only allow-admins-set permissions-->
+                                <div class="form-group">
+                                    {{ form.role.label }}
+                                    <div class="dropdown bootstrap-select form-control">
+                                        {{ form.role(class="selectpicker form-control") }}
+                                        {% if form.role.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.role.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    {{ form.category.label }}
+                                    <div class="dropdown bootstrap-select form-control">
+                                        {{ form.category(class="selectpicker form-control") }}
+                                        {% if form.role.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.role.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                {#{% if current_user.is_admin() %}
+                                <div class="form-group">
+                                    {{ form.role.label }}
+                                    <div class="dropdown bootstrap-select form-control">
+                                        {{ form.role(class="selectpicker form-control", value=user.role[0].id) }}
+                                        {% if form.role.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.role.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if not current_user.is_admin() %}
+                                <div class="form-group"> 
+                                    {{ form.role.label }}
+                                    <div class="dropdown bootstrap-select form-control">
+                                        {{ form.role(class="selectpicker form-control", disabled=True, value=user.role[0].id) }}
+                                        {% if form.role.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.role.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %} #}
+
+                                <div class="form-group">
+                                    {{form.reg_num.label}}
+                                    {% if form.reg_num.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.reg_num.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% else %}
+                                        {{ form.reg_num(class="form-control", placeholder="Registration Number") }}
+                                        {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.course.label }}
+                                    <div class="dropdown bootstrap-select form-control">
+                                        {{ form.course(class="selectpicker form-control") }}
+                                        {% if form.course.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.course.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.completion_status.label }}
+                                    <div class="dropdown bootstrap-select form-control">
+                                        {{ form.completion_status(class="selectpicker form-control") }}
+                                        {% if form.completion_status.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.completion_status.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.cert_status.label }}
+                                    <div class="dropdown bootstrap-select form-control">
+                                        {{ form.cert_status(class="selectpicker form-control") }}
+                                        {% if form.cert_status.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.cert_status.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{form.facebook.label}}
+                                    {% if form.facebook.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.facebook.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% else %}
+                                        {{ form.facebook(class="form-control", placeholder="Facebook Url") }}
+                                        {% endif %}
+                                </div>
+                                
+                                <div class="form-group">
+                                    {{form.twitter.label}}
+                                    {% if form.twitter.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.twitter.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% else %}
+                                        {{ form.twitter(class="form-control", placeholder="Twitter Url") }}
+                                        {% endif %}
+                                </div> 
+                                
+                                <div class="form-group">
+                                    {{form.linkedin.label}}
+                                    {% if form.linkedin.errors %}
+                                        <div class="invalid-feedback alert alert-danger"> {% for error in form.linkedin.errors %}{{ error }} ! {% endfor %}</div>
+                                        {% else %}
+                                        {{ form.linkedin(class="form-control", placeholder="Linkedin Url") }}
+                                        {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9 col-lg-8">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="header-title">
+                                <h4 class="card-title">{{current_user.username}} Information</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="new-user-info">
+
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            {{form.name.label}}
+                                            {{ form.name(class="form-control", placeholder="Fisrt & Last Names") }}
+                                            {% if form.name.errors %}
+                                                <div class="invalid-feedback alert alert-danger"> {% for error in form.name.errors %}{{ error }} ! {% endfor %}</div>
+                                                {% endif %}
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label for="cname">Company Name:</label>
+                                            <input type="text" class="form-control" id="cname"
+                                                value="{{brand.name}}" placeholder="{{brand.name}}">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-12 col-sm-12">
+                                            <label>About: {{current_user.username}}</label>
+                                            {% if form.about.errors %}
+                                            <div class="invalid-feedback alert alert-danger"> {% for error in form.about.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% else %}
+                                            {{ form.about(class="form-control", rows="2", placeholder="About Me") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            {{form.designation.label}}
+                                            {{ form.designation(class="form-control",  placeholder="Enter Your Job Designation") }}
+                                            {% if form.designation.errors %}
+                                            <div class="invalid-feedback alert alert-danger"> {% for error in form.designation.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            {{form.bank.label}}
+                                            {{ form.bank(class="selectpicker form-control") }}
+                                            <div class="dropdown bootstrap-select form-control">
+                                            {% if form.bank.errors %}
+                                            <div class="invalid-feedback alert alert-danger"> {% for error in form.bank.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            {{form.acct_no.label}}
+                                            {{ form.acct_no(class="form-control",  placeholder="Account Number") }}
+                                            {% if form.acct_no.errors %}
+                                            <div class="invalid-feedback alert alert-danger"> {% for error in form.acct_no.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            {{form.academic_qualification.label}}
+                                            {{ form.academic_qualification(class="form-control") }}
+                                            {% if form.academic_qualification.errors %}
+                                            <div class="invalid-tooltip"> {% for error in form.academic_qualification.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                         </div>
+
+                                        <div class="form-group col-md-4">
+                                            {{form.experience_years.label}}
+                                            {{ form.experience_years(class="selectpicker form-control") }}
+                                            {% if form.experience_years.errors %}
+                                            <div class="invalid-tooltip"> {% for error in form.experience_years.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                         </div>
+
+                                        <div class="form-group col-md-4">
+                                            {{form.experience_level.label}}
+                                            {{ form.experience_level(class="form-control") }}
+                                            {% if form.experience_level.errors %}
+                                            <div class="invalid-tooltip"> {% for error in form.experience_level.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                         </div>
+
+                                        <div class="form-group col-md-6">
+                                            {{form.dob.label}}
+                                            {{ form.dob(class="form-control") }}
+                                            {% if form.dob.errors %}
+                                            <div class="invalid-tooltip"> {% for error in form.dob.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                         </div>
+
+                                        <div class="form-group col-md-6">
+                                            {{form.gender.label}}
+                                            {{ form.gender(class="selectpicker form-control") }}
+                                            {% if form.acct_no.errors %}
+                                            <div class="invalid-tooltip"> {% for error in form.gender.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                         </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <hr>
+                                    <h5 class="mb-3">Refferee</h5>
+                                    <div class="row">
+                                                                              
+                                        <div class="form-group col-md-4">
+                                            {{form.refferee_type.label}}
+                                            {% if form.refferee_type.errors %}
+                                            <div class="invalid-feedback alert alert-danger"> {% for error in form.refferee_type.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% else %}
+                                            {{ form.refferee_type(class="form-control",  placeholder="Refferee") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                                {{form.refferee_email.label}}
+                                                {{ form.refferee_email(class="form-control",  placeholder="Refferee Email Addres") }}
+                                                {% if form.refferee_email.errors %}
+                                                <div class="invalid-feedback alert alert-danger"> {% for error in form.refferee_email.errors %}{{ error }} ! {% endfor %}</div>
+                                                {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                                {{form.refferee_phone.label}}
+                                                {{ form.refferee_phone(class="form-control",  placeholder="Refferee Phone Number") }}
+                                                {% if form.refferee_phone.errors %}
+                                                <div class="invalid-feedback alert alert-danger"> {% for error in form.refferee_phone.errors %}{{ error }} ! {% endfor %}</div>
+                                                {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            {{form.refferee_address.label}}
+                                            {{ form.refferee_address(class="form-control",  placeholder="Valid Physical Address") }}
+                                            {% if form.refferee_address.errors %}
+                                            <div class="invalid-feedback alert alert-danger"> {% for error in form.refferee_address.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <hr>
+                                    <h5 class="mb-3">Contact</h5>
+                                    <div class="row">
+                                                                              
+                                        <div class="form-group col-md-4">
+                                            {{form.city.label}}
+                                            {% if form.city.errors %}
+                                            <div class="invalid-feedback alert alert-danger"> {% for error in form.city.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% else %}
+                                            {{ form.city(class="form-control",  placeholder="Town/City") }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-8">
+                                            {{form.address.label}}
+                                            {% if form.address.errors %}
+                                            <div class="invalid-feedback alert alert-danger"> {% for error in form.address.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% else %}
+                                            {{ form.address(class="form-control",  placeholder="My Residential Address") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                                {{form.phone.label}}
+                                                {{ form.phone(class="form-control",  placeholder="Mobile Number") }}
+                                                {% if form.city.errors %}
+                                                <div class="invalid-feedback alert alert-danger"> {% for error in form.phone.errors %}{{ error }} ! {% endfor %}</div>
+                                                {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            {{form.email.label}}
+                                            {{ form.email(class="form-control",  placeholder="Valid Email Addres") }}
+                                            {% if form.email.errors %}
+                                            <div class="invalid-feedback alert alert-danger"> {% for error in form.email.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <hr>
+                                    <h5 class="mb-3">Security</h5>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            {{form.username.label}}
+                                            {{ form.username(class="form-control") }}
+                                            {% if form.username.errors %}
+                                            <div class="invalid-feedback alert alert-danger alert alert-danger"> {% for error in form.username.errors %}{{ error }} ! {% endfor %}</div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                                {{form.password.label}}
+                                                {% if form.password.errors %}
+                                                <div class="invalid-feedback alert alert-danger"> {% for error in form.password.errors %}{{ error }} ! {% endfor %}</div>
+                                                {% else %}
+                                                {{ form.password(class="form-control", placeholder="Password") }}
+                                                {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input class="mr-2" type="checkbox">Enable
+                                            Two-Factor-Authentication</label>
+                                    </div>
+                                    <div id="response" class="alert"></div>
+                                    {{ form.submit(class="btn btn-primary btn-lg") }}
+                                    {% if form.submit.errors %}
+                                    <div class="invalid-feedback alert alert-danger"> {% for error in form.submit.errors %}{{ error }} ! {% endfor %}</div>
+                                    {% endif %}
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </form> 
+            </div>
+        </div>
+    </div>
+    <!-- Modal Edit -->
+    {% include 'incs/modal.html' %}
+</div>
+</div>
+
+<style>
+    .make-blur {
+        -webkit-filter: blur(5px);
+        -moz-filter: blur(5px);
+        -o-filter: blur(5px);
+        -ms-filter: blur(5px);
+        filter: blur(5px);
+        background-color: #ccc;
+    }
+    .form-control:focus {
+        border-color: #FF0000;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
+    }
+
+/* DISABLED FORM SELECT FIELD */
+.readonly-select select {
+    background-color: #f5f5f5;
+}
+
+</style>
+{% endblock content %}
+
+{% block page_js %}
+
+<script>
+    // Prevent the select field from opening when clicked
+    document.addEventListener("DOMContentLoaded", function() {
+        var selectField = document.querySelector('.readonly-select select');
+        if (selectField) {
+            selectField.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+            });
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(() => {
+
+        $('form').submit((e) => {
+            e.preventDefault();
+            $('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+            const saveBtnText = $('#submit').html();
+        
+            // Extract form data (excluding file input)
+            const formData = new FormData();
+            const form = document.querySelector('form');
+            for (const element of form.elements) {
+                if (element.name && element.type == 'file') {
+                    //File: File() constructor
+                    element.name = File(element.value);
+                    
+                    formData.append(element.name, element.value);
+                }
+            }
+            
+            formData.update("photo", const fileInput = document.querySelector('#photo').value )
+
+            console.log(formData);
+
+            return;
+            // Handle file upload separately
+            /*
+            const fileInput = document.querySelector('#photo');
+            if (fileInput.files.length > 0) {
+                formData.append('photo', fileInput.files[0]);
+            }*/
+
+            // Log the form data (excluding file input)
+            console.log('Form data (excluding file):', Object.fromEntries(formData));
+        
+            // Send form data via AJAX
+            const jqxhr = $.ajax({
+                url: '{{request.base_url}}',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+            });
+        
+            jqxhr.done((response) => {
+                $('#submit').html(saveBtnText); // Reset spinning submit button
+                if (response.response !== undefined) {
+                    $('#response').html(response.response).addClass(response.flash);
+                } else {
+                    $('#response').text(response).addClass('alert-success');
+                }
+        
+                if (response.link !== undefined) {
+                    $('#response').append(` -> <br> <a href="${response.link}">Continue Here</a>`);
+                }
+                if (response.receipt !== undefined) {
+                    $('#response').append(`<br> <a href="${response.receipt}">Receipt Here</a>`);
+                }
+        
+                console.log(`Response: ${response.response} | Flash message: ${response.flash}`);
+            });
+        
+            jqxhr.fail((error) => {
+                $('#response').text('Oops! Request failed. Please try again.').addClass('alert-danger');
+                $('#save').html(saveBtnText); // Reset spinning submit button
+            });
+        
+            jqxhr.always(() => {
+                $('#save').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+            });
+        });
+        
+        /*
+        $('form').submit((e) => {
+            e.preventDefault()
+            $('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+            save_btn = $('#submit').html()
+
+            // Log the form data to the console
+            // Get the form element
+            const form = document.querySelector('form');
+
+            // Create an empty object to store key-value pairs
+            const formData = {};
+
+            // Iterate through form elements
+            for (const element of form.elements) {
+                if (element.name) {
+                    formData[element.name] = element.value;
+                }
+            }
+            // Log the form data
+            console.log('Form data:', formData);
+
+
+            var jqxhr = $.post('{{request.base_url}}', $('form').serialize());
+
+            jqxhr.done((r) => {
+                //alert("ajax success");
+                $('#submit').html(save_btn); //reset spinning submit-btn
+                if ('undefined' != typeof (r.response)) {
+                    $('#response').html((r.response)).addClass(r.flash);
+                } else ($('#response').text(r).addClass('alert-success'))
+
+                if ("undefined" != typeof r.link) {
+                    $('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+                    //$('form').hide();
+                }
+                if ("undefined" != typeof r.receipt) {
+                    $('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+                    //$('form').hide();
+                }
+
+                console.log('response->(' + response.response + 'flash-message (' + response.flash);
+
+            });
+
+            jqxhr.fail((er) => { //JSON.stringify(err)
+                $('#response').text('oops!!!, Request Failed. Pls Try Again', er).addClass('alert-danger')
+                $('#save').html(save_btn); //reset spinning submit-btn
+            });
+
+            jqxhr.always(() => {
+                //alert("ajax complete");
+                $('#save').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+            });
+
+        });
+        */
+
+    });
+
+</script>
+
+{% endblock page_js %}

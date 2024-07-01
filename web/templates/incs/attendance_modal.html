@@ -1,0 +1,73 @@
+<!----modal assigned tasks -->
+<div class="modal fade" id="attendance_moal" tabindex="-1" 
+aria-labelledby="taskModalScrollableTitle" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="taskModalScrollableTitle">Attendance</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">×</span>
+             </button>
+          </div>
+          <div class="modal-body">
+            <!------->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                            <div>
+                                <h4 class="mb-3">Records</h4>
+                            </div>
+                            <a href="" class="btn btn-primary add-list">
+                                <i class="las la-plus mr-3"></i>Add Comment</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="table-responsive rounded mb-3">
+                            <table class="data-tables table mb-0 tbl-server-info">
+                                <thead class="bg-white text-uppercase">
+                                    <tr class="ligth ligth-data">
+                                        <th>S/N</th>
+                                        <th>User</th>
+                                        <th>Time-in</th>
+                                        <th>Time-out</th>
+                                        <th>Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendance-table-body" class="ligth-body">
+                                    
+                                    <tr id="attendance-empty-row" class="d-none">
+                                        <td>01</td>
+                                        <td>Chris James</td>
+                                        <td>05:37 PM</td>
+                                        <td>05:37 AM</td>
+                                        <td>11 Jun 2024 00:00:00</td>
+                                        <td>
+                                            <div class="d-flex align-items-center list-action"> 
+                                                <button class="badge bg-warning mr-2 border-none delete-attendance" 
+                                                data-toggle="tooltip" 
+                                                data-placement="top" title="" data-original-title="Delete" 
+                                               ><i class="ri-delete-bin-line mr-0"></i>
+                                            </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Page end  -->
+            </div>
+            <!------->
+          </div>
+          <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+       </div>
+    </div>
+ </div>
+
+<!-- Wrapper End-->
