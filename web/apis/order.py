@@ -5,10 +5,10 @@ from web import db, csrf
 from datetime import datetime
 
 from flask import Blueprint
-order = Blueprint('orders', __name__)
+order_bp = Blueprint('orders-api', __name__)
 
 # create order
-@order.route('/orders', methods=['POST'])
+@order_bp.route('/orders', methods=['POST'])
 def create_order():
     data = request.get_json()
     new_order = Order(
@@ -24,7 +24,7 @@ def create_order():
     return jsonify({"message": "Order created successfully"}), 201
 
 # get single-order
-@app.route('/orders/<int:id>', methods=['GET'])
+@order_bp.route('/orders/<int:id>', methods=['GET'])
 def get_order(id):
     order = Order.query.get_or_404(id)
     if order.deleted:
@@ -43,7 +43,7 @@ def get_order(id):
     return jsonify(result)
 
 # get many orders
-@app.route('/orders', methods=['GET'])
+@order_bp.route('/orders', methods=['GET'])
 def get_orders():
     orders = Order.query.filter_by(deleted=False).all()
     result = [
@@ -63,7 +63,7 @@ def get_orders():
     return jsonify(result)
 
 # update an oreder
-@order.route('/orders/<int:id>', methods=['PUT'])
+@order_bp.route('/orders/<int:id>', methods=['PUT'])
 def update_order(id):
     data = request.get_json()
     order = Order.query.get_or_404(id)
@@ -84,7 +84,7 @@ def update_order(id):
     return jsonify({"message": "Order updated successfully"})
 
 # delete order
-@order.route('/orders/<int:id>', methods=['DELETE'])
+@order_bp.route('/orders/<int:id>', methods=['DELETE'])
 def delete_order(id):
     order = Order.query.get_or_404(id)
     # db.session.delete(order)

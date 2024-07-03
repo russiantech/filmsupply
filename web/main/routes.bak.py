@@ -6,7 +6,7 @@ import traceback
 from datetime import datetime, date, timedelta
 
 from web.models import (
-    Task, 
+    Task, Assigned_Task, User, Attendance
 )
 
 from web import db, csrf
@@ -17,10 +17,41 @@ from web.utils.decorators import role_required
 main = Blueprint('main', __name__)
 
 @main.route("/")
-# @role_required('*')
-# @db_session_management
+@role_required('*')
+@db_session_management
 def index():
-    return stream_template('index.html')
+    user_id = current_user.id
+    # tasks = Task.query.filter_by(user_id=user_id).order_by(Task.timestamp.desc()).all()
+    tasks = Task.query.filter_by(user_id=user_id).order_by(Task.timestamp.desc()).limit(15).all()
+    assigned_tasks = Assigned_Task.query.filter_by(user_id=user_id).order_by(Assigned_Task.created.desc()).all()
+
+    tasks_list = []
+    for task in tasks:
+        
+        tasks_list.append({
+            'id': task.id,
+            'description': task.description,
+            'status': task.status,
+            'timestamp': task.timestamp.strftime('%Y-%m-%d') \
+                if task.timestamp is not None and task.timestamp != "" else None
+        })
+    
+    assigned_tasks_list = []
+    for task in assigned_tasks:
+        
+        assigned_tasks_list.append({
+            'id': task.id,
+            'detail': task.detail,
+            'duration': task.duration or None
+        })
+    
+    context = {
+        "tasks_list": tasks_list,
+        "assigned_tasks_list": assigned_tasks_list,
+        "status_options" : ["pending", "completed", "on-going", "stucked", "cancelled"]  # Define status options
+        }
+
+    return stream_template('index.html', **context)
 
 @main.route("/users", methods=['GET', 'POST'])
 @role_required('admin')

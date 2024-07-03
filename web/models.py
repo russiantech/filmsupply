@@ -6,7 +6,6 @@ from sqlalchemy.sql import func
 from flask import current_app
 
 db = SQLAlchemy()
-#s_manager = LoginManager()
 
 user_roles = db.Table(
     'user_roles',
@@ -83,17 +82,31 @@ class Notification(db.Model):
     title = db.Column(db.String(128), index=True)
     image = db.Column(db.String(128), index=True)
     message = db.Column(db.String(255), nullable=False)
-    file_path = db.Column(db.String(255), nullable=False)
+    file_path = db.Column(db.String(255))
     is_read = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=func.now())
+
     deleted = db.Column(db.Boolean(), default=False)
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'title': self.title,
+            'image': self.image,
+            'message': self.message,
+            'file_path': self.file_path,
+            'is_read': self.is_read,
+            'created': self.created.isoformat(),
+            'updated': self.updated.isoformat(),
+            'deleted': self.deleted
+        }
+        
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key = True)
-    type = db.Column(db.String(100), unique=True)
+    level = db.Column(db.String(100), unique=True)
     user = db.relationship('User', secondary=user_roles, back_populates='role', lazy='dynamic')
 
 class Payment(db.Model):
@@ -111,8 +124,6 @@ class Payment(db.Model):
     deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())
-
-
 
 
 from sqlalchemy import Enum

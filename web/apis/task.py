@@ -5,9 +5,9 @@ from web import db, csrf
 from datetime import datetime
 
 from flask import Blueprint
-task= Blueprint('tasks', __name__)
+task_bp = Blueprint('task-api', __name__)
 
-@task.route('/tasks', methods=['POST'])
+@task_bp.route('/tasks', methods=['POST'])
 def create_task():
     data = request.get_json()
     new_task = Task(name=data['name'], description=data['description'], price=data['price'])
@@ -15,7 +15,7 @@ def create_task():
     db.session.commit()
     return jsonify({'message': 'Task created successfully!'}), 201
 
-@task.route('/tasks/<int:id>', methods=['GET'])
+@task_bp.route('/tasks/<int:id>', methods=['GET'])
 def get_task(id):
     task = Task.query.get_or_404(id)
     return jsonify({
@@ -25,7 +25,7 @@ def get_task(id):
         'price': task.price
     })
 
-@task.route('/tasks/<int:id>', methods=['PUT'])
+@task_bp.route('/tasks/<int:id>', methods=['PUT'])
 def update_task(id):
     data = request.get_json()
     task = Task.query.get_or_404(id)
@@ -35,7 +35,7 @@ def update_task(id):
     db.session.commit()
     return jsonify({'message': 'Task updated successfully!'})
 
-@task.route('/tasks/<int:id>', methods=['DELETE'])
+@task_bp.route('/tasks/<int:id>', methods=['DELETE'])
 def delete_task(id):
     task = Task.query.get_or_404(id)
     db.session.delete(task)

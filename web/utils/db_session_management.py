@@ -26,22 +26,16 @@ def db_session_management(route_function):
             print(e)
             db.session.rollback()
             referrer = request.headers.get('Referer')
-            response = {'flash': 'alert-warning', 'link': str(referrer), 'response': f'Sorry this already existed, and should not be duplicated->'}
+            response = {'success': False, 'link': str(referrer), 'error': 'Sorry this already existed, and should not be duplicated'}
             return jsonify(response)
 
         except Exception as e:
             # Rollback the transaction in case of any other exception
             db.session.rollback()
             referrer = request.headers.get('Referer')
-            response = {'flash': 'alert-warning', 'link': str(referrer), 'response': str(e)}
-            
-            error_message = str(e)
-            traceback_info = traceback.format_exc()  # Get traceback information
-            print( f"oops: {error_message}.\n hmm:{traceback_info}")
 
-            #return jsonify(response), 500
-            
-            return redirect(referrer)
+            error_message = str(e)
+            response = {'success': False, 'link': str(referrer), 'error': error_message }
 
         finally:
             if not db.session.is_active:

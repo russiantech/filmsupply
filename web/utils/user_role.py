@@ -2,7 +2,7 @@
 def type(user):
     
     for r in user.role:
-        return r.type.capitalize() or 'student'
+        return r.level.capitalize() or 'student'
 
     """    
     r = 0

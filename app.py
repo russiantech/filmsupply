@@ -1,18 +1,3 @@
-from web import create_app
-
-app = create_app()
-
-from flask import jsonify
-
-@app.route("/routes")
-def site_map():
-    links = []
-    # for rule in app.url_map.iter_rules():
-    for rule in app.url_map._rules:
-        # Filter out rules we can't navigate to in a browser
-        # and rules that require parameters
-        links.append({'url': rule.rule, 'view': rule.endpoint})
-    return jsonify(links), 200
-
-if __name__ == '__main__':
-    app.run("localhost", 8000, True, True)
+version https://git-lfs.github.com/spec/v1
+oid sha256:608f0f52c6ddc7b6ef3d6a25f84e2d659053271139d62a656c61d3013c2e11c2
+size 495

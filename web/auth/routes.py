@@ -7,12 +7,13 @@ import sqlalchemy as sa, traceback
 
 from web.apis.errors import bad_request
 from web import db, bcrypt
-from web.models import Query, Role, User, Notification
+from web.models import Role, User, Notification
 
 from web.utils import save_image, email, ip_adrs
-from web.auth.forms import (QueryForm, SignupForm, SigninForm, UpdateMeForm, ForgotForm, ResetForm)
+from web.auth.forms import ( SignupForm, SigninForm, UpdateMeForm, ForgotForm, ResetForm)
 from web.utils.decorators import admin_or_current_user, role_required
 from web.utils.providers import oauth2providers
+from web.utils.ip_adrs import user_ip
 
 from web.utils.db_session_management import db_session_management
 from web import db, csrf
@@ -177,21 +178,22 @@ def signin():
 
     form = SigninForm()
     if form.validate_on_submit():
-        user = User.query.filter( or_( User.email==form.signin.data, User.phone==form.signin.data, User.username==form.signin.data) ).first()
+        user = User.query.filter( or_( 
+            User.email==form.signin.data, 
+            User.phone==form.signin.data, 
+            User.username==form.signin.data) 
+            ).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             user.online = True
             user.last_seen = datetime.utcnow()
             user.ip = ip_adrs.user_ip()
             db.session.commit()
             login_user(user, remember=form.remember.data)
-            #login_user(user)
             next_page = request.args.get('next')
-            #return f"{current_user, form.remember.data}"
             return redirect(next_page or url_for('main.index'))
         else: 
             flash('Invalid Login Details. Try Again', 'danger')
             return redirect(referrer)
-            #return f"Authentication failed. Reach out to admin regarding this"
     return render_template('auth/signin.html', title='Sign In', form=form)
 
 @auth.route("/signout")
@@ -212,16 +214,7 @@ def update(username):
 
         user = User.query.filter(User.username==username).first_or_404()
         form = UpdateMeForm()
-        query_form = QueryForm()
 
-        """ # Validate critical fields separately
-        if any([form.username.data, form.password.data, form.reg_num.data, form.course.data, 
-                form.completion_status.data, form.cert_status.data]):
-            validation_response = form.validate_critical_fields()
-            if not validation_response == True:
-                return validation_response """
-            
-        # only admins/account-ownr | this is also done by this decorator `@admin_or_current_user()`
         if not ( (current_user.is_admin()) | (current_user.username == user.username)):
             return redirect(url_for('auth.update', username = current_user.username))
 
@@ -234,73 +227,37 @@ def update(username):
             choices.extend( (role.id, role.type) for role in other_roles) if current_user.is_admin() else None
             # Set choices for the form's role field
             form.role.choices = choices
-        
-        handles = user.socials # Retrieve existing dictionary or create a new one
 
         if form.validate_on_submit():
-             # Check if the current user is an admin
-            if not current_user.is_admin():
-                # Check if any critical fields are being changed
-                if (
-                    (form.username.data and form.username.data != user.username) or
-                    (form.password.data) or  # Assuming form.password.data is non-empty when updating password
-                    (form.reg_num.data and form.reg_num.data != user.reg_num) or
-                    (form.course.data and form.course.data != user.course) or
-                    (form.completion_status.data and form.completion_status.data != user.completion_status) or
-                    (form.cert_status.data and form.cert_status.data != user.cert_status)
-                ):
-                    message = "only admin can update these: (\
-                        password, username, reg no, course, completion status, certificate status.)"
-                    return jsonify({"success": False, "error": str(message)}), 200
-            
+
             with db.session.no_autoflush:
                 existing_user = User.query.filter(User.phone == form.phone.data, User.username != user.username).first()
                 if existing_user:
                     message = "The phone number is already in use. Please use a different phone number."
                     return jsonify({"success": False, "error": str(message) }), 200
             
-            if 'photo' in request.files:
-                photo_filename = save_image.save_photo(request.files['photo'])
-                user.photo = photo_filename
+            if 'image' in request.files:
+                photo_filename = save_image.save_photo(request.files['image'])
+                user.image = photo_filename
                 print("photo file-name", photo_filename)
                 
+            user.admin = form.admin.data
             user.name = form.name.data
             user.username = form.username.data
             user.email = form.email.data
             user.phone = form.phone.data
-            user.address = form.address.data
+            user.tier = form.tier.data
+            user.balance = form.balance.data
             user.gender = form.gender.data
-            user.acct_no = form.acct_no.data
-            user.bank = form.bank.data
-            user.city = form.city.data
             user.about = form.about.data
             user.password = hash_txt(form.password.data) if form.password.data else user.password
-            user.category = form.category.data or 'user'
+            user.withdrawal_password = hash_txt(form.withdrawal_password.data) if form.withdrawal_password.data else user.withdrawal_password
+            user.ip = user_ip()
+            user.verified = False
             new_role_ids = [form.role.data]  # Assuming the form data provides a list of role IDs
             new_roles = Role.query.filter(Role.id.in_(new_role_ids) ).all()
-            user.role = new_roles
-            
-            # Additional fields from UpdateMeForm
-            user.designation = form.designation.data
-            user.academic_qualification = form.academic_qualification.data
-            user.experience_years = form.experience_years.data
-            user.experience_level = form.experience_level.data
-            user.refferee_type = form.refferee_type.data
-            user.refferee_email = form.refferee_email.data
-            user.refferee_phone = form.refferee_phone.data
-            user.refferee_address = form.refferee_address.data
-            user.dob = form.dob.data
-            user.reg_num = form.reg_num.data
-            user.course = form.course.data
-            user.cert_status = form.cert_status.data
-            user.completion_status = form.completion_status.data
-                
-            social_handles = \
-                {'facebook': form.facebook.data, 'twitter' : form.twitter.data, 
-                 'instagram' :form.instagram.data, 'linkedin' :form.linkedin.data }
-            #user.socials = str(social_handles)
-            user.socials = social_handles
-                
+            user.roles = new_roles
+
             db.session.commit()
             db.session.flush()
             
@@ -308,45 +265,25 @@ def update(username):
             return jsonify({"success": True, "message":str(message)}), 200
         
         elif request.method == 'GET':
-            if handles:
-                form.twitter.data = handles['twitter'] 
-                form.facebook.data = handles['facebook'] 
-                form.instagram.data = handles['instagram'] 
-                form.linkedin.data = handles['linkedin'] 
+            form.admin.data = user.admin
             form.name.data = user.name
             form.username.data = user.username
             form.email.data = user.email
             form.phone.data = user.phone
+            form.tier.data = user.tier
+            form.balance.data = user.balance
             form.gender.data = user.gender
-            form.acct_no.data = user.acct_no
-            form.city.data = user.city
-            form.address.data = user.address
             form.about.data = user.about
-            form.bank.data = user.bank
-            
-            # Additional fields from User to UpdateMeForm
-            form.designation.data = user.designation
-            form.academic_qualification.data = user.academic_qualification
-            form.experience_years.data = user.experience_years
-            form.experience_level.data = user.experience_level
-            form.refferee_type.data = user.refferee_type
-            form.refferee_email.data = user.refferee_email
-            form.refferee_phone.data = user.refferee_phone
-            form.refferee_address.data = user.refferee_address
-            form.dob.data = user.dob
-            form.reg_num.data = user.reg_num
-            form.course.data = user.course
-            form.cert_status.data = user.cert_status
-            form.completion_status.data = user.completion_status
+            form.password.data = '***'
+            form.withdrawal_password.data = '***'
 
         if request.method == "POST" and not form.validate_on_submit():
             return jsonify({"success": False, "error": str(form.errors) }), 200
 
         context = {
             'form' : form, 
-            "query_form" : query_form, 
             'user': user, 
-            'brand': {"name":"Dunistech academy"} }
+            'brand': {"name":"Film Supply"} }
         
         return render_template('auth/update.html',  **context)
 
@@ -483,8 +420,7 @@ def fetch_notifications():
     return jsonify({"notifications": notifications_list}), 200
 
 @auth.route('/mark_as_read/<int:notification_id>', methods=['PUT'])
-@login_required  # Ensure user is authenticated
-@role_required('manager', 'admin', '*')
+@role_required('*')
 @csrf.exempt
 def mark_notification_as_read(notification_id):
     try:
@@ -537,26 +473,3 @@ def impersonate():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
-
-@auth.route('/user/<int:user_id>/id-details', methods=['GET'])
-@login_required
-def user_id(user_id):
-    try:
-        user = User.query.get(user_id)
-        if user:
-            return jsonify({
-                'success': True,
-                'user': {
-                    'photo': user.photo,
-                    'name': user.name or ". . .",
-                    'reg_num': user.reg_num,
-                    'course': user.course or ". . .",
-                    'batch': datetime.now().year,  # Assuming batch is a field in your User model
-                    'email': user.email or ". . .",
-                    'phone': user.phone or ". . ."
-                }
-            }), 200
-        else:
-            return jsonify({'success': False, 'error': 'User not found'}), 404
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
