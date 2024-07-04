@@ -21,20 +21,58 @@ def create_task():
     return jsonify({'success':True, 'message': 'Task created successfully'}), 201
 
 # get one
-@task_bp.route('/tasks/<int:id>', methods=['GET'])
+""" @task_bp.route('/tasks/<int:id>', methods=['GET'])
 def get_task(id):
     task = Task.query.get_or_404(id)
     return jsonify({
         'title': task.title,
+        'image': task.image,
         'description': task.description,
         'reward': task.reward
-    })
+    }) """
+
+
+@task_bp.route('/tasks/<int:id>', methods=['GET'])
+def get_task(id):
+    try:
+        task = Task.query.get_or_404(id)
+        user_id = request.args.get('user_id', 1) # do not forget to update this line ti work with actual user_id
+        user = User.query.get(user_id)
+        
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        return jsonify({
+            'id': task.id,
+            'title': task.title,
+            'description': task.description,
+            'reward': task.reward,
+            'user_plan': user.plan  # Assuming user.plan stores the user's plan
+        })
+    except Exception as e:
+        return jsonify({'success':False, 'error': str(e)})
 
 # get many
 @task_bp.route('/tasks', methods=['GET'])
 def get_tasks():
     tasks = Task.query.all()  # Get all tasks
-    tasks_list = [{'id': task.id, 'title': task.title, 'description': task.description, 'reward': task.reward} for task in tasks]
+    tasks_list = [{'id': task.id, 'image': task.image, 'title': task.title, 'description': task.description, 'reward': task.reward} for task in tasks]
+    return jsonify(tasks_list), 200
+
+# Add this endpoint to your Flask application
+@task_bp.route('/tasks/total', methods=['GET'])
+def get_total_tasks():
+    total_tasks = Task.query.count()
+    return jsonify({'total_tasks': total_tasks}), 200
+
+@task_bp.route('/tasks-pending', methods=['GET'])
+def get_tasks_pending():
+    """ filter out and return only pending tasks """
+    # user_id = request.args.get('user_id', current_user.id)
+    user_id = request.args.get('user_id')
+    completed_task_ids = [order.task_id for order in Order.query.filter_by(user_id=user_id).all()]
+    tasks = Task.query.filter(~Task.id.in_(completed_task_ids)).all()
+    tasks_list = [{'id': task.id, 'image':task.image, 'title': task.title, 'description': task.description, 'reward': task.reward} for task in tasks]
     return jsonify(tasks_list), 200
 
 # update task

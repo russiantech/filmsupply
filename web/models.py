@@ -185,7 +185,6 @@ class Task(db.Model):
     description = db.Column(db.Text, nullable=True)
     reward = db.Column(db.Float, nullable=False)
     
-
     deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())

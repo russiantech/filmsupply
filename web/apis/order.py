@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_login import current_user, login_required
-from web.models import (  Order )
+from web.models import (  Order, User )
 from web import db, csrf
 from datetime import datetime
 
@@ -16,6 +16,7 @@ user_plan_percentages = {
 }
 
 @order_bp.route('/orders', methods=['POST'])
+@csrf.exempt
 def create_order():
     data = request.get_json()
     user_id = data['user_id']
