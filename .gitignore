@@ -9,7 +9,7 @@ __pycache__/
 *$py.class
 
 # large files
-*.mp4
+#*.mp4
 
 # C extensions
 *.so
