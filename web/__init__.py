@@ -8,6 +8,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_session import Session
+from flask_cors import CORS
 # from flask_oauthlib.client import OAuth
 from web.models import db, User
 
@@ -22,6 +23,8 @@ s_manager = LoginManager()
 mail = Mail()
 migrate = Migrate()
 moment = Moment()
+cors = CORS()
+
 # oauth = OAuth()
 
 @s_manager.user_loader
@@ -39,6 +42,7 @@ def configure_extensions(app):
     mail.init_app(app)
     migrate.init_app(app, db)
     moment.init_app(app)
+    cors.init_app(app)
     # oauth.init_app(app)
 
 def create_app():

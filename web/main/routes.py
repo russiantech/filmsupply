@@ -45,7 +45,6 @@ def users():
             user.deleted = True
             db.session.commit()
             
-            flash(f'User Has Been Deleted!', 'danger')
             return jsonify({ 
                 'response': f'Hmm, User Deleted!!!',
                 'flash':'alert-danger',

@@ -7,9 +7,45 @@ from datetime import datetime
 from flask import Blueprint
 order_bp = Blueprint('orders-api', __name__)
 
-# create order
+# Assuming 'user_plan_percentages' dictionary maps user plans to their corresponding percentages
+user_plan_percentages = {
+    'normal': 0.7,
+    'vip': 0.9,
+    'vvip': 1.5,
+    'vvvip': 2.0
+}
+
 @order_bp.route('/orders', methods=['POST'])
 def create_order():
+    data = request.get_json()
+    user_id = data['user_id']
+    task_id = data['task_id']
+    rating = data['rating']
+    comment = data['comment']
+    
+    user = User.query.get_or_404(user_id)
+    task = Task.query.get_or_404(task_id)
+
+    plan_percentage = user_plan_percentages.get(user.plan, 0)
+    amount = task.reward * plan_percentage
+
+    new_order = Order(
+        user_id=user_id,
+        task_id=task_id,
+        amount=amount,
+        status='completed',
+        rating=rating,
+        comment=comment
+    )
+    
+    db.session.add(new_order)
+    db.session.commit()
+    return jsonify({"message": "Order created successfully"}), 201
+
+
+# create order
+@order_bp.route('/orders0', methods=['POST'])
+def create_order0():
     data = request.get_json()
     new_order = Order(
         user_id=data['user_id'],
@@ -62,7 +98,7 @@ def get_orders():
     ]
     return jsonify(result)
 
-# update an oreder
+# update an order
 @order_bp.route('/orders/<int:id>', methods=['PUT'])
 def update_order(id):
     data = request.get_json()

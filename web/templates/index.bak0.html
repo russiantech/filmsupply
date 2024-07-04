@@ -1,0 +1,2070 @@
+{% extends 'base.html' %}
+{% block title %} Film supply {% endblock title %}
+
+{% block content %}
+
+    <div class="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">
+        <marquee width="100%" direction="left" height="20px; padding:10px">
+            Welcome to join Film-supply, if you need more information, please contact online customer service, thank
+            you!
+        </marquee>
+    </div>
+
+    <div class="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">
+        <div class="layout-container">
+
+            <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                id="layout-navbar" style="top: 10px;">
+
+                <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+                    <!-- User -->
+                    <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="avatar avatar-online">
+                                <img src="./static/img/avatars/0.jpg" alt="" class="w-px-40 h-auto rounded-circle">
+                            </div>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-start">
+
+                            <li>
+
+                                <a class="dropdown-item" href="pages-account-settings-account.html">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <div class="avatar avatar-online">
+                                                <img src="./static/img/icons/pro.png" alt=""
+                                                    class="w-px-40 h-auto rounded-circle">
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <span class="fw-medium d-block">John Doe</span>
+                                            <small class="text-muted">Admin</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="dropdown-divider"></div>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="pages-profile-user.html">
+                                    <i class="bx bx-user me-2"></i>
+                                    <span class="align-middle">My Profile</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="pages-account-settings-account.html">
+                                    <i class="bx bx-cog me-2"></i>
+                                    <span class="align-middle">Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="pages-account-settings-billing.html">
+                                    <span class="d-flex align-items-center align-middle">
+                                        <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+                                        <span class="flex-grow-1 align-middle">Billing</span>
+                                        <span
+                                            class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="dropdown-divider"></div>
+                            </li>
+
+                            <li>
+                                <div class="dropdown-divider"></div>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="auth-login-cover.html" target="_blank">
+                                    <i class="bx bx-power-off me-2"></i>
+                                    <span class="align-middle">Log Out</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--/ User -->
+
+                    <!-- Notification -->
+                    <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
+                        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <!-- <i class="bx bx-bell bx-sm"></i> -->
+                            <img src="./static/img/icons/pro.png" alt="" class="w-px-40 h-auto rounded-circle">
+                        </a>
+                    </li>
+                    <!--/ Notification -->
+                </ul>
+
+
+                <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                    <!-- /Search -->
+                    <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+                        <!-- Notification -->
+                        <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
+                            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                <i class="bx bx-bell bx-sm"></i>
+                                <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end py-0">
+                                <li class="dropdown-menu-header border-bottom">
+                                    <div class="dropdown-header d-flex align-items-center py-3">
+                                        <h5 class="text-body mb-0 me-auto">Notification</h5>
+                                        <a href="javascript:void(0)" class="dropdown-notifications-all text-body"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                            aria-label="Mark all as read" data-bs-original-title="Mark all as read"><i
+                                                class="bx fs-4 bx-envelope-open"></i></a>
+                                    </div>
+                                </li>
+                                <li class="dropdown-notifications-list scrollable-container ps ps__rtl">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar">
+                                                        <img src=".././static/img/avatars/1.png" alt=""
+                                                            class="w-px-40 h-auto rounded-circle">
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-1">Congratulation Lettie 🎉</h6>
+                                                    <p class="mb-0">You're now a pro user, enjoy</p>
+                                                    <small class="text-muted">1h ago</small>
+                                                </div>
+                                                <div class="flex-shrink-0 dropdown-notifications-actions">
+                                                    <a href="javascript:void(0)"
+                                                        class="dropdown-notifications-read"><span
+                                                            class="badge badge-dot"></span></a>
+                                                    <a href="javascript:void(0)"
+                                                        class="dropdown-notifications-archive"><span
+                                                            class="bx bx-x"></span></a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar">
+                                                        <span
+                                                            class="avatar-initial rounded-circle bg-label-danger">CF</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-1">Hi from Filmsupply</h6>
+                                                    <p class="mb-0">You're welcome to our awesome platform where making
+                                                        money is real</p>
+                                                    <small class="text-muted">12hr ago</small>
+                                                </div>
+                                                <div class="flex-shrink-0 dropdown-notifications-actions">
+                                                    <a href="javascript:void(0)"
+                                                        class="dropdown-notifications-read"><span
+                                                            class="badge badge-dot"></span></a>
+                                                    <a href="javascript:void(0)"
+                                                        class="dropdown-notifications-archive"><span
+                                                            class="bx bx-x"></span></a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+                                        <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                                    </div>
+                                    <div class="ps__rail-y" style="top: 0px; right: -13px;">
+                                        <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+                                    </div>
+                                </li>
+                                <li class="dropdown-menu-footer border-top p-3">
+                                    <button class="btn btn-primary text-uppercase w-100">view all
+                                        notifications</button>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </nav>
+
+            <!-- Layout container -->
+            <div class="layout-page">
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <!-- <hr class="container-m-nx border-light mt-5" /> -->
+
+                        <!-- Pills -->
+                        <h5 class="py-3 my-4">Explore Options</h5>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="nav-align-top mb-4">
+                                    <ul class="nav nav-pills mb-3 d-flex justify-content-between" role="tablist">
+                                        <li class="nav-item">
+                                            <button type="button" class="nav-link active fw-medium " role="tab"
+                                                data-bs-toggle="tab" data-bs-target="#navs-pills-top-home"
+                                                aria-controls="navs-pills-top-home" aria-selected="true">
+                                                Home
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button type="button" class="nav-link fw-medium " role="tab"
+                                                data-bs-toggle="tab" data-bs-target="#navs-pills-top-start"
+                                                aria-controls="navs-pills-top-start" aria-selected="false">
+                                                Start Rating
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button type="button" class="nav-link fw-medium " role="tab"
+                                                data-bs-toggle="tab" data-bs-target="#navs-pills-top-records"
+                                                aria-controls="navs-pills-top-records" aria-selected="false">
+                                                Records
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button type="button" class="nav-link fw-medium " role="tab"
+                                                data-bs-toggle="tab" data-bs-target="#navs-pills-top-account"
+                                                aria-controls="navs-pills-top-account" aria-selected="false">
+                                                My Account
+                                            </button>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
+                                            <!--  -->
+                                            <div class="col-12 mb-4">
+                                                <div id="carouselExample" class="carousel slide"
+                                                    data-bs-ride="carousel">
+                                                    <ol class="carousel-indicators">
+                                                        <li data-bs-target="#carouselExample" data-bs-slide-to="0"
+                                                            class="active"></li>
+                                                        <li data-bs-target="#carouselExample" data-bs-slide-to="1"></li>
+                                                        <li data-bs-target="#carouselExample" data-bs-slide-to="2"></li>
+                                                    </ol>
+                                                    <style>
+                                                        .carousel-item video {
+                                                            width: 100%;
+                                                            height: 100%;
+                                                            object-fit: cover;
+                                                        }
+
+                                                        .carousel-inner-1 {
+                                                            height: 400px;
+                                                            /* Set the desired height for the carousel items */
+                                                        }
+                                                    </style>
+                                                    <div class="carousel-inner carousel-inner-1 ">
+                                                        <div class="carousel-item active">
+                                                            <video class="d-block w-100 h-100" autoplay muted loop>
+                                                                <source src="./static/videos/hero.mp4"
+                                                                    type="video/mp4" />
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <video class="d-block w-100 h-100" autoplay muted loop>
+                                                                <source src="./static/videos/hero_0.mp4"
+                                                                    type="video/mp4" />
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <video class="d-block w-100 h-100" autoplay muted loop>
+                                                                <source src="./static/videos/hero_1.mp4"
+                                                                    type="video/mp4" />
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </div>
+                                                    </div>
+                                                    <!----
+                                                        <div class="carousel-inner">
+                                                        <div class="carousel-item active">
+                                                            <video class="d-block w-100 h-px-200" controls>
+                                                                <source src="./static/videos/hero.mp4" type="video/mp4" />
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <video class="d-block w-100 h-px-200" controls>
+                                                                <source src="./static/videos/hero.mp4" type="video/mp4" />
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <img class="d-block w-100" src="./static/img/elements/18.jpg" alt="Third slide" />
+                                                            <div class="carousel-caption d-none d-md-block">
+                                                            <h3>Third slide</h3>
+                                                            <p>Lorem ipsum dolor sit amet, virtute consequat ea qui, minim graeco mel no.</p>
+                                                            </div>
+                                                        </div>
+                                                        </div> ---->
+
+                                                    <a class="carousel-control-prev" href="#carouselExample"
+                                                        role="button" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon"
+                                                            aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Previous</span>
+                                                    </a>
+                                                    <a class="carousel-control-next" href="#carouselExample"
+                                                        role="button" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon"
+                                                            aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Next</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!--  -->
+                                        </div>
+                                        <div class="tab-pane fade" id="navs-pills-top-start" role="tabpanel">
+                                            <!--  --->
+                                            <div class="row align-items-center">
+                                                <div class="col-md-6">
+                                                    <!--  -->
+                                                    <div class="text-center mb-5 mb-lg-0">
+                                                        <div id="carousel_slide"
+                                                            class="carousel slide carousel-fade light_arrow pointer-event"
+                                                            data-bs-interval="2000" data-bs-ride="carousel">
+                                                            <div class="carousel-inner">
+                                                                <div class="carousel-item text-center mb-5 mb-lg-0">
+                                                                    <img src="./static/img/start/1.png" alt=""
+                                                                        style="max-height: 10%; height: 400px;"
+                                                                        class="img-fluid rounded">
+                                                                </div>
+                                                                <div class="carousel-item text-center mb-5 mb-lg-0">
+                                                                    <img src="./static/img/start/2.png" alt=""
+                                                                        style="max-height: 10%; height: 400px;"
+                                                                        class="img-fluid rounded">
+                                                                </div>
+                                                                <div
+                                                                    class="carousel-item text-center mb-5 mb-lg-0 active">
+                                                                    <img src="./static/img/start/3.png" alt=""
+                                                                        style="max-height: 100%; height: 400px;"
+                                                                        class="img-fluid rounded">
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div id="task-container" class="tab-right-content">
+
+                                                        <div class="d-flex align-items-center">
+                                                            <img src="./static/img/start/1.png" alt="Oneplus"
+                                                                height="32" width="32" class="me-2 rounded">
+                                                            <div class="d-flex flex-column">
+                                                                <span class="fw-medium lh-1">OnePlus
+                                                                    7Pro, 2023 series.</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-xl">
+                                                            <div class="card mb-4">
+                                                                <div
+                                                                    class="card-header d-flex justify-content-between align-items-center">
+                                                                    <small class="mb-0 text-warning">
+                                                                        Select rating, add comment to earn
+                                                                        <b class="badge bg-label-primary me-3">0.3% of
+                                                                            200</b> </small>
+                                                                    <span>
+                                                                        Task <h4 class="badge bg-label-primary me-3"> 4
+                                                                            of 33 completed</h4>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <form xvpn-watching-form="true">
+                                                                        <div class="mb-3">
+                                                                            <div class="pb-0">
+                                                                                <div
+                                                                                    class="d-flex align-items-center gap-3 mb-3">
+                                                                                    <div class="ratings">
+                                                                                        <i
+                                                                                            class="bx bxs-star bx-sm text-warning"></i>
+                                                                                        <i
+                                                                                            class="bx bxs-star bx-sm text-warning"></i>
+                                                                                        <i
+                                                                                            class="bx bxs-star bx-sm text-warning"></i>
+                                                                                        <i
+                                                                                            class="bx bxs-star bx-sm text-warning"></i>
+                                                                                        <i
+                                                                                            class="bx bxs-star bx-sm text-lighter"></i>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label"
+                                                                                for="basic-default-message">Comment</label>
+                                                                            <textarea id="commet" class="form-control"
+                                                                                placeholder="Hi, Do you have a moment to talk ?"
+                                                                                spellcheck="false"></textarea>
+                                                                        </div>
+                                                                        <button type="submit"
+                                                                            class="btn btn-outline-warning">
+                                                                            Upload</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!--  -->
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <!--  -->
+                                        </div>
+                                        <div class="tab-pane fade" id="navs-pills-top-records" role="tabpanel">
+                                            <div class="container-xxl flex-grow-1 container-p-y">
+
+                                                <div class="row">
+
+                                                    <div class="col-md-6 col-lg-8 mb-4 mb-md-0">
+                                                        <div class="card">
+                                                            <div class="table-responsive text-nowrap">
+                                                                <table class="table text-nowrap">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>S/N</th>
+                                                                            <th>Product</th>
+                                                                            <th>Rating</th>
+                                                                            <th>Total</th>
+                                                                            <th>Profit</th>
+                                                                            <th>Status</th>
+                                                                            <th>Timestamp</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody class="table-border-bottom-0">
+                                                                        <tr>
+                                                                            <td>1.0</td>
+                                                                            <td>
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <img src="./static/img/start/1.png"
+                                                                                        alt="Oneplus" height="32"
+                                                                                        width="32" class="me-2 rounded">
+                                                                                    <div class="d-flex flex-column">
+                                                                                        <span
+                                                                                            class="fw-medium lh-1">OnePlus
+                                                                                            7Pro, 2023 series.</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td><small
+                                                                                    class="text-muted">3.0/5.0</small>
+                                                                            </td>
+                                                                            <td><small class="text-muted">90</small>
+                                                                            </td>
+                                                                            <td>0.9</td>
+                                                                            <td><span
+                                                                                    class="badge bg-label-primary">Completed</span>
+                                                                            </td>
+                                                                            <td>Thursday 2, 2002</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>1.0</td>
+                                                                            <td>
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <img src="./static/img/start/1.png"
+                                                                                        alt="Oneplus" height="32"
+                                                                                        width="32" class="me-2 rounded">
+                                                                                    <div class="d-flex flex-column">
+                                                                                        <span
+                                                                                            class="fw-medium lh-1">OnePlus
+                                                                                            7Pro, 2023 series.</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td><small
+                                                                                    class="text-muted">3.0/5.0</small>
+                                                                            </td>
+                                                                            <td>200</td>
+                                                                            <td><small class="text-muted">0.9</small>
+                                                                            </td>
+                                                                            <td><span
+                                                                                    class="badge bg-label-primary">Completed</span>
+                                                                            </td>
+                                                                            <td>Thursday 2, 2002</td>
+
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>1.0</td>
+                                                                            <td>
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <img src="./static/img/start/1.png"
+                                                                                        alt="Oneplus" height="32"
+                                                                                        width="32" class="me-2 rounded">
+                                                                                    <div class="d-flex flex-column">
+                                                                                        <span
+                                                                                            class="fw-medium lh-1">OnePlus
+                                                                                            7Pro, 2023 series.</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td><small
+                                                                                    class="text-muted">3.0/5.0</small>
+                                                                            </td>
+                                                                            <td>200</td>
+                                                                            <td><small class="text-muted">0.9</small>
+                                                                            </td>
+                                                                            <td><span
+                                                                                    class="badge bg-label-primary">Completed</span>
+                                                                            </td>
+                                                                            <td><span
+                                                                                    class="badge bg-label-primary">Thursday
+                                                                                    2, 2002</span></td>
+
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>1.0</td>
+                                                                            <td>
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <img src="./static/img/start/1.png"
+                                                                                        alt="Oneplus" height="32"
+                                                                                        width="32" class="me-2 rounded">
+                                                                                    <div class="d-flex flex-column">
+                                                                                        <span
+                                                                                            class="fw-medium lh-1">OnePlus
+                                                                                            7Pro, 2023 series.</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td><small
+                                                                                    class="text-muted">3.0/5.0</small>
+                                                                            </td>
+                                                                            <td>200</td>
+                                                                            <td><small class="text-muted">0.9</small>
+                                                                            </td>
+                                                                            <td><span
+                                                                                    class="badge bg-label-primary">Completed</span>
+                                                                            </td>
+                                                                            <td><span
+                                                                                    class="badge bg-label-primary">Thursday
+                                                                                    2, 2002</span></td>
+
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Total Balance -->
+                                                    <div class="col-md-6 col-lg-4">
+                                                        <div class="card h-100">
+                                                            <div
+                                                                class="card-header d-flex align-items-center justify-content-between">
+                                                                <h5 class="card-title m-0 me-2">Total Balance</h5>
+                                                                <div class="dropdown">
+                                                                    <button class="btn p-0" type="button"
+                                                                        id="totalBalance" data-bs-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdown-menu-end"
+                                                                        aria-labelledby="totalBalance">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">Last 28 Days</a>
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">Last Month</a>
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">Last Year</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="d-flex justify-content-start">
+                                                                    <div class="d-flex pe-4">
+                                                                        <div class="me-3">
+                                                                            <span class="badge bg-label-warning p-2"><i
+                                                                                    class="bx bx-wallet text-warning"></i></span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <h6 class="mb-0">$2.54k</h6>
+                                                                            <small>Wallet(Earnings)</small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="d-flex">
+                                                                        <div class="me-3">
+                                                                            <span
+                                                                                class="badge bg-label-secondary p-2"><i
+                                                                                    class="bx bx-dollar text-secondary"></i></span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <h6 class="mb-0">$4.2k</h6>
+                                                                            <small>Deposits</small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="totalBalanceChart"
+                                                                    class="border-bottom mb-3 totalBalanceChart"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/ Total Balance -->
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="navs-pills-top-account" role="tabpanel">
+                                            <div class="container-xxl flex-grow-1 container-p-y">
+
+                                                <div class="row">
+
+                                                    <div class="col-md-6 col-lg-8 mb-4 mb-md-0">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+
+                                                                    <form>
+                                                                        <div class="col-xl">
+                                                                            <div
+                                                                                class="card-header d-flex justify-content-between align-items-left">
+                                                                                <h5 class="mb-0">Account Details</h5>
+                                                                                <small
+                                                                                    class="text-warning float-end">Level
+                                                                                    one (Normal)</small>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div
+                                                                                    class="d-flex align-items-start align-items-sm-center gap-4 mb-3">
+                                                                                    <img src="./static/img/avatars/0.jpg"
+                                                                                        alt="user-avatar"
+                                                                                        class="d-block rounded"
+                                                                                        height="100" width="100"
+                                                                                        id="uploadedAvatar">
+                                                                                    <div class="button-wrapper">
+                                                                                        <label for="upload"
+                                                                                            class="btn btn-primary me-2 mb-4"
+                                                                                            tabindex="0">
+                                                                                            <span
+                                                                                                class="d-none d-sm-block">Upload
+                                                                                                new photo</span>
+                                                                                            <i
+                                                                                                class="bx bx-upload d-block d-sm-none"></i>
+                                                                                            <input type="file"
+                                                                                                id="upload"
+                                                                                                class="account-file-input"
+                                                                                                hidden=""
+                                                                                                accept="image/png, image/jpeg">
+                                                                                        </label>
+                                                                                        <button type="button"
+                                                                                            class="btn btn-label-secondary account-image-reset mb-4"
+                                                                                            control-id="ControlID-16">
+                                                                                            <i
+                                                                                                class="bx bx-reset d-block d-sm-none"></i>
+                                                                                            <span
+                                                                                                class="d-none d-sm-block">Reset</span>
+                                                                                        </button>
+
+                                                                                        <p class="text-muted mb-0">
+                                                                                            Allowed JPG, GIF or PNG. Max
+                                                                                            size of 800K</p>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="name">First & Last
+                                                                                        Name</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span id="name2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-user"></i></span>
+                                                                                        <input type="text"
+                                                                                            class="form-control"
+                                                                                            id="name"
+                                                                                            placeholder="First & Last Name"
+                                                                                            aria-label="first and last names"
+                                                                                            aria-describedby="name2" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="gender">Gender</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <select name="gender"
+                                                                                            class="form-select"
+                                                                                            id="gender">
+                                                                                            <option selected>Choose...
+                                                                                            </option>
+                                                                                            <option value="male">Male
+                                                                                            </option>
+                                                                                            <option value="female">
+                                                                                                Female</option>
+                                                                                            <option value="other">Other
+                                                                                            </option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="basic-icon-default-email">Email</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-envelope"></i></span>
+                                                                                        <input type="text" name="email"
+                                                                                            id="basic-icon-default-email"
+                                                                                            class="form-control"
+                                                                                            placeholder="john.doe"
+                                                                                            aria-label="john.doe"
+                                                                                            aria-describedby="basic-icon-default-email2" />
+                                                                                    </div>
+                                                                                    <div class="form-text">You can use
+                                                                                        letters, numbers & periods</div>
+                                                                                </div>
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="basic-icon-default-phone">Phone
+                                                                                        No</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span
+                                                                                            id="basic-icon-default-phone2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-phone"></i></span>
+                                                                                        <input type="text" name="phone"
+                                                                                            id="basic-icon-default-phone"
+                                                                                            class="form-control phone-mask"
+                                                                                            placeholder="658 799 8941"
+                                                                                            aria-label="658 799 8941"
+                                                                                            aria-describedby="basic-icon-default-phone2" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="col-xl">
+                                                                            <h5 class="mb-3">Security</h5>
+                                                                            <div class="row">
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="name">Login
+                                                                                        Password</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span id="name2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-user"></i></span>
+                                                                                        <input type="text"
+                                                                                            class="form-control"
+                                                                                            id="password"
+                                                                                            name="password"
+                                                                                            placeholder="Login Password"
+                                                                                            aria-label="first and last names"
+                                                                                            aria-describedby="name2" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="gender">Withdrawal
+                                                                                        Password</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <input type="text"
+                                                                                            class="form-control"
+                                                                                            id="withdrawal_password"
+                                                                                            placeholder="Withdrawal Password"
+                                                                                            aria-label="Withdrawal Passwords"
+                                                                                            aria-describedby="name2" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="col-xl">
+                                                                            <h5 class="mb-3">Exchange Wallet</h5>
+                                                                            <div class="row">
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="name">Name</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span id="name2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-user"></i></span>
+                                                                                        <input type="text"
+                                                                                            class="form-control"
+                                                                                            id="name"
+                                                                                            placeholder="enter name"
+                                                                                            aria-label="first and last names"
+                                                                                            aria-describedby="name2" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="basic-icon-default-phone">Phone</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span
+                                                                                            id="basic-icon-default-phone2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-phone"></i></span>
+                                                                                        <input type="text" name="phone"
+                                                                                            id="basic-icon-default-phone"
+                                                                                            class="form-control phone-mask"
+                                                                                            placeholder="enter wallet phone"
+                                                                                            aria-label="658 799 8941"
+                                                                                            aria-describedby="basic-icon-default-phone2" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="basic-icon-default-email">Exchange</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-wallet"></i></span>
+                                                                                        <input type="text"
+                                                                                            name="exchange"
+                                                                                            id="basic-icon-default-email"
+                                                                                            class="form-control"
+                                                                                            placeholder="exchange"
+                                                                                            aria-label="john.doe"
+                                                                                            aria-describedby="basic-icon-default-email2" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="basic-icon-default-phone">Exchange
+                                                                                        Address</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span
+                                                                                            id="basic-icon-default-phone2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-wallet"></i></span>
+                                                                                        <input type="text"
+                                                                                            name="exchange_address"
+                                                                                            id="basic-icon-default-phone"
+                                                                                            class="form-control phone-mask"
+                                                                                            placeholder="exchange address"
+                                                                                            aria-label="658 799 8941"
+                                                                                            aria-describedby="basic-icon-default-phone2" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                        <br>
+                                                                        <div class="col-xl">
+                                                                            <h5 class="mb-3">Revolute</h5>
+                                                                            <div class="row">
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="name">revolute Name</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span id="name2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-user"></i></span>
+                                                                                        <input type="text"
+                                                                                            class="form-control"
+                                                                                            id="revolute_name"
+                                                                                            placeholder="Enter Your revolute Name"
+                                                                                            aria-label="revolute Name"
+                                                                                            aria-describedby="name2" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="basic-icon-default-phone">revolute
+                                                                                        Bank Account</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span
+                                                                                            id="basic-icon-default-phone2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-wallet"></i></span>
+                                                                                        <input type="number"
+                                                                                            name="revolute_bank_account"
+                                                                                            id="basic-icon-default-phone"
+                                                                                            class="form-control phone-mask"
+                                                                                            placeholder="enter your revolute bank account"
+                                                                                            aria-label="658 799 8941"
+                                                                                            aria-describedby="basic-icon-default-phone2" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="basic-icon-default-email">Revolute
+                                                                                        Short Code</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-wallet"></i></span>
+                                                                                        <input type="text"
+                                                                                            name="revolute_short_code"
+                                                                                            id="basic-icon-default-email"
+                                                                                            class="form-control"
+                                                                                            placeholder="revolute Short Code"
+                                                                                            aria-label="john.doe"
+                                                                                            aria-describedby="basic-icon-default-email2" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="basic-icon-default-phone">revolute
+                                                                                        Tag Link</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span
+                                                                                            id="basic-icon-default-phone2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-wallet"></i></span>
+                                                                                        <input type="text"
+                                                                                            name="revolut_tag_link"
+                                                                                            id="revolut_tag_link"
+                                                                                            class="form-control phone-mask"
+                                                                                            placeholder="Revolute Tag Link"
+                                                                                            aria-label="658 799 8941"
+                                                                                            aria-describedby="basic-icon-default-phone2" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="col-xl">
+                                                                            <h5 class="mb-3">Wise</h5>
+                                                                            <div class="row">
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="name"> Name</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span id="name2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-user"></i></span>
+                                                                                        <input type="text"
+                                                                                            class="form-control"
+                                                                                            id="wise_name"
+                                                                                            placeholder="Enter Your wise account Name"
+                                                                                            aria-label="wise Name"
+                                                                                            aria-describedby="name2" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                                                    <label class="form-label"
+                                                                                        for="basic-icon-default-phone">Wise
+                                                                                        email address</label>
+                                                                                    <div
+                                                                                        class="input-group input-group-merge">
+                                                                                        <span
+                                                                                            id="basic-icon-default-phone2"
+                                                                                            class="input-group-text"><i
+                                                                                                class="bx bx-wallet"></i></span>
+                                                                                        <input type="email"
+                                                                                            name="wise_email"
+                                                                                            id="basic-icon-default-phone"
+                                                                                            class="form-control phone-mask"
+                                                                                            placeholder="enter your wise account email"
+                                                                                            aria-label="658 799 8941"
+                                                                                            aria-describedby="basic-icon-default-phone2" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <button type="submit"
+                                                                            class="btn btn-outline-warning">Save
+                                                                            Changes</button>
+
+                                                                    </form>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Total Balance -->
+                                                    <div class="col-md-6 col-lg-4">
+                                                        <div class="card h-100">
+                                                            <div
+                                                                class="card-header d-flex align-items-center justify-content-between">
+                                                                <h5 class="card-title m-0 me-2">Total Balance</h5>
+                                                                <div class="dropdown">
+                                                                    <button class="btn p-0" type="button"
+                                                                        id="totalBalance" data-bs-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdown-menu-end"
+                                                                        aria-labelledby="totalBalance">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">Last 28 Days</a>
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">Last Month</a>
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">Last Year</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="d-flex justify-content-start">
+                                                                    <div class="d-flex pe-4">
+                                                                        <div class="me-3">
+                                                                            <span class="badge bg-label-warning p-2"><i
+                                                                                    class="bx bx-wallet text-warning"></i></span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <h6 class="mb-0">$2.54k</h6>
+                                                                            <small>Wallet(Earnings)</small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="d-flex">
+                                                                        <div class="me-3">
+                                                                            <span
+                                                                                class="badge bg-label-secondary p-2"><i
+                                                                                    class="bx bx-dollar text-secondary"></i></span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <h6 class="mb-0">$4.2k</h6>
+                                                                            <small>Deposits</small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="totalBalanceChart_0"
+                                                                    class="border-bottom mb-3 totalBalanceChart"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/ Total Balance -->
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pills -->
+                    </div>
+
+                    <div class="container-xxl flex-grow-1 container-p-y">
+
+                        <h4 class="py-3 mb-4">Functions</h4>
+
+                        <div class="row mb-4">
+                            <!--  Pricing -->
+                            <div class="col-12 col-sm-6 col-lg-3 mb-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <i class="mb-3 bx bx-md bx-bar-chart-alt-2"></i>
+                                        <h5>Membership</h5>
+                                        <p>Explore available plans</p>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#pricingModal">Let me see</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/  Pricing -->
+
+                            <!--  Add New Credit Card -->
+                            <div class="col-12 col-sm-6 col-lg-3 mb-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <i class="mb-3 bx bx-md bx-credit-card"></i>
+                                        <h5>Certificates</h5>
+                                        <p>We're certified</p>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#addNewCCModal"> Show </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/  Add New Credit Card -->
+
+                            <!--  Add New Address -->
+                            <div class="col-12 col-sm-6 col-lg-3 mb-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <i class="mb-3 bx bx-md bx-buildings"></i>
+                                        <h5>Rules</h5>
+                                        <p>Know the rules involved.</p>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#ourRules"> Show </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/  Add New Address -->
+
+                            <!--  Refer & Earn -->
+                            <div class="col-12 col-sm-6 col-lg-3 mb-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <i class="mb-3 bx bx-md bx-gift"></i>
+                                        <h5>About Film-supply</h5>
+                                        <p>Know us</p>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#aboutModal"> Show </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- All Modals -->
+                        <!-- Pricing Modal -->
+                        <div class="modal fade" id="pricingModal" tabindex="-1" style="display: none;"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-simple modal-pricing">
+                                <div class="modal-content p-0 p-md-2 p-xl-5">
+                                    <div class="modal-body px-2 px-md-4">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                        <!-- Pricing Plans -->
+                                        <div class="rounded-top">
+                                            <h2 class="text-center mb-2 mt-0 mt-md-4 px-2">Find the right plan for
+                                                yourself</h2>
+                                            <p class="text-center pb-3 px-2">
+                                                Choose th right plan and keep making money </p>
+
+                                            <div class="row mx-0 gy-3">
+                                                <!-- Basic -->
+                                                <div class="col-lg mb-md-0 mb-4">
+                                                    <div class="card border rounded shadow-none">
+                                                        <div class="card-body position-relative">
+                                                            <div class="my-3 pt-2 text-center">
+                                                                <img src="./static/img/icons/normal.png"
+                                                                    alt="Starter Image" height="80">
+                                                            </div>
+                                                            <h3 class="card-title text-center text-capitalize mb-1">
+                                                                Normal</h3>
+                                                            <ul class="list-group my-4 list-unstyled">
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Deposit
+                                                                        in accordance with our renewal event</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Profit
+                                                                        of 0.7% per order - 33 orders per set</span>
+                                                                </li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Better
+                                                                        Profit and permission</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Profit
+                                                                        of 7% for each Premium Tickets</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>No
+                                                                        access to other stage</span></li>
+                                                            </ul>
+                                                            <button type="button"
+                                                                class="btn btn-label-primary d-grid w-100"
+                                                                data-bs-dismiss="modal">Upgrade</button>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Pro -->
+                                                <div class="col-lg mb-md-0 mb-4">
+                                                    <div class="card border-primary border shadow-none">
+                                                        <div class="card-body position-relative">
+                                                            <div class="position-absolute end-0 me-4 top-0 mt-4">
+                                                                <span class="badge bg-label-primary">current</span>
+                                                            </div>
+                                                            <div class="my-3 pt-2 text-center">
+                                                                <img src="./static/img/icons/vip.png" alt="Pro Image"
+                                                                    height="80">
+                                                            </div>
+                                                            <h3
+                                                                class="card-title text-center text-warning text-capitalize mb-1">
+                                                                VIP</h3>
+
+                                                            <ul class="list-group my-4 list-unstyled">
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Deposit
+                                                                        in accordance with our renewal event</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Profit
+                                                                        of 0.9% per order - 35 orders per set</span>
+                                                                </li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Better
+                                                                        Profit and permission</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Profit
+                                                                        of 7% for each Premium Tickets</span></li>
+                                                            </ul>
+                                                            <button type="button"
+                                                                class="btn btn-label-primary d-grid w-100"
+                                                                data-bs-dismiss="modal">Upgrade Higher</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- vvip -->
+                                                <div class="col-lg">
+                                                    <div class="card border rounded shadow-none">
+                                                        <div class="card-body">
+
+                                                            <div class="my-3 pt-2 text-center">
+                                                                <img src="./static/img/icons/vvip.png" alt="Pro Image"
+                                                                    height="80">
+                                                            </div>
+                                                            <h3 class="card-title text-center text-capitalize mb-1">VVIP
+                                                            </h3>
+
+                                                            <ul class="list-group my-4 list-unstyled">
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Deposit
+                                                                        in accordance with our renewal event</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Profit
+                                                                        of 1.5% per order - 38 orders per set</span>
+                                                                </li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Better
+                                                                        Profit and permission</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Profit
+                                                                        of 9% for each Premium Tickets</span></li>
+                                                            </ul>
+
+                                                            <button type="button"
+                                                                class="btn btn-label-primary d-grid w-100"
+                                                                data-bs-dismiss="modal">Upgrade</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- vvvip -->
+                                                <div class="col-lg">
+                                                    <div class="card border rounded shadow-none">
+                                                        <div class="card-body">
+
+                                                            <div class="my-3 pt-2 text-center">
+                                                                <img src="./static/img/icons/vvvip.png" alt="Pro Image"
+                                                                    height="80">
+                                                            </div>
+                                                            <h3 class="card-title text-center text-capitalize mb-1">
+                                                                V.V.V.I.P</h3>
+
+                                                            <ul class="list-group my-4 list-unstyled">
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Deposit
+                                                                        in accordance with our renewal event</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Profit
+                                                                        of 2% per order - 40 orders per set</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Better
+                                                                        Profit and permission</span></li>
+                                                                <li class="mb-2 d-flex align-items-center"><span
+                                                                        class="badge badge-center w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i
+                                                                            class="bx bx-check bx-xs"></i></span><span>Profit
+                                                                        of 12% for each Premium Tickets</span></li>
+                                                            </ul>
+
+                                                            <button type="button"
+                                                                class="btn btn-label-primary d-grid w-100"
+                                                                data-bs-dismiss="modal">Upgrade</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/ Pricing Plans -->
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Pricing Modal -->
+
+                        <!-- Add New Credit Card Modal -->
+                        <div class="modal fade" id="addNewCCModal" tabindex="-1" aria-hidden="true"
+                            style="display: none;">
+                            <div class="modal-dialog modal-dialog-centered modal-simple modal-add-new-cc">
+                                <div class="modal-content p-3 p-md-5">
+                                    <div class="modal-body">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                        <div class="text-center mb-4">
+                                            <h3>Film supply is certified</h3>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="card bg-dark text-white text-center mb-3" style="width: 100%;">
+                                                <img src="./static/img/cert/cert.jpg" style="width: 100%; height: auto;"
+                                                    class="card-img-top" />
+                                                <div class="card-img-overlay"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Add  -->
+
+                        <script src="./static/js/pages-pricing.js"></script>
+
+                        <div class="modal fade" id="ourRules" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-simple modal-enable-otp modal-dialog-centered">
+                                <div class="modal-content p-3 p-md-5">
+                                    <div class="modal-body">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                        <div class="text-center mb-4">
+                                            <h3 class="mb-3">Our Rules</h3>
+                                            <p class="text-muted">Kindly follow these rules of operation to make the
+                                                most from Film-supply.</p>
+                                        </div>
+                                        <!--  -->
+                                        <div class="row">
+
+                                            <div class="col-md mb-4 mb-md-0">
+                                                <small class="text-light fw-semibold">Click to open/close</small>
+                                                <div class="accordion mt-3" id="accordionExample">
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingOne">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse" data-bs-target="#accordionOne"
+                                                                aria-expanded="false" aria-controls="accordionOne">
+                                                                I. Start Rating
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionOne" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(1.1)
+                                                                        Minimum account balance of 20 for the first 33
+                                                                        rating set</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(1.2)
+                                                                        A minimum renewal of 50 is required to start the
+                                                                        rating order</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(1.3)
+                                                                        Once the third set of 33 orders have been
+                                                                        completed, the user must request a full
+                                                                        withdrawal and receive the withdrawal amount
+                                                                        before requesting to reset the account.</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingTwo">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse" data-bs-target="#accordionTwo"
+                                                                aria-expanded="false" aria-controls="accordionTwo">
+                                                                II. Withdrawal
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionTwo" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(2.1)
+                                                                        Full withdrawal amount can be requested after
+                                                                        completing all the orders</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(2.2)
+                                                                        Users need to complete all the ratings before
+                                                                        withdraw</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(2.3)
+                                                                        You cannot request a withdrawal or refund if you
+                                                                        choose to give up or withdraw in the middle of
+                                                                        orders</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(2.4)
+                                                                        No withdrawals can be processed if the user’s
+                                                                        withdrawal request has not been received.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(2.5)
+                                                                        Every user account total amount has exceeded the
+                                                                        normal level of the platform will be
+                                                                        automatically upgraded to premium vip grade.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(2.6)
+                                                                        Normal user only can withdraw 20000 at once</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingThree">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#accordionThree" aria-expanded="false"
+                                                                aria-controls="accordionThree">
+                                                                III. Funds
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionThree" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(3.1)
+                                                                        All funds will be held securely in the user’s
+                                                                        account and can be requested in full once all
+                                                                        rating has been completed</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(3.2)
+                                                                        To avoid any loss of funds, all data will be
+                                                                        processed by the system and not manually</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(3.3)
+                                                                        The platform will take full responsibility for
+                                                                        any accidental loss of funds.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(3.4)
+                                                                        In order to avoid people using the company to
+                                                                        participate in money laundering activities, each
+                                                                        account can only accept deposits from one
+                                                                        address, if you use another address to deposit
+                                                                        money, you must declare it to the customer
+                                                                        service before making the deposit, otherwise,
+                                                                        when the withdrawal is discovered by the finance
+                                                                        department, all funds in the account will be
+                                                                        frozen until the suspect explains the source of
+                                                                        the funds and pays a deposit of 50% of the total
+                                                                        amount audited, all the above funds will be
+                                                                        fully refunded after the audit investigation
+                                                                        Please note that all said funds will be refunded
+                                                                        in full upon successful audit investigation.</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingFour">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#accordionFour" aria-expanded="false"
+                                                                aria-controls="accordionFour">
+                                                                IV. Account Security
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionFour" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(4.1)
+                                                                        Please do not disclose your login password and
+                                                                        withdrawal password to others, as the platform
+                                                                        will not be held responsible for any loss.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(4.2)
+                                                                        Users are not recommended to set their birthday
+                                                                        password, ID card number, or mobile phone number
+                                                                        as their withdrawal password or login
+                                                                        password.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(4.3)
+                                                                        If you forget your login password or withdrawal
+                                                                        password, please contact our online service to
+                                                                        reset it.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(4.4)
+                                                                        Credibility below 80% will affect withdrawal
+                                                                        application.</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingFive">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#accordionFive" aria-expanded="false"
+                                                                aria-controls="accordionFive">
+                                                                V. General Software
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionFive" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(5.1)
+                                                                        Platform earnings are divided into normal
+                                                                        earnings and tens earnings. 1 to 4 tens times
+                                                                        earning opportunities will be possible for each
+                                                                        grand/normal user of the 33 ratings orders. All
+                                                                        users will normally only receive a maximum is 4
+                                                                        in a row</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(5.2)
+                                                                        Normal users will earn 0.7% of the profit for
+                                                                        each normal order of rating</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(5.3)
+                                                                        VIP users will earn 0.9% of the profit for each
+                                                                        normal order of rating</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(5.4)
+                                                                        Funds and earnings will be refunded to the
+                                                                        user’s account for each completed order of
+                                                                        rating</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(5.5)
+                                                                        The system will randomly allocate orders to the
+                                                                        user’s account based on the total amount in the
+                                                                        user’s account</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(5.6)
+                                                                        Users must maintain account credibility and if
+                                                                        their account credibility is low will be
+                                                                        affected withdrawal.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(5.7)
+                                                                        If your account balance is more than 10000
+                                                                        system will automatically upgrade your account
+                                                                        to VVVVIP</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingSix">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse" data-bs-target="#accordionSix"
+                                                                aria-expanded="false" aria-controls="accordionSix">
+                                                                VI. Grand Order
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionSix" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(6.1)
+                                                                        Users will receive tens times the profits for
+                                                                        each film in the orders than for the regular
+                                                                        rating.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(6.2)
+                                                                        Once you have received the grand orders, all
+                                                                        funds will stop rolling and will be returned to
+                                                                        your account after you have completed.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(6.3)
+                                                                        The system will randomly allocate the grand
+                                                                        orders to the user’s account according to the
+                                                                        total balance on the user’s account</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(6.4)
+                                                                        Bundles are one-time ratings and will have 0-4
+                                                                        Grand order and the max 4 Grand order in a
+                                                                        row.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(6.5)
+                                                                        Once the grand orders has been allocated to the
+                                                                        user’s account, it cannot be cancelled or
+                                                                        skipped.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(6.6)
+                                                                        Grand orders are randomly assigned by the system
+                                                                        and therefore cannot be changed, canceled,
+                                                                        controlled or skipped by any user/staff.</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingSeven">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#accordionSeven" aria-expanded="false"
+                                                                aria-controls="accordionSeven">
+                                                                VII. Deposit
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionSeven" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(7.1)
+                                                                        The amount of deposit is the choice of the user,
+                                                                        we cannot decide the amount of deposit for the
+                                                                        user, we suggest that the user can make the
+                                                                        advance according to his ability or after he is
+                                                                        familiar with the platform.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(7.2)
+                                                                        If a user needs to make a deposit when receiving
+                                                                        a grand orders, it is recommended that the user
+                                                                        be able to make an advance based on the
+                                                                        insufficient amount shown on the account.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(7.3)
+                                                                        Before making an deposit, you must request an
+                                                                        deposit from the online service and confirm the
+                                                                        deposit detail.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(7.4)
+                                                                        The platform will not be held responsible if the
+                                                                        user deposits the wrong deposit details.</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingEight">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#accordionEight" aria-expanded="false"
+                                                                aria-controls="accordionEight">
+                                                                VIII. Film Companies Cooperation
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionEight" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(8.1)
+                                                                        There are different order on and off the
+                                                                        platform at each time, if the rating is not
+                                                                        optimized for a long period, the film companies
+                                                                        will not be able to offload the rating, which
+                                                                        will affect the film companies progress, it is
+                                                                        recommended that the user completes all rating
+                                                                        order and applies for a withdrawal as soon as
+                                                                        possible to avoid affecting the film companies
+                                                                        progress, otherwise the user will bear the
+                                                                        responsibility for the breach of contract for
+                                                                        the loss caused by the companies complaint and
+                                                                        the decrease in reputation score.</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(8.2)
+                                                                        The film companies will provide a deposit detail
+                                                                        for the user to make a deposit</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(8.3)
+                                                                        Any delay in completing the rating order will be
+                                                                        detrimental to the film companies and the
+                                                                        process</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(8.4)
+                                                                        All agent doing the rating order don’t exceed
+                                                                        the time limit, if you have exceed the time
+                                                                        limit your account grand order will auto reset
+                                                                        timing.</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingNine">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#accordionNine" aria-expanded="false"
+                                                                aria-controls="accordionNine">
+                                                                IX. Referral
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionNine" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(9.1)
+                                                                        Users will be able to invite other users using
+                                                                        the referral code on their account</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(9.2)
+                                                                        If the account has not yet completed all the
+                                                                        data, it is not possible to invite other
+                                                                        users</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(9.3)
+                                                                        The referrer will receive 20% of the referee’s
+                                                                        total earnings for the day</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card accordion-item">
+                                                        <h2 class="accordion-header" id="headingTen">
+                                                            <button type="button" class="accordion-button collapsed"
+                                                                data-bs-toggle="collapse" data-bs-target="#accordionTen"
+                                                                aria-expanded="false" aria-controls="accordionTen">
+                                                                X. Operating Hours
+                                                            </button>
+                                                        </h2>
+                                                        <div id="accordionTen" class="accordion-collapse collapse"
+                                                            data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="list-group list-group-flush">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(10.1)
+                                                                        Platform operating hours 10:00 to 23:00</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(10.2)
+                                                                        Online customer service hours 10:00 to 23:00</a>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="list-group-item list-group-item-action">(10.3)
+                                                                        Platform withdrawal hours 10:00 to 23:00</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--  -->
+                        <!-- Modal -->
+                        <div class="modal fade" id="aboutModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-fullscreen" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalFullTitle">We're a Licensed Movie Production
+                                            Company</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="col-md-12 col-lg-12">
+                                            <div class="card bg-dark text-white text-center mb-3"
+                                                style="height: 200px;">
+                                                <video src="./static/videos/us.mp4" class="card-img-top" muted autoplay
+                                                    loop style="object-fit: cover; height: 100%;"></video>
+                                                <div class="card-img-overlay">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <p>Our work also includes short film services, enhancements and hourly rates
+                                                to help you minimise costs and improve performance.</p>
+                                            <p>We can assist you with day-to-day tasks and offer you the flexibility to
+                                                choose from a range of specialists.</p>
+                                            <p>The moving picture is a tool of impossible power. Images become stories
+                                                that speak to the very core of the human experience. In the hands of a
+                                                passionate creative, these stories are an opportunity to entertain,
+                                                educate, and inspire. To communicate, connect, and truly breakthrough.
+                                                Filmsupply exists to empower these creatives.</p>
+                                            <p>With decades of experience in the advertising, film, and production
+                                                industries, Filmsupply's Licensing Specialists have a holistic
+                                                comprehension of the licensing process. We're proud to provide our
+                                                creative
+                                                clients with a personalized, white-glove experience at every step of
+                                                every project.</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">
+                                            Back.
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--  -->
+                    </div>
+
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <h5 class="pb-1 mb-4">Now Showing</h5>
+                        <div class="row mb-5">
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card bg-dark text-white text-center mb-3" style="max-width: 28rem;">
+                                    <video src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
+                                        class="card-img-top" muted autoplay loop></video>
+                                    <div class="card-img-overlay">
+                                        <h5 class="card-title">...</h5>
+                                        <p class="card-text">watch now at:</p>
+                                        <p class="card-text">Mitcham | Noarlunga</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card bg-dark text-white text-center mb-3" style="max-width: 100%;">
+                                    <img src="./static/img/showing_now/1.png" style="max-height: 10%; height: 210px;"
+                                        class="card-img-top h-20" />
+                                    <div class="card-img-overlay">
+                                        <h5 class="card-title">...</h5>
+                                        <p class="card-text">watch now at:</p>
+                                        <p class="card-text">Mildura</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card bg-dark text-white text-center mb-3" style="max-width: 28rem;">
+                                    <video src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
+                                        class="card-img-top" muted autoplay loop></video>
+                                    <div class="card-img-overlay">
+                                        <h5 class="card-title">...</h5>
+                                        <p class="card-text">watch now at:</p>
+                                        <p class="card-text">Mitcham | Mt Barker</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card bg-dark text-white text-center mb-3" style="max-width: 28rem;">
+                                    <img src="./static/img/showing_now/4.png" style="max-height: 10%; height: 210px;"
+                                        class="card-img-top h-20" />
+                                    <div class="card-img-overlay">
+                                        <h5 class="card-title">...</h5>
+                                        <p class="card-text">watch now at:</p>
+                                        <p class="card-text">Mitcham | Noarlunga</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card bg-dark text-white text-center mb-3" style="max-width: 28rem;">
+                                    <video src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
+                                        class="card-img-top" muted autoplay loop></video>
+                                    <div class="card-img-overlay">
+                                        <h5 class="card-title">...</h5>
+                                        <p class="card-text">watch now at:</p>
+                                        <p class="card-text">Mitcham | Noarlunga</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card bg-dark text-white text-center mb-3" style="max-width: 28rem;">
+                                    <img src="./static/img/showing_now/5.png" style="max-height: 10%; height: 210px;"
+                                        class="card-img-top h-20" />
+                                    <div class="card-img-overlay">
+                                        <h5 class="card-title">...</h5>
+                                        <p class="card-text">watch now at:</p>
+                                        <p class="card-text">Mildura | Mitcham</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    {% include 'incs/footer.html' %}
+
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!--/ Content wrapper -->
+            </div>
+
+            <!--/ Layout container -->
+        </div>
+
+    </div>
+
+{% endblock content %}
+
+{% block page_js %}
+
+    <style>
+        .hidden {
+            display: none;
+        }
+        .rating-star {
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        let currentTaskIndex = 0;
+        let tasks = [];
+
+        async function fetchTasks() {
+            const response = await fetch(`http://127.0.0.1:8000/tasks`);
+            tasks = await response.json();
+            displayTask(currentTaskIndex);
+        }
+
+        function displayTask(index) {
+            if (index >= tasks.length) {
+                document.getElementById('task-container').innerHTML = '<p>All tasks completed!</p>';
+                return;
+            }
+
+            const task = tasks[index];
+            document.getElementById('task-container').innerHTML = `
+                <div class="d-flex align-items-center">
+                    <img src="./static/img/start/1.png" alt="Oneplus" height="32" width="32" class="me-2 rounded">
+                    <div class="d-flex flex-column">
+                        <span class="fw-medium lh-1">${task.title}</span>
+                    </div>
+                </div>
+                <div class="col-xl">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <small class="mb-0 text-warning">Select rating, add comment to earn
+                                <b class="badge bg-label-primary me-3">${task.reward}</b> </small>
+                            <span>Task <h4 class="badge bg-label-primary me-3">${index + 1} of ${tasks.length} completed</h4></span>
+                        </div>
+                        <div class="card-body">
+                            <form onsubmit="submitTask(event)">
+                                <div class="mb-3">
+                                    <div class="pb-0">
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <div class="ratings">
+                                                ${[1, 2, 3, 4, 5].map(i => `
+                                                    <i class="bx bxs-star bx-sm text-warning rating-star" data-value="${i}" onclick="setRating(${i})"></i>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="basic-default-message">Comment</label>
+                                    <textarea id="comment" class="form-control" placeholder="Hi, Do you have a moment to talk?" spellcheck="false"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-outline-warning">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setRating(value) {
+            document.querySelectorAll('.rating-star').forEach(star => {
+                star.classList.toggle('text-warning', star.dataset.value <= value);
+                star.classList.toggle('text-lighter', star.dataset.value > value);
+            });
+        }
+
+        function submitTask(event) {
+            event.preventDefault();
+            const comment = document.getElementById('comment').value;
+            // Perform task submission (e.g., send to the server)
+            // After submission, move to the next task
+            currentTaskIndex++;
+            displayTask(currentTaskIndex);
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchTasks);
+        /* ----------------------- */
+document.getElementById('taskForm').addEventListener('submit', submitTask);
+
+async function submitTask(event) {
+    event.preventDefault();
+
+    const userId = document.getElementById('user_id').value;
+    const taskId = document.getElementById('task_id').value;
+    const amount = document.getElementById('amount').value;
+    const status = document.getElementById('status').value;
+    const rating = 4; // Example rating, you can dynamically set this based on user input
+    const comment = document.getElementById('comment').value;
+
+    const orderData = {
+        user_id: userId,
+        task_id: taskId,
+        amount: parseFloat(amount),
+        status: status,
+        rating: rating,
+        comment: comment
+    };
+
+    try {
+        const response = await fetch('http://localhost:8000/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Failed to create order: ${errorMessage}`);
+        }
+
+        const result = await response.json();
+        console.log(result);
+
+        // After successful submission, move to the next task
+        currentTaskIndex++;
+        displayTask(currentTaskIndex);
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        alert('Failed to create order. Please try again.');
+    }
+}
+
+function displayTask(index) {
+    // Placeholder function to display the task based on the index
+    // This function needs to be implemented based on how you fetch and display tasks
+    // For example:
+    fetch(`http://localhost:5000/tasks/${index}`)
+        .then(response => response.json())
+        .then(task => {
+            // Update form fields with the new task data
+            document.getElementById('task_id').value = task.id;
+            document.getElementById('taskTitle').innerText = task.title; // Assuming you have an element with id 'taskTitle'
+            document.getElementById('taskDescription').innerText = task.description; // Assuming you have an element with id 'taskDescription'
+        })
+        .catch(error => console.error('Error fetching the task:', error));
+}
+
+    </script>
+
+
+{% endblock page_js %}

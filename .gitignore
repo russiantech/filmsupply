@@ -2,6 +2,7 @@
 
 # Byte-compiled / optimized / DLL files
 flask_session/
+migrations/
 __pycache__/
 *.py[cod]
 *$py.class

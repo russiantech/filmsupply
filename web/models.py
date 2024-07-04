@@ -4,13 +4,14 @@ from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from flask import current_app
+# from web.utils.ip_adrs import user_ip
 
 db = SQLAlchemy()
 
 user_roles = db.Table(
     'user_roles',
-    db.Column('uid', db.Integer, db.ForeignKey('user.id')),
-    db.Column('rid', db.Integer, db.ForeignKey('role.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('role_id', db.Integer, db.ForeignKey('roles.id')),
     keep_existing=True
 )
 
@@ -35,10 +36,11 @@ class User(db.Model, UserMixin):
     about = db.Column(db.String(5000))
     
     verified = db.Column(db.Boolean(), default=False)
-    ip = db.Column(db.String(50))
+    ip = db.Column(db.String(50), default='0.0.0')
     
     orders = db.relationship('Order', backref='user', lazy=True)
-    account_details = db.relationship('AccountDetails', backref='user', lazy=True)
+    account_details = db.relationship('AccountDetail', backref='user', lazy=True)
+    payments = db.relationship('Payment', backref='user', lazy=True)
 
     notifications = db.relationship('Notification', backref='user', lazy=True)
     roles = db.relationship('Role', secondary=user_roles, back_populates='user', lazy='dynamic')
@@ -52,9 +54,6 @@ class User(db.Model, UserMixin):
 
     def is_admin(self):
         return any(role.type == 'admin' for role in self.role)
-
-    def permit(self):
-        return [r.type for r in self.role]
 
     def generate_token(self, exp=600, type='reset'):
         payload = {'uid': self.id, 'exp': time.time() + exp, 'type': type }
@@ -77,8 +76,9 @@ class User(db.Model, UserMixin):
 
 
 class Notification(db.Model):
+    __tablename__ = 'notiications'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(128), index=True)
     image = db.Column(db.String(128), index=True)
     message = db.Column(db.String(255), nullable=False)
@@ -107,12 +107,12 @@ class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key = True)
     level = db.Column(db.String(100), unique=True)
-    user = db.relationship('User', secondary=user_roles, back_populates='role', lazy='dynamic')
+    user = db.relationship('User', secondary=user_roles, back_populates='roles', lazy='dynamic')
 
 class Payment(db.Model):
-    __tablename__ = 'payment'
+    __tablename__ = 'payments'
     id = db.Column(db.Integer, unique=True, primary_key=True, nullable=False)
-    usr_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Orderinfo->User->foreign-key
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)  # Orderinfo->User->foreign-key
     
     txn_ref = db.Column(db.String(100)) #['dollar, naira etc]
     txn_amt = db.Column(db.Integer())
@@ -135,8 +135,9 @@ class AccountType(PyEnum):
     WISE = "wise"
 
 class AccountDetail(db.Model):
+    __tablename__ = 'accountdetails'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     account_type = db.Column(Enum(AccountType), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(20), nullable=True)
@@ -155,9 +156,12 @@ class AccountDetail(db.Model):
 
 
 class Order(db.Model):
+    __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
-    task_id = db.Column(db.Integer, nullable=False)
+    # user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=False)
+    # task_id = db.Column(db.Integer, nullable=False)
     amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False)
     
@@ -165,21 +169,25 @@ class Order(db.Model):
     rating = db.Column(db.Integer, nullable=True)
     comment = db.Column(db.Text, nullable=True)
 
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user = db.relationship('User', back_populates='pages')
+
     deleted = db.Column(db.Boolean(), default=False)  # False: not deleted, True: deleted
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now(), onupdate=func.now())
 
 
 class Task(db.Model):
+    __tablename__ = 'tasks'
     id = db.Column(db.Integer, primary_key=True)
+    image = db.Column(db.String(128), index=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
     reward = db.Column(db.Float, nullable=False)
+    
 
     deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())
-
-
     
 
