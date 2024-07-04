@@ -30,15 +30,55 @@ def hash_txt(txt):
 @auth.route("/signup", methods=['GET', 'POST'])
 @db_session_management
 def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    
+    form = SignupForm(request.form)
+    if form.validate_on_submit():
+        # Retrieve form data
+        data = {
+            'username': form.username.data,
+            'email': form.email.data,
+            'phone': form.phone.data,
+            'password': form.password.data
+        }
+
+        # Perform checks on the data
+        if not all(key in data for key in ('username', 'email', 'phone', 'password')):
+            return bad_request('Must include username, email, phone, and password fields.')
+
+        if db.session.scalar(sa.select(User).where(User.username == data['username'])):
+            return bad_request('Please use a different username.')
+
+        if db.session.scalar(sa.select(User).where(User.email == data['email'])):
+            return bad_request('Please use a different email address.')
+
+        if db.session.scalar(sa.select(User).where(User.phone == data['phone'])):
+            return bad_request('Please use a different phone number.')
+
+        try:
+            # Create and save the new user
+            user = User(
+                username=form.username.data,
+                email=form.email.data,
+                phone=form.phone.data,
+                password=hash_txt(form.password.data),
+                ip=ip_adrs.user_ip()
+            )
+            db.session.add(user)
+            db.session.commit()
+
+            # Send verification email
+            email.verify_email(user)
+
+            return jsonify({"success":True, "message":"Registration Successful"})
+
+        except Exception as e:
+            print(traceback.print_exc())
+            db.session.rollback()  # Rollback the transaction to maintain data integrity
+            return jsonify({"success":False, "error": f"{e}"})
 
     return render_template('auth/signup.html')
-
-@auth.route("/signin", methods=['GET', 'POST'])
-# @db_session_management
-@csrf.exempt
-def signin():
-
-    return render_template('auth/signin.html')
 
 #this route-initializes auth
 @auth.route('/authorize/<provider>')
@@ -127,6 +167,49 @@ def oauth2_callback(provider):
     # log the user in
     login_user(user)
     return redirect(url_for('main.index'))
+
+@auth.route("/signin", methods=['GET', 'POST'])
+@csrf.exempt
+def signin():
+    
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
+
+    form = SigninForm(request.form)
+    
+    print(form.data)
+
+    if not all(key in form for key in ('signin', 'password')):
+        return jsonify({"success": False, "message": "Must include username or email or phone, and password fields."})
+
+
+    if form.validate_on_submit():
+        user = User.query.filter(
+            or_(
+                User.email == form.signin.data,
+                User.phone == form.signin.data,
+                User.username == form.signin.data
+            )
+        ).first()
+        
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            user.online = True
+            user.last_seen = datetime.utcnow()
+            user.ip = ip_adrs.user_ip()
+            db.session.commit()
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return jsonify({"success": True, "message": "Authentication Successful"})
+        else:
+            return jsonify({"success": False, "error": "Invalid Authentication"})
+    
+    # return jsonify({"success": False, "error": f"{form.errors}"})
+    else:
+        # if not form.validate_on_submit():
+        return jsonify({"success": False, "error": str(form.errors)})
+
+
+    return render_template('auth/signin.html')
 
 
 @auth.route("/signout")
@@ -291,50 +374,6 @@ def confirm(token):
             return redirect(url_for('auth.signin'))
         return render_template('auth/reset.html', user=user, form=form)
 
-@auth.route('/query/<int:user_id>', methods=['POST'])
-@login_required
-@csrf.exempt
-def query(user_id):
-    
-    user = User.query.get_or_404(user_id)
-    
-    if 'file_input' not in request.files:
-        return jsonify({"success": False, "error": "No file part"}), 400
-
-    file_input = request.files['file_input']
-    if file_input.filename == '':
-        return jsonify({"success": False, "error": "No selected file"}), 400
-
-    if file_input:
-
-        file_input = request.files['file_input']
-
-        # Specify custom upload path and username
-        saved_filename = save_image.save_file(file_input, './static/images/queries', user.username)
-
-        query = Query(user_id=user.id, file_path=saved_filename, message=request.form.get('message'))
-        db.session.add(query)
-        db.session.commit()
-
-        # Example usage:
-        subject = "Query Alert"
-        sender = f"{current_app.config['MAIL_USERNAME']}"
-        recipients = [f"{user.email}", "jameschristo962@gmail.com"]
-        text_body = request.form.get('message')
-        html_body = f"<p>{request.form.get('message')}.</p>"
-        email.send_email(subject, sender, recipients, text_body, html_body)
-
-        # Create in-app notification
-        notification = Notification(
-            user_id=user.id, 
-            file_path = f"./static/images/queries/{saved_filename}",
-            message='You have received a new query.')
-        db.session.add(notification)
-        db.session.commit()
-
-        return jsonify({"success": True, "message": "Query sent successfully!"}), 200
-
-    return jsonify({"success": False, "error": "File upload failed"}), 400
 
 @auth.route('/fetch_notifications', methods=['GET'])
 @login_required

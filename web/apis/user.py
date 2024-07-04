@@ -4,6 +4,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import or_
 
 import sqlalchemy as sa, traceback
+from jsonschema import validate, ValidationError
 
 from web.apis.errors import bad_request
 from web import db, bcrypt
@@ -22,114 +23,125 @@ from web import db, csrf
 import secrets, requests
 from urllib.parse import urlencode
 
-auth = Blueprint('auth', __name__)
+user_bp = Blueprint('user', __name__)
 
 def hash_txt(txt):
     return bcrypt.generate_password_hash(txt).decode('utf-8') # use .encode('utf-8') to decode this
 
-@auth.route("/signup", methods=['GET', 'POST'])
-@db_session_management
-def signup():
+auth_schema = {
+    "type": "object",
+    "properties": {
+        "signin": {"type": "string"},
+        "password": {"type": "string"},
+        "remember": {"type": "boolean"}
+    },
+    "required": ["signin", "password"]
+}
 
-    return render_template('auth/signup.html')
 
-@auth.route("/signin", methods=['GET', 'POST'])
-# @db_session_management
+signup_schema = {
+    "type": "object",
+    "properties": {
+        "username": {"type": "string"},
+        "email": {"type": "string", "format": "email"},
+        "phone": {"type": "string"},
+        "password": {"type": "string"}
+    },
+    "required": ["username", "email", "password"]
+}
+
+@user_bp.route("/user", methods=['POST'])
 @csrf.exempt
-def signin():
-
-    return render_template('auth/signin.html')
-
-#this route-initializes auth
-@auth.route('/authorize/<provider>')
-@db_session_management
-def oauth2_authorize(provider):
-    if not current_user.is_anonymous:
-        return redirect(url_for('auth.update', usrname=current_user.username))
-
-    provider_data = oauth2providers.get(provider)
-    if provider_data is None:
-        abort(404)
-
-    # generate a random string for the state parameter
-    session['oauth2_state'] = secrets.token_urlsafe(16)
-
-    # create a query string with all the OAuth2 parameters
-    qs = urlencode({
-        'client_id': provider_data['client_id'],
-        'redirect_uri': url_for('auth.oauth2_callback', provider=provider, _external=True),
-        'response_type': 'code',
-        'scope': ' '.join(provider_data['scopes']),
-        'state': session['oauth2_state'],
-    })
-
-    # redirect the user to the OAuth2 provider authorization URL
-    return redirect(provider_data['authorize_url'] + '?' + qs)
-
-@auth.route('/callback/<provider>')
-@db_session_management
-def oauth2_callback(provider):
-    if not current_user.is_anonymous:
+def create_user():
+    if current_user.is_authenticated:
         return redirect(url_for('main.index'))
 
-    provider_data = oauth2providers.get(provider)
-    if provider_data is None:
-        abort(404)
+    if request.content_type != 'application/json':
+        return jsonify({"success": False, "message": "Content-Type must be application/json"}), 415
 
-    # if there was an authentication error, flash the error messages and exit
-    if 'error' in request.args:
-        for k, v in request.args.items():
-            if k.startswith('error'):
-                flash(f'{k}: {v}')
-        return redirect(url_for('main.index'))
+    data = request.get_json()
 
-    # make sure that the state parameter matches the one we created in the
-    # authorization request
-    if request.args['state'] != session.get('oauth2_state'):
-        abort(401)
+    try:
+        validate(instance=data, schema=signup_schema)
+    except ValidationError as e:
+        return jsonify({"success": False, "message": e.message}), 400
 
-    # make sure that the authorization code is present
-    if 'code' not in request.args:
-        abort(401)
+    if db.session.scalar(sa.select(User).where(User.username == data['username'])):
+        return jsonify({"success": False, "message": "Please use a different username."})
 
-    # exchange the authorization code for an access token
-    response = requests.post(provider_data['token_url'], data={
-        'client_id': provider_data['client_id'],
-        'client_secret': provider_data['client_secret'],
-        'code': request.args['code'],
-        'grant_type': 'authorization_code',
-        'redirect_uri': url_for('auth.oauth2_callback', provider=provider,
-                                _external=True),
-    }, headers={'Accept': 'application/json'})
+    if db.session.scalar(sa.select(User).where(User.email == data['email'])):
+        return jsonify({"success": False, "message": "Please use a different email address."})
 
-    if response.status_code != 200:
-        abort(401)
-    oauth2_token = response.json().get('access_token')
-    if not oauth2_token:
-        abort(401)
+    if db.session.scalar(sa.select(User).where(User.phone == data['phone'])):
+        return jsonify({"success": False, "message": "Please use a different phone number."})
 
-    # use the access token to get the user's email address
-    response = requests.get(provider_data['userinfo']['url'], headers={
-        'Authorization': 'Bearer ' + oauth2_token,
-        'Accept': 'application/json',
-    })
-    if response.status_code != 200:
-        abort(401)
-    email = provider_data['userinfo']['email'](response.json())
-
-    # find or create the user in the database
-    user = db.session.scalar(db.select(User).where(User.email == email))
-    if user is None:
-        user = User(email=email, username=email.split('@')[0], password=hash_txt(secrets.token_urlsafe(5)), src=provider)
+    try:
+        user = User(
+            username=data['username'],
+            email=data['email'],
+            phone=data['phone'],
+            password=hash_txt(data['password']),
+            ip=ip_adrs.user_ip()
+        )
         db.session.add(user)
         db.session.commit()
 
-    # log the user in
-    login_user(user)
-    return redirect(url_for('main.index'))
+        email.verify_email(user)
+
+        return jsonify({"success": True, "message": "Registration Successful", "redirect": url_for('auth.signin')})
+
+    except Exception as e:
+        print(traceback.print_exc())
+        db.session.rollback()
+        return jsonify({"success": False, "error": str(e)})
 
 
-@auth.route("/signout")
+
+
+@user_bp.route("/auth", methods=['POST'])
+@csrf.exempt
+def auth():
+    try:
+        if not current_user.is_anonymous:
+            return redirect(url_for('main.index'))
+
+        # Check if the request content type is application/json
+        if request.content_type != 'application/json':
+            return jsonify({"success": False, "message": "Content-Type must be application/json"})
+
+        # Parse JSON data from the request
+        data = request.get_json()
+
+        # Validate the data against the schema
+        try:
+            validate(instance=data, schema=auth_schema)
+        except ValidationError as e:
+            return jsonify({"success": False, "message": e.message})
+
+        # Authentication logic
+        user = User.query.filter(
+            sa.or_(
+                User.email == data['signin'],
+                User.phone == data['signin'],
+                User.username == data['signin']
+            )
+        ).first()
+
+        if user and check_password_hash(user.password, data['password']):
+            user.online = True
+            user.last_seen = datetime.utcnow()
+            user.ip = ip_adrs.user_ip()
+            db.session.commit()
+            login_user(user, remember=data.get('remember', False))
+            return jsonify({"success": True, "message": "Authentication Successful", "redirect": url_for('main.index')})
+        else:
+            return jsonify({"success": False, "error": "Invalid Authentication"})
+
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+
+@user_bp.route("/signout")
 @login_required
 @db_session_management
 def signout():
@@ -138,7 +150,7 @@ def signout():
     db.session.commit()
     return redirect(url_for('auth.signin'))
 
-@auth.route("/<string:username>/update", methods=['GET', 'POST'])
+@user_bp.route("/<string:username>/update", methods=['GET', 'POST'])
 @login_required
 @admin_or_current_user()
 # @db_session_management
@@ -224,7 +236,95 @@ def update(username):
         print(e)
         return jsonify({"success": False, "error": str(e) }), 200
 
-@auth.route("/forgot", methods=['GET', 'POST'])
+#this route-initializes auth
+@user_bp.route('/authorize/<provider>')
+@db_session_management
+def oauth2_authorize(provider):
+    if not current_user.is_anonymous:
+        return redirect(url_for('auth.update', usrname=current_user.username))
+
+    provider_data = oauth2providers.get(provider)
+    if provider_data is None:
+        abort(404)
+
+    # generate a random string for the state parameter
+    session['oauth2_state'] = secrets.token_urlsafe(16)
+
+    # create a query string with all the OAuth2 parameters
+    qs = urlencode({
+        'client_id': provider_data['client_id'],
+        'redirect_uri': url_for('auth.oauth2_callback', provider=provider, _external=True),
+        'response_type': 'code',
+        'scope': ' '.join(provider_data['scopes']),
+        'state': session['oauth2_state'],
+    })
+
+    # redirect the user to the OAuth2 provider authorization URL
+    return redirect(provider_data['authorize_url'] + '?' + qs)
+
+@user_bp.route('/callback/<provider>')
+@db_session_management
+def oauth2_callback(provider):
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
+
+    provider_data = oauth2providers.get(provider)
+    if provider_data is None:
+        abort(404)
+
+    # if there was an authentication error, flash the error messages and exit
+    if 'error' in request.args:
+        for k, v in request.args.items():
+            if k.startswith('error'):
+                flash(f'{k}: {v}')
+        return redirect(url_for('main.index'))
+
+    # make sure that the state parameter matches the one we created in the
+    # authorization request
+    if request.args['state'] != session.get('oauth2_state'):
+        abort(401)
+
+    # make sure that the authorization code is present
+    if 'code' not in request.args:
+        abort(401)
+
+    # exchange the authorization code for an access token
+    response = requests.post(provider_data['token_url'], data={
+        'client_id': provider_data['client_id'],
+        'client_secret': provider_data['client_secret'],
+        'code': request.args['code'],
+        'grant_type': 'authorization_code',
+        'redirect_uri': url_for('auth.oauth2_callback', provider=provider,
+                                _external=True),
+    }, headers={'Accept': 'application/json'})
+
+    if response.status_code != 200:
+        abort(401)
+    oauth2_token = response.json().get('access_token')
+    if not oauth2_token:
+        abort(401)
+
+    # use the access token to get the user's email address
+    response = requests.get(provider_data['userinfo']['url'], headers={
+        'Authorization': 'Bearer ' + oauth2_token,
+        'Accept': 'application/json',
+    })
+    if response.status_code != 200:
+        abort(401)
+    email = provider_data['userinfo']['email'](response.json())
+
+    # find or create the user in the database
+    user = db.session.scalar(db.select(User).where(User.email == email))
+    if user is None:
+        user = User(email=email, username=email.split('@')[0], password=hash_txt(secrets.token_urlsafe(5)), src=provider)
+        db.session.add(user)
+        db.session.commit()
+
+    # log the user in
+    login_user(user)
+    return redirect(url_for('main.index'))
+
+@user_bp.route("/forgot", methods=['GET', 'POST'])
 @db_session_management
 def forgot():
     if current_user.is_authenticated:
@@ -240,7 +340,7 @@ def forgot():
     return render_template('auth/forgot.html', form=form)
 
 #->for unverified-users, notice use of 'POST' instead of 'post' before it works
-@auth.route("/unverified", methods=['post', 'get'])
+@user_bp.route("/unverified", methods=['post', 'get'])
 @login_required
 @db_session_management
 def unverified():
@@ -250,7 +350,7 @@ def unverified():
     return render_template('auth/unverified.html')
 
 #->for both verify/reset tokens
-@auth.route("/confirm/<token>", methods=['GET', 'POST'])
+@user_bp.route("/confirm/<token>", methods=['GET', 'POST'])
 @db_session_management
 def confirm(token):
     #print(current_user.generate_token(type='verify'))
@@ -291,52 +391,8 @@ def confirm(token):
             return redirect(url_for('auth.signin'))
         return render_template('auth/reset.html', user=user, form=form)
 
-@auth.route('/query/<int:user_id>', methods=['POST'])
-@login_required
-@csrf.exempt
-def query(user_id):
-    
-    user = User.query.get_or_404(user_id)
-    
-    if 'file_input' not in request.files:
-        return jsonify({"success": False, "error": "No file part"}), 400
 
-    file_input = request.files['file_input']
-    if file_input.filename == '':
-        return jsonify({"success": False, "error": "No selected file"}), 400
-
-    if file_input:
-
-        file_input = request.files['file_input']
-
-        # Specify custom upload path and username
-        saved_filename = save_image.save_file(file_input, './static/images/queries', user.username)
-
-        query = Query(user_id=user.id, file_path=saved_filename, message=request.form.get('message'))
-        db.session.add(query)
-        db.session.commit()
-
-        # Example usage:
-        subject = "Query Alert"
-        sender = f"{current_app.config['MAIL_USERNAME']}"
-        recipients = [f"{user.email}", "jameschristo962@gmail.com"]
-        text_body = request.form.get('message')
-        html_body = f"<p>{request.form.get('message')}.</p>"
-        email.send_email(subject, sender, recipients, text_body, html_body)
-
-        # Create in-app notification
-        notification = Notification(
-            user_id=user.id, 
-            file_path = f"./static/images/queries/{saved_filename}",
-            message='You have received a new query.')
-        db.session.add(notification)
-        db.session.commit()
-
-        return jsonify({"success": True, "message": "Query sent successfully!"}), 200
-
-    return jsonify({"success": False, "error": "File upload failed"}), 400
-
-@auth.route('/fetch_notifications', methods=['GET'])
+@user_bp.route('/fetch_notifications', methods=['GET'])
 @login_required
 def fetch_notifications():
     notifications = Notification.query.filter_by(
@@ -352,7 +408,7 @@ def fetch_notifications():
 
     return jsonify({"notifications": notifications_list}), 200
 
-@auth.route('/mark_as_read/<int:notification_id>', methods=['PUT'])
+@user_bp.route('/mark_as_read/<int:notification_id>', methods=['PUT'])
 @role_required('*')
 @csrf.exempt
 def mark_notification_as_read(notification_id):
@@ -367,7 +423,7 @@ def mark_notification_as_read(notification_id):
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@auth.route('/impersonate', methods=['POST'])
+@user_bp.route('/impersonate', methods=['POST'])
 @login_required
 # @role_required('admin') //this will cause issues/undefined. better do it under the route
 @csrf.exempt

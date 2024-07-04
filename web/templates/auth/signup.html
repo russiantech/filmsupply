@@ -1,106 +1,151 @@
 {% extends 'base.html' %}
-<title>{% block title %} Signin . Dunistech Academy {% endblock title %}</title>
+<title>{% block title %}Signup . Filmsupply {% endblock title %}</title>
+{% block page_css %}
+<link rel="stylesheet" href="./static/css/page-auth.css">
+{% endblock page_css %}
+
 {% block content %}
-<div class="wrapper">
-	<section class="login-content">
-	   <div class="container">
-		  <div class="row align-items-center justify-content-center height-self-center">
-			 <div class="col-lg-8">
-				<div class="card auth-card">
-				   <div class="card-body p-0">
-					  <div class="d-flex align-items-center auth-content">
-						 <div class="col-lg-7 align-self-center">
-							<div class="p-3">
-								<h3 class="mb-2 text-primary">Sign-up | Dunistech Academy</h3>
-								<p class="text-warning">Welcome to Dunis Technologies, Glad to have you in our tech ecosystem.</p>
- 
-							   <form class="form-wrap" method="post" action="">
-								{{ form.hidden_tag() }}
-								  <div class="row">
-									 <div class="col-lg-12">
-										<div class="floating-label form-group">
-										   {% if form.username.errors %}
-												{{ form.username(class="floating-input form-control is-invalid") }}
-												<div class="invalid-feedback">
-													{% for error in form.username.errors %}
-													<span class="link">{{ error }}</span>
-													{% endfor %}
-												</div>
-												{% else %}
-												{{ form.username(class="floating-input form-control", placeholder=" ") }}
-												{% endif %}
-												<label>Username</label>
-										</div>
-									 </div>
-									 <div class="col-lg-12">
-										<div class="floating-label form-group">
-										   {% if form.phone.errors %}
-												{{ form.phone(class="floating-input form-control is-invalid") }}
-												<div class="invalid-feedback">
-													{% for error in form.phone.errors %}
-													<span class="link">{{ error }}</span>
-													{% endfor %}
-												</div>
-												{% else %}
-												{{ form.phone(class="floating-input form-control", placeholder=" ") }}
-												{% endif %}
-												<label>Phone</label>
-										</div>
-									 </div>
-									 <div class="col-lg-12">
-										<div class="floating-label form-group">
-										   {% if form.email.errors %}
-												{{ form.email(class="floating-input form-control is-invalid") }}
-												<div class="invalid-feedback">
-													{% for error in form.email.errors %}
-													<span class="link">{{ error }}</span>
-													{% endfor %}
-												</div>
-												{% else %}
-												{{ form.email(class="floating-input form-control", placeholder=" ") }}
-												{% endif %}
-												<label>Email</label>
-										</div>
-									 </div>
-									 <div class="col-lg-12">
-										<div class="floating-label form-group">
-											{% if form.password.errors %}
-											{% for error in form.password.errors %}<div class="link">{{ error }} !</div>{% endfor %}
-											{% else %}
-											{{ form.password(class="floating-input form-control", placeholder=" ")}}
-											{% endif %}
 
-										   <label>Password</label>
-										</div>
-									 </div>
-									 <div class="col-lg-6">
-										<div class="custom-control custom-checkbox mb-3">
-												{{ form.tnc(class="custom-control-input") }}
-												{{ form.tnc.label(class="custom-control-label control-label-1") }}
-										</div>
-									 </div>
-								  </div>
-								  <button type="submit" class="btn col-12 btn-primary">Create Account Now</button>
-								  <p class="mt-3">
-									{% include 'incs/alerts.html' %}
-									I'm a registered user 
-									<a href="{{url_for('auth.signin')}}" class="text-primary">login now</a>
-								  </p>
-							   </form>
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <!-- Register -->
+      <div class="card">
+        <div class="card-body">
+          <!-- Logo -->
+          <div class="app-brand justify-content-center">
+            <a href="" class="app-brand-link gap-2">
+              <span class="app-brand-logo demo">
 
-							</div>
-						 </div>
-						 <div class="col-lg-5 content-right">
-							<img src="{{url_for('static', filename='images/login/02.png')}}" class="img-fluid image-right" alt="">
-						 </div>
-					  </div>
-				   </div>
-				</div>
-			 </div>
-		  </div>
-	   </div>
-	</section>
-	</div>
+                <img src="./static/img/favicon/favicon.png" class="rounded img-responsive" alt="">
 
+              </span>
+              <span class="app-brand-text demo text-body fw-bold">Film Supply</span>
+            </a>
+          </div>
+
+          <!-- /Logo -->
+          <h4 class="mb-2">Welcome to Film Supply! 👋</h4>
+          <p class="mb-4">Provide your data to become a member</p>
+
+          <form id="formSignup" class="mb-3 fv-plugins-bootstrap5 fv-plugins-framework" action="./user" method="POST">
+            
+            <div class="mb-3 fv-plugins-icon-container">
+              <label for="signin" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username"
+                placeholder="Enter your username" autofocus="">
+            </div>
+
+            <div class="mb-3 fv-plugins-icon-container">
+              <label for="email" class="form-label">Email </label>
+              <input type="email" class="form-control" id="email" name="email"
+                placeholder="Enter your email address here" autofocus="">
+            </div>
+
+            <div class="mb-3 fv-plugins-icon-container">
+              <label for="phone" class="form-label">Phone </label>
+              <input type="phone" class="form-control" id="phone" name="phone"
+                placeholder="Enter your phone number here" autofocus="">
+            </div>
+
+            
+            <div class="mb-3 form-password-toggle fv-plugins-icon-container">
+              
+              <div class="d-flex justify-content-between">
+                <label class="form-label" for="password">Password</label>
+                <a href="auth-forgot-password-basic.html">
+                  <small>Forgot Password?</small>
+                </a>
+              </div>
+
+              <div class="input-group input-group-merge has-validation">
+                <input type="password" id="password" class="form-control" name="password" placeholder="············" aria-describedby="password">
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+
+            </div>
+
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                <label class="form-check-label" for="remember">
+                  Remember Me
+                </label>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <button class="btn btn-outline-warning d-grid w-100" type="submit">Sign in</button>
+            </div>
+
+          </form>
+
+          <p class="text-center">
+            <span>Already a member?</span>
+            <a href="{{url_for('auth.signin')}}">
+              <span>Login to an my account</span>
+            </a>
+          </p>
+
+          <div class="divider my-4">
+            <div class="divider-text">or</div>
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
+              <i class="tf-icons bx bxl-facebook"></i>
+            </a>
+
+            <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
+              <i class="tf-icons bx bxl-google-plus"></i>
+            </a>
+
+            <a href="javascript:;" class="btn btn-icon btn-label-twitter">
+              <i class="tf-icons bx bxl-twitter"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- /Register -->
+    </div>
+  </div>
+</div>
 {% endblock content %}
+
+{% block page_js %}
+<script>
+	$(document).ready(function() {
+      $('#formSignup').on('submit', function(event) {
+          event.preventDefault();
+
+          $.ajax({
+              url: $(this).attr('action'),
+              method: $(this).attr('method'),
+              contentType: 'application/json',  // Set the content type to application/json
+              data: JSON.stringify({
+                  username: $('#username').val(),
+                  email: $('#email').val(),
+                  phone: $('#phone').val(),
+                  password: $('#password').val()
+              }),
+              success: function(response) {
+                  if (response.success) {
+                      response_modal(response.message || 'Success');
+                      if (response.redirect) {
+                          window.location.href = response.redirect;
+                      }
+                  } else {
+                      response_modal(response.error || response || 'An error occurred.');
+                  }
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                  response_modal(errorThrown || 'An unexpected error occurred.');
+              }
+          });
+      });
+  });
+</script>
+
+{% endblock page_js %}
 

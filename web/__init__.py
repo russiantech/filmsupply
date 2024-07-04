@@ -65,6 +65,9 @@ def create_app():
     
     from web.auth.routes import auth
     app.register_blueprint(auth)
+
+    from web.apis.user import user_bp
+    app.register_blueprint(user_bp)
     
     from web.main.routes import main
     app.register_blueprint(main)

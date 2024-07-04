@@ -4,6 +4,7 @@ data-theme="theme-default" data-assets-path="./static/" data-template="vertical-
 <head>
     <title>{% block title %} Film Supply. {% endblock title %}</title>
     {% include 'incs/metas.html' %}
+    {% block page_css %} {% endblock page_css %}
     {{ moment.include_moment() }}
 </head>
 <body>
@@ -11,17 +12,18 @@ data-theme="theme-default" data-assets-path="./static/" data-template="vertical-
     {% block content %}
 
     {% endblock content %}
+
     {% include "incs/response_modal.html" %}
     
     <!-- Core JS -->
     {% include 'incs/bottom_js.html' %}
     
-    {% block page_js %} {% endblock page_js %}
+    {% block page_js %}  {% endblock page_js %}
     
     <script>
-        function showCrudModal(message) {
-            document.getElementById('crudModalBody').innerText = message;
-            $('#crudModal').modal('show');
+        function response_modal(message) {
+            document.getElementById('response_text').innerText = message;
+            $('#response_modal').modal('show');
         }
     
         function showMessage(message, type = 'success') {

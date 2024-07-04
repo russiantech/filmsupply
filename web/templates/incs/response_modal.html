@@ -1,18 +1,21 @@
-<div class="modal fade" id="response_modal" tabindex="-1" role="dialog" aria-labelledby="crudModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="crudModalLabel">Operation Status</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-secondary" id="crudModalBody">
-                <!-- Message will be dynamically inserted here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+
+<div class="modal fade" id="response_modal" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="modalCenterTitle">Modal title</h5> -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" control-id="ControlID-4"></button>
         </div>
+        <div class="modal-body">
+         
+            <div class="row">
+            <div id="response_text" class="col text-bold  text-warning">  </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-label-warning" data-bs-dismiss="modal" control-id="ControlID-8">Close</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
