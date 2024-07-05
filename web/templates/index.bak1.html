@@ -267,75 +267,178 @@
     }
 </style>
 
+
 <script>
-    const baseUrl = `${window.location.origin}`;
-    let currentTaskId = null;
+    let baseUrl = `${window.location.origin}`
+    let currentTaskIndex = 0;
+    let tasks = [];
 
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchAndDisplayTask();
-    });
-
-    async function fetchAndDisplayTask() {
-        try {
-            const response = await fetch(`${baseUrl}/tasks-pending`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch tasks');
-            }
-            const task = await response.json();
-            if (!task || Object.keys(task).length === 0) {
-                const taskContainer = document.getElementById('task-container');
-                if (taskContainer) {
-                    taskContainer.innerHTML = '<p class="text-warning text-bold">Congratulations! All tasks completed!</p>';
-                }
-                return;
-            }
-            displayTask(task);
-        } catch (error) {
-            console.error('Error fetching task:', error);
-        }
+    async function fetchTasks() {
+        const userId = 1;  // Replace with the actual user ID
+        // const response = await fetch(`http://127.0.0.1:8000/tasks?user_id=${userId}`);
+        const response = await fetch(`${baseUrl}/tasks-pending`);
+        // const response = await fetch(`${baseUrl}/tasks-pending?user_id=${userId}`);
+        tasks = await response.json();
+        console.log(tasks)
+        displayTask(currentTaskIndex);
     }
 
-    function displayTask(task) {
-        const taskContainer = document.getElementById('task-container');
-        if (!taskContainer) {
-            console.error('Task container not found');
+    function displayTask(index) {
+
+        if (index >= tasks.length) {
+            document.getElementById('task-container').innerHTML = '<p class="text-warning text-bold">Congratulations!. All tasks completed!</p>';
             return;
         }
 
-        currentTaskId = task.id;
-        taskContainer.innerHTML = `
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <small class="mb-0 text-warning">
-                        Select rating, add comment to earn
-                        <b class="badge bg-label-primary me-3" id="taskReward">${(task.reward * 0.003).toFixed(2)} of ${task.reward}</b>
-                    </small>
-                    <span>
-                        Task <h4 class="badge bg-label-primary me-3" id="taskIndex">${task.id}</h4>
-                    </span>
+        const task = tasks[index];
+        document.getElementById('task-container').innerHTML = `
+                <div class="d-flex align-items-center">
+                    <img src="./static/img/start/${task.image}" alt="${task.title}" height="32" width="32" class="me-2 rounded">
+                    <div class="d-flex flex-column">
+                        <span class="fw-medium lh-1">${task.description}</span>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form id="taskForm" onsubmit="submitTask(event)">
-                        <input type="hidden" id="task_id" name="task_id" value="${task.id}">
-                        <input type="hidden" id="user_id" name="user_id" value="${task.user_id}">
-                        <input type="hidden" id="rating" name="rating">
-                        <input type="hidden" id="reward" name="reward" value="${task.reward}">
-                        <div class="mb-3">
-                            <label class="form-label" for="comment">Comment</label>
-                            <textarea id="comment" class="form-control" placeholder="Enter your comment" spellcheck="false"></textarea>
+                <div class="col-xl">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <small class="mb-0 text-warning">Select rating, add comment to earn
+                                <b class="badge bg-label-primary me-3">0.3% of 200</b> </small>
+                            <span>Task <h4 class="badge bg-label-primary me-3">${index + 1} of ${tasks.length} completed</h4></span>
                         </div>
-                        <div id="rating-stars" class="d-flex align-items-center gap-3 mb-3">
-                            <i class="bx bxs-star bx-sm text-lighter" data-rating="1"></i>
-                            <i class="bx bxs-star bx-sm text-lighter" data-rating="2"></i>
-                            <i class="bx bxs-star bx-sm text-lighter" data-rating="3"></i>
-                            <i class="bx bxs-star bx-sm text-lighter" data-rating="4"></i>
-                            <i class="bx bxs-star bx-sm text-lighter" data-rating="5"></i>
+                        <div class="card-body">
+                            <form onsubmit="submitTask(event)">
+                                <div class="mb-3">
+                                    <div class="pb-0">
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <div class="ratings">
+                                                ${[1, 2, 3, 4, 5].map(i => `
+                                                    <i class="bx bxs-star bx-sm text-warning rating-star" data-value="${i}" onclick="setRating(${i})"></i>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="basic-default-message">Comment</label>
+                                    <textarea id="comment" class="form-control" placeholder="Hi, Do you have a moment to talk?" spellcheck="false"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-outline-warning">Upload</button>
+                            </form>
                         </div>
-                        <button type="submit" class="btn btn-outline-warning">Upload</button>
-                    </form>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+    }
+
+    function setRating(value) {
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.classList.toggle('text-warning', star.dataset.value <= value);
+            star.classList.toggle('text-lighter', star.dataset.value > value);
+        });
+    }
+    /*
+    function submitTask(event) {
+        event.preventDefault();
+        const comment = document.getElementById('comment').value;
+        // Perform task submission (e.g., send to the server)
+        // After submission, move to the next task
+        currentTaskIndex++;
+        displayTask(currentTaskIndex);
+
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchTasks);
+    */
+
+    
+        
+        let totalTasks = 0;
+
+        document.getElementById('taskForm').addEventListener('submit', submitTask);
+
+        async function submitTask(event) {
+            event.preventDefault();
+
+            const userId = document.getElementById('user_id').value;
+            const taskId = document.getElementById('task_id').value;
+            const comment = document.getElementById('comment').value;
+            const rating = document.getElementById('rating').value;
+
+            const orderData = {
+                user_id: parseInt(userId),
+                task_id: parseInt(taskId),
+                rating: parseInt(rating),
+                comment: comment
+            };
+
+            try {
+                const response = await fetch(`${baseUrl}/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (!response.ok) {
+                    const errorMessage = await response.text();
+                    throw new Error(`Failed to create order: ${errorMessage}`);
+                }
+
+                const result = await response.json();
+                console.log(result);
+
+                // After successful submission, move to the next task
+                currentTaskIndex++;
+                displayTask(currentTaskIndex);
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('Failed to create order. Please try again.');
+            }
+        }
+
+        async function displayTask(taskId) {
+            const userId = document.getElementById('user_id').value;
+
+            try {
+                // const taskResponse = await fetch(`${baseUrl}/tasks/${taskId}?user_id=${userId}`);
+                const taskResponse = await fetch(`${baseUrl}/tasks-pending`);
+                if (!taskResponse.ok) {
+                    throw new Error('Task not found');
+                }
+
+                const task = await taskResponse.json();
+                console.log(task)
+                if (task) {
+                    document.getElementById('task_id').value = task.id;
+                    document.getElementById('taskTitle').innerText = task.title;
+                    // document.getElementById('taskDescription').innerText = task.description;
+                    document.getElementById('taskReward').innerText = `Earn ${task.reward}`;
+                    document.getElementById('taskIndex').innerText = `Task ${taskId} of ${totalTasks}`;
+                    document.getElementById('reward').value = task.reward;
+                } else {
+                    alert('No more tasks available.');
+                }
+            } catch (error) {
+                console.error('Error fetching the task:', error);
+            }
+        }
+
+        async function fetchTotalTasks() {
+            try {
+                const response = await fetch(`${baseUrl}/tasks/total`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch total tasks');
+                }
+                const data = await response.json();
+                totalTasks = data.total_tasks;
+
+                // Initial task load
+                displayTask(currentTaskIndex);
+            } catch (error) {
+                console.error('Error fetching total tasks:', error);
+            }
+        }
 
         document.querySelectorAll('#rating-stars .bxs-star').forEach(star => {
             star.addEventListener('click', function() {
@@ -344,57 +447,23 @@
                 updateStarRating(rating);
             });
         });
-    }
 
-    function updateStarRating(rating) {
-        document.querySelectorAll('#rating-stars .bxs-star').forEach(star => {
-            if (star.getAttribute('data-rating') <= rating) {
-                star.classList.add('text-warning');
-                star.classList.remove('text-lighter');
-            } else {
-                star.classList.add('text-lighter');
-                star.classList.remove('text-warning');
-            }
-        });
-    }
-
-    async function submitTask(event) {
-        event.preventDefault();
-        const taskId = document.getElementById('task_id').value;
-        const comment = document.getElementById('comment').value;
-        const rating = document.getElementById('rating').value;
-
-        const orderData = {
-            user_id: 1, // Assuming a static user ID for this example
-            task_id: parseInt(taskId),
-            rating: parseInt(rating),
-            comment: comment
-        };
-
-        try {
-            const response = await fetch(`${baseUrl}/orders`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(orderData)
+        function updateStarRating(rating) {
+            document.querySelectorAll('#rating-stars .bxs-star').forEach(star => {
+                if (star.getAttribute('data-rating') <= rating) {
+                    star.classList.add('text-warning');
+                    star.classList.remove('text-lighter');
+                } else {
+                    star.classList.add('text-lighter');
+                    star.classList.remove('text-warning');
+                }
             });
-
-            if (!response.ok) {
-                const errorMessage = await response.text();
-                throw new Error(`Failed to create order: ${errorMessage}`);
-            }
-
-            const result = await response.json();
-            console.log(result);
-
-            // After successful submission, fetch and display the next task
-            fetchAndDisplayTask();
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            alert('Failed to create order. Please try again.');
         }
-    }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchTotalTasks();
+        });
+
 </script>
 
 {% endblock page_js %}

@@ -1,11 +1,24 @@
 from flask import request, jsonify
 from flask_login import current_user, login_required
-from web.models import (  Task )
+from web.models import (  Task , Order)
 from web import db, csrf
 from datetime import datetime
 
 from flask import Blueprint
 task_bp = Blueprint('task-api', __name__)
+
+
+@task_bp.route('/tasks-pending', methods=['GET'])
+def get_next_pending_task():
+    """ Return the next pending task for the user """
+    user_id = request.args.get('user_id', type=int, default=1)  # Replace with actual user logic
+    completed_task_ids = [order.task_id for order in Order.query.filter_by(user_id=user_id).all()]
+    next_task = Task.query.filter(~Task.id.in_(completed_task_ids)).first()
+    if next_task:
+        task_data = {'id': next_task.id, 'image': next_task.image, 'title': next_task.title, 'description': next_task.description, 'reward': next_task.reward}
+        return jsonify(task_data), 200
+    else:
+        return jsonify(None), 200
 
 
 @task_bp.route('/tasks', methods=['POST'])
@@ -53,7 +66,7 @@ def get_task(id):
         return jsonify({'success':False, 'error': str(e)})
 
 # get many
-@task_bp.route('/tasks', methods=['GET'])
+@task_bp.route('/tasks-all', methods=['GET'])
 def get_tasks():
     tasks = Task.query.all()  # Get all tasks
     tasks_list = [{'id': task.id, 'image': task.image, 'title': task.title, 'description': task.description, 'reward': task.reward} for task in tasks]
@@ -66,10 +79,10 @@ def get_total_tasks():
     return jsonify({'total_tasks': total_tasks}), 200
 
 @task_bp.route('/tasks-pending', methods=['GET'])
-def get_tasks_pending():
-    """ filter out and return only pending tasks """
-    # user_id = request.args.get('user_id', current_user.id)
-    user_id = request.args.get('user_id')
+@login_required
+def tasks_pending():
+    """ filter out and return only pending tasks for the user """
+    user_id = request.args.get('user_id', current_user.id)
     completed_task_ids = [order.task_id for order in Order.query.filter_by(user_id=user_id).all()]
     tasks = Task.query.filter(~Task.id.in_(completed_task_ids)).all()
     tasks_list = [{'id': task.id, 'image':task.image, 'title': task.title, 'description': task.description, 'reward': task.reward} for task in tasks]
