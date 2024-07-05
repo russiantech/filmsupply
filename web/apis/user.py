@@ -57,35 +57,46 @@ def create_user():
         return redirect(url_for('main.index'))
 
     if request.content_type != 'application/json':
-        return jsonify({"success": False, "message": "Content-Type must be application/json"}), 415
+        return jsonify({"success": False, "message": "Content-Type must be application/json"})
 
     data = request.get_json()
 
+    # Log received data for debugging purposes
+    print(f"Received data: {data}")
+
+    # Validate the data against the schema
     try:
         validate(instance=data, schema=signup_schema)
     except ValidationError as e:
-        return jsonify({"success": False, "message": e.message}), 400
+        return jsonify({"success": False, "error": e.message})
 
+    # Ensure that no fields are empty
+    if not all(data.get(key) for key in ('username', 'email', 'password')):
+        return jsonify({"success": False, "error": "Required field is empty"})
+
+    # Perform checks on the data
     if db.session.scalar(sa.select(User).where(User.username == data['username'])):
-        return jsonify({"success": False, "message": "Please use a different username."})
+        return jsonify({"success": False, "error": "Please use a different username."})
 
     if db.session.scalar(sa.select(User).where(User.email == data['email'])):
-        return jsonify({"success": False, "message": "Please use a different email address."})
+        return jsonify({"success": False, "error": "Please use a different email address."})
 
     if db.session.scalar(sa.select(User).where(User.phone == data['phone'])):
-        return jsonify({"success": False, "message": "Please use a different phone number."})
+        return jsonify({"success": False, "error": "Please use a different phone number."})
 
     try:
+        # Create and save the new user
         user = User(
             username=data['username'],
             email=data['email'],
             phone=data['phone'],
-            password=hash_txt(data['password']),
+            password=bcrypt.generate_password_hash(data['password']),
             ip=ip_adrs.user_ip()
         )
         db.session.add(user)
         db.session.commit()
 
+        # Send verification email
         email.verify_email(user)
 
         return jsonify({"success": True, "message": "Registration Successful", "redirect": url_for('auth.signin')})
@@ -94,8 +105,6 @@ def create_user():
         print(traceback.print_exc())
         db.session.rollback()
         return jsonify({"success": False, "error": str(e)})
-
-
 
 
 @user_bp.route("/auth", methods=['POST'])
@@ -118,6 +127,10 @@ def auth():
         except ValidationError as e:
             return jsonify({"success": False, "message": e.message})
 
+        # Ensure that no fields are empty
+        if not all(data.get(key) for key in ('signin', 'password')):
+            return jsonify({"success": False, "message": "All fields are required and must not be empty."})
+
         # Authentication logic
         user = User.query.filter(
             sa.or_(
@@ -127,7 +140,7 @@ def auth():
             )
         ).first()
 
-        if user and check_password_hash(user.password, data['password']):
+        if user and bcrypt.check_password_hash(user.password, data['password']):
             user.online = True
             user.last_seen = datetime.utcnow()
             user.ip = ip_adrs.user_ip()

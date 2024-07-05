@@ -136,7 +136,7 @@
                           window.location.href = response.redirect;
                       }
                   } else {
-                      response_modal(response.error || response || 'An error occurred.');
+                      response_modal(response.error || JSON.stringify(response)	 || 'An error occurred.');
                   }
               },
               error: function(jqXHR, textStatus, errorThrown) {

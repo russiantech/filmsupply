@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_login import current_user, login_required
-from web.models import (  Order, User )
+from web.models import ( Task, Order, User )
 from web import db, csrf
 from datetime import datetime
 
@@ -16,32 +16,57 @@ user_plan_percentages = {
 }
 
 @order_bp.route('/orders', methods=['POST'])
+@login_required
 @csrf.exempt
 def create_order():
-    data = request.get_json()
-    user_id = data['user_id']
-    task_id = data['task_id']
-    rating = data['rating']
-    comment = data['comment']
-    
-    user = User.query.get_or_404(user_id)
-    task = Task.query.get_or_404(task_id)
+    try:
+        data = request.get_json()
 
-    plan_percentage = user_plan_percentages.get(user.plan, 0)
-    amount = task.reward * plan_percentage
+        if not data:
+            raise ValueError("No input data provided")
 
-    new_order = Order(
-        user_id=user_id,
-        task_id=task_id,
-        amount=amount,
-        status='completed',
-        rating=rating,
-        comment=comment
-    )
-    
-    db.session.add(new_order)
-    db.session.commit()
-    return jsonify({"message": "Order created successfully"}), 201
+        user_id = data.get('user_id', current_user.id)
+        task_id = data.get('task_id')
+        rating = data.get('rating')
+        comment = data.get('comment')
+
+        # Validate required fields
+        if task_id is None:
+            raise ValueError("Task ID is required")
+        if rating is None:
+            raise ValueError("Rating is required")
+        if comment is None:
+            raise ValueError("Comment is required")
+
+        user = User.query.get_or_404(user_id)
+        task = Task.query.get_or_404(task_id)
+
+        plan_percentage = user_plan_percentages.get(user.plan, 0)
+        amount = task.reward * plan_percentage
+
+        new_order = Order(
+            user_id=user_id,
+            task_id=task_id,
+            amount=amount,
+            status='completed',
+            rating=rating,
+            comment=comment
+        )
+
+        db.session.add(new_order)
+        db.session.commit()
+
+        return jsonify({"success": True, "message": "Order created successfully"})
+
+    except ValueError as ve:
+        print(ve)
+        return jsonify({'success': False, 'error': str(ve)})
+    except Exception as e:
+        print(e)
+        # Log the exception for debugging purposes
+        # logging.exception("An error occurred while creating an order")
+        return jsonify({'success': False, 'error': 'An internal error occurred'})
+
 
 
 # create order

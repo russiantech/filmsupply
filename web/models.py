@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
     image = db.Column(db.String(1000))
     
     password = db.Column(db.String(500), nullable=False)
-    withdrawal_password = db.Column(db.String(500), nullable=False)
+    withdrawal_password = db.Column(db.String(20))
 
     tier = db.Column(db.String(50), nullable=False, default='normal')
     balance = db.Column(db.Float, default=0.0)

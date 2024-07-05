@@ -341,13 +341,13 @@ def query(user_id):
 def fetch_notifications():
     notifications = Notification.query.filter_by(
         user_id=current_user.id, is_read=False, deleted=False
-        ).order_by(Notification.created_at.desc()).all()
+        ).order_by(Notification.created.desc()).all()
     notifications_list = [{
         'id': notification.id,
         'message': notification.message,
         'is_read': notification.is_read,
         'file_path': notification.file_path,
-        'created_at': notification.created_at.strftime('%a, %b %d %I:%M %p')
+        'created': notification.created.strftime('%a, %b %d %I:%M %p')
     } for notification in notifications]
 
     return jsonify({"notifications": notifications_list}), 200

@@ -36,11 +36,11 @@ def get_task(id):
 def get_task(id):
     try:
         task = Task.query.get_or_404(id)
-        user_id = request.args.get('user_id', 1) # do not forget to update this line ti work with actual user_id
+        user_id = request.args.get('user_id', current_user.id) # do not forget to update this line ti work with actual user_id
         user = User.query.get(user_id)
         
         if not user:
-            return jsonify({'error': 'User not found'}), 404
+            return jsonify({'error': 'User not found'})
         
         return jsonify({
             'id': task.id,

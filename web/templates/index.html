@@ -267,25 +267,102 @@
     }
 </style>
 
-
 <script>
-    let baseUrl = `${window.location.origin}`
+    /*
     let currentTaskIndex = 0;
     let tasks = [];
 
     async function fetchTasks() {
         const userId = 1;  // Replace with the actual user ID
-        // const response = await fetch(`http://127.0.0.1:8000/tasks?user_id=${userId}`);
-        const response = await fetch(`${baseUrl}/tasks?user_id=${userId}`);
+        const response = await fetch(`http://127.0.0.1:8000/tasks`);
+        tasks = await response.json();
+        displayTask(currentTaskIndex);
+    }
+
+    function displayTask(index) {
+        if (index >= tasks.length) {
+            document.getElementById('task-container').innerHTML = '<p>All tasks completed!</p>';
+            return;
+        }
+
+        const task = tasks[index];
+        document.getElementById('task-container').innerHTML = `
+            <div class="d-flex align-items-center">
+                <img src="./static/img/start/1.png" alt="Oneplus" height="32" width="32" class="me-2 rounded">
+                <div class="d-flex flex-column">
+                    <span class="fw-medium lh-1">${task.title}</span>
+                </div>
+            </div>
+            <div class="col-xl">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <small class="mb-0 text-warning">Select rating, add comment to earn
+                            <b class="badge bg-label-primary me-3">0.3% of 200</b> </small>
+                        <span>Task <h4 class="badge bg-label-primary me-3">${index + 1} of ${tasks.length} completed</h4></span>
+                    </div>
+                    <div class="card-body">
+                        <form onsubmit="submitTask(event)">
+                            <div class="mb-3">
+                                <div class="pb-0">
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="ratings">
+                                            ${[1, 2, 3, 4, 5].map(i => `
+                                                <i class="bx bxs-star bx-sm text-warning rating-star" data-value="${i}" onclick="setRating(${i})"></i>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-default-message">Comment</label>
+                                <textarea id="comment" class="form-control" placeholder="Hi, Do you have a moment to talk?" spellcheck="false"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-outline-warning">Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function setRating(value) {
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.classList.toggle('text-warning', star.dataset.value <= value);
+            star.classList.toggle('text-lighter', star.dataset.value > value);
+        });
+    }
+
+    function submitTask(event) {
+        event.preventDefault();
+        const comment = document.getElementById('comment').value;
+        // Perform task submission (e.g., send to the server)
+        // After submission, move to the next task
+        currentTaskIndex++;
+        displayTask(currentTaskIndex);
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchTasks);
+    */
+</script>
+
+<script>
+    
+    let baseUrl = `${window.location.origin}`
+    let currentTaskIndex = 0;
+    let tasks = [];
+
+    async function fetchTasks() {
+        const response = await fetch(`${baseUrl}/tasks`);
         // const response = await fetch(`${window.location.origin}/tasks-pending?user_id=${userId}`);
         tasks = await response.json();
+        console.log(tasks)
         displayTask(currentTaskIndex);
     }
 
     function displayTask(index) {
 
         if (index >= tasks.length) {
-            document.getElementById('task-container').innerHTML = '<p>All tasks completed!</p>';
+            document.getElementById('task-container').innerHTML = '<p class="text-warning text-bold">Congratulations!. All tasks completed!</p>';
             return;
         }
 
@@ -335,8 +412,9 @@
             star.classList.toggle('text-lighter', star.dataset.value > value);
         });
     }
-    /*
-    function submitTask(event) {
+    
+    
+    async function submitTask(event) {
         event.preventDefault();
         const comment = document.getElementById('comment').value;
         // Perform task submission (e.g., send to the server)
@@ -346,15 +424,10 @@
 
     }
 
-    document.addEventListener('DOMContentLoaded', fetchTasks);
-    */
-
-    
+    // document.addEventListener('DOMContentLoaded', fetchTasks);
+    document.getElementById('taskForm').addEventListener('submit', submitTask);
         
-        let totalTasks = 0;
-
-        document.getElementById('taskForm').addEventListener('submit', submitTask);
-
+        /*
         async function submitTask(event) {
             event.preventDefault();
 
@@ -371,6 +444,7 @@
             };
 
             try {
+                
                 const response = await fetch(`${baseUrl}/orders`, {
                     method: 'POST',
                     headers: {
@@ -396,11 +470,12 @@
             }
         }
 
-        async function displayTask(taskId) {
-            const userId = document.getElementById('user_id').value;
+        async function displayTask1(taskId) {
+            // const userId = document.getElementById('user_id').value;
 
             try {
-                const taskResponse = await fetch(`${baseUrl}/tasks/${taskId}?user_id=${userId}`);
+                // const taskResponse = await fetch(`${baseUrl}/tasks/${taskId}?user_id=${userId}`);
+                const taskResponse = await fetch(`${baseUrl}/tasks`);
                 if (!taskResponse.ok) {
                     throw new Error('Task not found');
                 }
@@ -409,9 +484,10 @@
                 if (task) {
                     document.getElementById('task_id').value = task.id;
                     document.getElementById('taskTitle').innerText = task.title;
-                    document.getElementById('taskDescription').innerText = task.description;
+                    // document.getElementById('taskDescription').innerText = task.description;
                     document.getElementById('taskReward').innerText = `Earn ${task.reward}`;
-                    document.getElementById('taskIndex').innerText = `Task ${taskId} of ${totalTasks}`;
+                    // document.getElementById('taskIndex').innerText = `Task ${taskId} of ${totalTasks}`;
+                    document.getElementById('taskIndex').innerText = `Task ${taskId} of ${task.length}`;
                     document.getElementById('reward').value = task.reward;
                 } else {
                     alert('No more tasks available.');
@@ -420,7 +496,9 @@
                 console.error('Error fetching the task:', error);
             }
         }
+        */
 
+        /* let totalTasks = 0;
         async function fetchTotalTasks() {
             try {
                 const response = await fetch(`${baseUrl}/tasks/total`);
@@ -435,7 +513,11 @@
             } catch (error) {
                 console.error('Error fetching total tasks:', error);
             }
-        }
+        } 
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchTotalTasks();
+        });    
+        */
 
         document.querySelectorAll('#rating-stars .bxs-star').forEach(star => {
             star.addEventListener('click', function() {
@@ -457,9 +539,7 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchTotalTasks();
-        });
+
 
 </script>
 

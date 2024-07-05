@@ -105,9 +105,9 @@
                             </span>
                         </div>
                         <div class="card-body">
-                            <form id="taskForm">
+                            <form id="taskForm" action="./orders" method="post">
                                 <input type="hidden" id="task_id" name="task_id">
-                                <input type="hidden" id="user_id" name="user_id" value="1"> <!-- Example user ID -->
+                                <input type="hidden" id="user_id" name="user_id" value="{{current_user.id}}"> <!-- Example user ID -->
                                 <input type="hidden" id="rating" name="rating">
                                 <input type="hidden" id="reward" name="reward">
     
