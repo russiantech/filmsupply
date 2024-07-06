@@ -1,13 +1,14 @@
 from datetime import datetime
+import random
+import string
 import jwt, time
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from flask import current_app
 # from web.utils.ip_adrs import user_ip
-
+    
 db = SQLAlchemy()
-
 user_roles = db.Table(
     'user_roles',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
@@ -15,10 +16,11 @@ user_roles = db.Table(
     keep_existing=True
 )
 
-
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(50), default='0000')
+    refcode = db.Column(db.String(50), default='0000')
     name = db.Column(db.String(100), index=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False, index=True)
@@ -54,7 +56,7 @@ class User(db.Model, UserMixin):
         return str(self.id)
 
     def is_admin(self):
-        return any(role.type == 'admin' for role in self.role)
+        return any(role.type == 'admin' for role in self.roles)
 
     def generate_token(self, exp=600, type='reset'):
         payload = {'uid': self.id, 'exp': time.time() + exp, 'type': type }

@@ -36,7 +36,7 @@ def role_required(*required_roles):
                 # Remove the "abort(401)" part, so it won't tamper/affect other operations
                 return jsonify({'success': False, 'error': "login required"})
 
-            user_has_role = any(r_roles in [role.type for role in current_user.role] for r_roles in required_roles)
+            user_has_role = any(r_roles in [role.level for role in current_user.roles] for r_roles in required_roles)
             allow_all = any( '*' in r_roles for r_roles in required_roles)
             
             # return view_func(*args, **kwargs) if user_has_role or allow_all else redirect(url_for('main.index', usrname=current_user.username)) #abort(403) #forbidden

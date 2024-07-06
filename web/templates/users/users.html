@@ -1,0 +1,508 @@
+{% extends 'base.html' %}
+{% block title %} Users . Film supply {% endblock title %}
+
+{% block content %}
+<div class="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">
+    <div class="layout-container">
+
+        {% include "incs/nav.html" %}
+
+        <!-- Layout container -->
+        <div class="layout-page">
+
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+
+                <!-- Content -->
+                
+                  <div class="container-xxl flex-grow-1 container-p-y">
+                    
+                    
+        
+        <h4 class="py-3 mb-4">
+          <span class="text-muted fw-light">Users / </span> Filmsuply
+        </h4>
+        
+        <div class="row mb-4 g-3">
+          <div class="col-sm-6 col-xl-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="content-left">
+                    <h3 class="mb-0">$24,983</h3>
+                    <small>Total Earning</small>
+                  </div>
+                  <span class="badge bg-label-primary rounded-circle p-2">
+                    <i class="bx bx-dollar bx-sm"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xl-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="content-left">
+                    <h3 class="mb-0">$8,647</h3>
+                    <small>Unpaid Earning</small>
+                  </div>
+                  <span class="badge bg-label-success rounded-circle p-2">
+                    <i class="bx bx-gift bx-sm"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xl-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="content-left">
+                    <h3 class="mb-0">2,367</h3>
+                    <small>Signups</small>
+                  </div>
+                  <span class="badge bg-label-danger rounded-circle p-2">
+                    <i class="bx bx-user bx-sm"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xl-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="content-left">
+                    <h3 class="mb-0">4.5%</h3>
+                    <small>Conversion Rate</small>
+                  </div>
+                  <span class="badge bg-label-info rounded-circle p-2">
+                    <i class="bx bx-infinite bx-sm"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mb-4 g-4">
+          <div class="col-lg-7">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="mb-1">How to use</h5>
+                <p class="mb-4">Integrate your referral code in 3 easy steps.</p>
+                <div class="d-flex flex-column flex-sm-row justify-content-between text-center gap-3">
+                  <div class="d-flex flex-column align-items-center">
+                    <span><i class="bx bx-rocket text-primary bx-md p-3 border border-primary rounded-circle border-dashed mb-0"></i></span>
+                    <p class="mt-3 mb-2 w-75">Create &amp; validate your referral link and get</p>
+                    <h5 class="text-primary mb-0">$50</h5>
+                  </div>
+                  <div class="d-flex flex-column align-items-center">
+                    <span><i class="bx bxs-user-badge text-primary bx-md p-3 border border-primary rounded-circle border-dashed mb-0"></i></span>
+                    <p class="mt-3 mb-2 w-75">For every new signup you get</p>
+                    <h5 class="text-primary mb-0">10%</h5>
+                  </div>
+                  <div class="d-flex flex-column align-items-center">
+                    <span><i class="bx bxs-paper-plane text-primary bx-md p-3 border border-primary rounded-circle border-dashed mb-0"></i></span>
+                    <p class="mt-3 mb-2 w-75">Get other friends to generate link and get</p>
+                    <h5 class="text-primary mb-0">$100</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-lg-5">
+            <div class="card h-100">
+              <div class="card-body">
+                <form class="referral-form" onsubmit="return false">
+                  <div class="mb-4 mt-1">
+                    <h5>Invite your friends</h5>
+                    <div class="d-flex flex-wrap flex-lg-nowrap gap-3 align-items-end">
+                      <div class="w-75">
+                        <label class="form-label mb-0" for="referralEmail">Enter friend’s email address and invite them</label>
+                        <input type="email" id="referralEmail" name="referralEmail" class="form-control w-100" placeholder="Email address">
+                      </div>
+                      <div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h5>Share the referral link</h5>
+                    <div class="d-flex flex-wrap flex-lg-nowrap gap-3 align-items-end">
+                      <div class="w-75">
+                        <label class="form-label mb-0" for="referralLink">Share referral link in social media</label>
+                        <input type="text" id="referralLink" name="referralLink" class="form-control w-100" placeholder="pixinvent.com/?ref=6479">
+                      </div>
+                      <div class="d-flex">
+                        <button type="button" class="btn btn-facebook btn-icon me-2"><i class="bx bxl-facebook text-white bx-sm"></i></button>
+                        <button type="button" class="btn btn-twitter btn-icon"><i class="bx bxl-twitter text-white bx-sm"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Referral List Table -->
+        <div class="card">
+          <div class="card-datatable table-responsive">
+            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer"><div class="card-header d-flex flex-column flex-sm-row pb-md-0 align-items-start align-items-sm-center pt-md-2"><div class="head-label"><h5 class="card-title text-nowrap mb-2 mb-sm-0">Referred users</h5></div><div class="d-flex align-items-sm-center justify-content-end mt-2 mt-sm-0"><div class="dataTables_length mt-0 mt-md-3 me-3" id="DataTables_Table_0_length"><label><select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-select"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select></label></div><div class="dt-action-buttons pt-0"><div class="dt-buttons btn-group flex-wrap"><div class="btn-group"><button class="btn buttons-collection dropdown-toggle btn-label-secondary me-3" tabindex="0" aria-controls="DataTables_Table_0" type="button" aria-haspopup="dialog" aria-expanded="false"><span><i class="bx bx-export me-1"></i>Export</span></button></div> </div></div></div></div><table class="datatables-referral table border-top dataTable no-footer dtr-column collapsed" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" style="width: 978px;">
+              <thead>
+                <tr><th class="control sorting_disabled" rowspan="1" colspan="1" style="width: 0px;" aria-label=""></th><th class="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all" rowspan="1" colspan="1" style="width: 18px;" data-col="1" aria-label=""><input type="checkbox" class="form-check-input"></th><th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 309px;" aria-label="Users: activate to sort column descending" aria-sort="ascending">Users</th><th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 117px;" aria-label="Referred ID: activate to sort column ascending">Referred ID</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 93px;" aria-label="Status: activate to sort column ascending">Status</th><th class="sorting dtr-hidden" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 87px; display: none;" aria-label="Value: activate to sort column ascending">Value</th><th class="text-nowrap sorting dtr-hidden" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 94px; display: none;" aria-label="Earnings: activate to sort column ascending">Earnings</th></tr>
+              </thead><tbody><tr class="odd"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><span class="avatar-initial rounded-circle bg-label-info">AC</span></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Andria Chisnell</span></a><small class="text-muted text-nowrap">achisnellq@imageshack.us</small></div></div></td><td><span>3363</span></td><td><span class="badge bg-label-warning" text-capitalized="">Unpaid</span></td><td class="dtr-hidden" style="display: none;"><span>$9106.99</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$705.15</span> </td></tr><tr class="even"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/8.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Adriano Lygoe</span></a><small class="text-muted text-nowrap">alygoe2m@gravatar.com</small></div></div></td><td><span>5361</span></td><td><span class="badge bg-label-success" text-capitalized="">Paid</span></td><td class="dtr-hidden" style="display: none;"><span>$6447.15</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$777.46</span> </td></tr><tr class="odd"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><span class="avatar-initial rounded-circle bg-label-dark">AH</span></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Anabal Hakking</span></a><small class="text-muted text-nowrap">ahakkingd@paginegialle.it</small></div></div></td><td><span>4892</span></td><td><span class="badge bg-label-danger" text-capitalized="">Rejected</span></td><td class="dtr-hidden" style="display: none;"><span>$8797.12</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$679.71</span> </td></tr><tr class="even"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/17.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Akim Korba</span></a><small class="text-muted text-nowrap">akorbab@flickr.com</small></div></div></td><td><span>8561</span></td><td><span class="badge bg-label-warning" text-capitalized="">Unpaid</span></td><td class="dtr-hidden" style="display: none;"><span>$3104.91</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$552.75</span> </td></tr><tr class="odd"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/18.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Allsun Wrotchford</span></a><small class="text-muted text-nowrap">awrotchford25@fc2.com</small></div></div></td><td><span>1094</span></td><td><span class="badge bg-label-danger" text-capitalized="">Rejected</span></td><td class="dtr-hidden" style="display: none;"><span>$6186.51</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$653.95</span> </td></tr><tr class="even"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/8.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Althea Dayce</span></a><small class="text-muted text-nowrap">adaycet@youtu.be</small></div></div></td><td><span>6069</span></td><td><span class="badge bg-label-danger" text-capitalized="">Rejected</span></td><td class="dtr-hidden" style="display: none;"><span>$6098.09</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$269.32</span> </td></tr><tr class="odd"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Andre Kenway</span></a><small class="text-muted text-nowrap">akenwayh@rambler.ru</small></div></div></td><td><span>9826</span></td><td><span class="badge bg-label-danger" text-capitalized="">Rejected</span></td><td class="dtr-hidden" style="display: none;"><span>$2221.71</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$347.19</span> </td></tr><tr class="even"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/4.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Antone Szymon</span></a><small class="text-muted text-nowrap">aszymon27@wufoo.com</small></div></div></td><td><span>3985</span></td><td><span class="badge bg-label-success" text-capitalized="">Paid</span></td><td class="dtr-hidden" style="display: none;"><span>$7048.75</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$246.18</span> </td></tr><tr class="odd"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><span class="avatar-initial rounded-circle bg-label-info">AS</span></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Aurora Skpsey</span></a><small class="text-muted text-nowrap">askpseyo@cdc.gov</small></div></div></td><td><span>2821</span></td><td><span class="badge bg-label-warning" text-capitalized="">Unpaid</span></td><td class="dtr-hidden" style="display: none;"><span>$2938.87</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$317.42</span> </td></tr><tr class="even"><td class="control" tabindex="0" style=""></td><td class="  dt-checkboxes-cell"><input type="checkbox" class="dt-checkboxes form-check-input"></td><td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><span class="avatar-initial rounded-circle bg-label-primary">AT</span></div></div><div class="d-flex flex-column"><a href="app-ecommerce-customer-details-overview.html"><span class="fw-medium">Adrienne Tourne</span></a><small class="text-muted text-nowrap">atourne8@fotki.com</small></div></div></td><td><span>4072</span></td><td><span class="badge bg-label-warning" text-capitalized="">Unpaid</span></td><td class="dtr-hidden" style="display: none;"><span>$6774.33</span></td><td class="dtr-hidden" style="display: none;"><span class="fw-medium">$821.78</span> </td></tr></tbody>
+            </table><div class="row mx-2"><div class="col-sm-12 col-md-6"><div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to 10 of 100 entries</div></div><div class="col-sm-12 col-md-6"><div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous"><a aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="DataTables_Table_0" role="link" aria-current="page" data-dt-idx="0" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="1" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="2" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="3" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="4" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item disabled" id="DataTables_Table_0_ellipsis"><a aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="ellipsis" tabindex="-1" class="page-link">…</a></li><li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="9" tabindex="0" class="page-link">10</a></li><li class="paginate_button page-item next" id="DataTables_Table_0_next"><a href="#" aria-controls="DataTables_Table_0" role="link" data-dt-idx="next" tabindex="0" class="page-link">Next</a></li></ul></div></div></div><div style="width: 1%;"></div></div>
+          </div>
+        
+        </div>
+        
+        
+                  </div>
+                  <!-- / Content -->
+        
+                  
+                  
+        
+        <!-- Footer -->
+        <footer class="content-footer footer bg-footer-theme">
+          <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+            <div class="mb-2 mb-md-0">
+              © <script>
+              document.write(new Date().getFullYear())
+        
+              </script>2024, made with ❤️ by <a href="https://themeselection.com" target="_blank" class="footer-link fw-medium">ThemeSelection</a>
+            </div>
+            <div class="d-none d-lg-inline-block">
+              
+              <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+              <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+              
+              <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/" target="_blank" class="footer-link me-4">Documentation</a>
+              
+              
+              <a href="https://themeselection.com/support/" target="_blank" class="footer-link d-none d-sm-inline-block">Support</a>
+              
+            </div>
+          </div>
+        </footer>
+        <!-- / Footer -->
+        
+                  
+                  <div class="content-backdrop fade"></div>
+                </div>
+            <!--/ Content wrapper -->
+        </div>
+
+        <!--/ Layout container -->
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block page_js %}
+
+<style>
+    .hidden {
+        display: none;
+    }
+
+    .rating-star {
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    const baseUrl = `${window.location.origin}`;
+    let currentTaskId = null;
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchAndDisplayTask();
+        getCompletedTasks()
+    });
+
+    async function fetchAndDisplayTask() {
+        try {
+            const response = await fetch(`${baseUrl}/tasks-pending`);
+            if (!response.ok) {
+                response_modal("Failed to fetch tasks")
+                throw new Error('Failed to fetch tasks');
+            }
+            const data = await response.json();
+            const task = data.task;
+            const totalTasks = data.total_tasks;
+            const completedTasks = data.completed_tasks;
+
+            if (!task) {
+                const taskContainer = document.getElementById('task-container');
+                if (taskContainer) {
+                    taskContainer.innerHTML = '<p class="text-warning text-bold">Congratulations! All tasks completed!</p>';
+                }
+                return;
+            }
+
+            displayTask(task, totalTasks, completedTasks);
+
+        } catch (error) {
+            response_modal(error)
+            console.error('Error fetching task:', error);
+        }
+    }
+
+    function displayTask(task, totalTasks, completedTasks) {
+        const taskContainer = document.getElementById('task-container');
+        if (!taskContainer) {
+            console.error('Task container not found');
+            response_modal('Task container not found')
+            return;
+        }
+
+        currentTaskId = task.id;
+        taskContainer.innerHTML = `
+        <div class="d-flex align-items-center">
+                    <img src="./static/img/start/${task.image}" alt="${task.title}" height="32" width="32" class="me-2 rounded">
+                    <div class="d-flex flex-column">
+                        <span class="fw-medium lh-1">${task.description}</span>
+                    </div>
+                </div>
+                <div class="col-xl">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <small class="mb-0 text-warning">
+                        Select rating, add comment to earn
+                        <b class="badge bg-label-primary me-3" id="taskReward">${task.reward_percentage.toFixed(2)} of ${task.reward}</b>
+                    </small>
+                    <span>
+                        Task <h4 class="badge bg-label-primary me-3" id="taskIndex">${completedTasks + 1} of ${totalTasks}</h4>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <form id="taskForm" onsubmit="submitTask(event)">
+                        <input type="hidden" id="task_id" name="task_id" value="${task.id}">
+                        <input type="hidden" id="user_id" name="user_id" value="${task.user_id}">
+                        <input type="hidden" id="rating" name="rating">
+                        <input type="hidden" id="reward" name="reward" value="${task.reward}">
+                        <div class="mb-3">
+                            <label class="form-label" for="comment">Comment</label>
+                            <textarea id="comment" class="form-control" placeholder="Enter your comment" spellcheck="false"></textarea>
+                        </div>
+                        <div id="rating-stars" class="d-flex align-items-center gap-3 mb-3">
+                            <i class="bx bxs-star bx-sm text-lighter" data-rating="1"></i>
+                            <i class="bx bxs-star bx-sm text-lighter" data-rating="2"></i>
+                            <i class="bx bxs-star bx-sm text-lighter" data-rating="3"></i>
+                            <i class="bx bxs-star bx-sm text-lighter" data-rating="4"></i>
+                            <i class="bx bxs-star bx-sm text-lighter" data-rating="5"></i>
+                        </div>
+                        <button type="submit" class="btn btn-outline-warning">Upload</button>
+                    </form>
+                </div>
+            </div>
+            </div>
+        `;
+
+        document.querySelectorAll('#rating-stars .bxs-star').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.getAttribute('data-rating');
+                document.getElementById('rating').value = rating;
+                updateStarRating(rating);
+            });
+        });
+    }
+
+    function updateStarRating(rating) {
+        document.querySelectorAll('#rating-stars .bxs-star').forEach(star => {
+            if (star.getAttribute('data-rating') <= rating) {
+                star.classList.add('text-warning');
+                star.classList.remove('text-lighter');
+            } else {
+                star.classList.add('text-lighter');
+                star.classList.remove('text-warning');
+            }
+        });
+    }
+
+    async function submitTask(event) {
+        event.preventDefault();
+        const taskId = document.getElementById('task_id').value;
+        const comment = document.getElementById('comment').value;
+        const rating = document.getElementById('rating').value;
+
+        const orderData = {
+            user_id: null, // Assuming a static user ID for this example
+            task_id: parseInt(taskId),
+            rating: parseInt(rating),
+            comment: comment
+        };
+
+        try {
+            const response = await fetch(`${baseUrl}/orders`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                response_modal(errorMessage)
+                throw new Error(`Failed to create order: ${errorMessage}`);
+            }
+
+            const data = await response.json();
+            response_modal(data.success ? data.message : data.error);
+            if (!data.success) console.error('Error:', data.error);
+            console.log(data);
+
+
+            // After successful submission, fetch and display the next task
+            fetchAndDisplayTask();
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            // alert('Failed to create order. Please try again.');
+            response_modal(error.error)
+        }
+    }
+
+
+    async function getCompletedTasks() {
+            try {
+                const response = await fetch(`${baseUrl}/tasks-completed`);
+                const completedTasks = await response.json();
+
+                completedTasks.error ? response_modal(completedTasks.error) : '';
+                if (!completedTasks.success) return console.error('Error:', data.error);
+                // console.log(completedTasks);
+
+                const tbody = document.getElementById('completed-tasks');
+                tbody.innerHTML = '';
+
+                completedTasks.tasks.forEach((task, index) => {
+                    const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="./static/img/start/${task.image}" alt="${task.title}" height="32" width="32" class="me-2 rounded">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-medium lh-1">${task.title}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><small class="text-muted">${task.rating}/5.0</small></td>
+                            <td><small class="text-muted">${task.amount}</small></td>
+                            <td><span class="badge bg-label-warning">${task.earnings}</span></td>
+                            <td>Completed</td>
+                            <td>${task.created}</td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+            } catch (error) {
+                response_modal(error)
+                console.error('Error fetching completed tasks:', error);
+            }
+        }
+        
+</script>
+
+<script>
+    "use strict";
+
+    (async function () {
+        try {
+            // Fetch the data from the endpoint
+            const response = await fetch('/analyze_data');
+            const data = await response.json();
+
+            if (data.error) {
+                console.error('Error fetching data:', data.error);
+                return;
+            }
+
+            // Update the totals in the HTML
+            document.getElementById('totalEarnings').textContent = `$${data.earnings.total.toFixed(2)}`;
+            document.getElementById('totalDeposits').textContent = `$${data.deposits.total.toFixed(2)}`;
+
+            console.log(data)
+            // Extract the required values from the response
+            const depositsData = [
+                data.deposits.mean, 
+                data.deposits.median, 
+                data.deposits.std_dev, 
+                data.deposits.total
+            ];
+            const earningsData = [
+                data.earnings.mean, 
+                data.earnings.median, 
+                data.earnings.std_dev, 
+                data.earnings.total
+            ];
+            const categories = ["Mean", "Median", "Std Dev", "Total"];
+
+            // Dark mode configuration (simplified)
+            const isDarkStyle = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const colors = isDarkStyle ? ["#4f51c0", "#e1e2ff"] : ["#696cff", "#a5a7ff"];
+
+            // Chart configuration
+            const options = {
+                series: [{
+                    name: "Deposits",
+                    data: depositsData
+                }, {
+                    name: "Earnings",
+                    data: earningsData
+                }],
+                chart: { 
+                    height: 350, 
+                    type: "line", 
+                    dropShadow: { 
+                        enabled: true, 
+                        top: 10, 
+                        left: 5, 
+                        blur: 3, 
+                        color: "#4f51c0", 
+                        opacity: .15 
+                    }, 
+                    toolbar: { show: false } 
+                }, 
+                dataLabels: { enabled: true }, 
+                stroke: { width: 2, curve: "smooth" }, 
+                legend: { show: true }, 
+                colors: colors, 
+                markers: { 
+                    size: 6, 
+                    colors: "transparent", 
+                    strokeColors: "transparent", 
+                    strokeWidth: 4, 
+                    hover: { size: 7 } 
+                }, 
+                grid: { 
+                    show: true, 
+                    padding: { top: -10, left: 0, right: 0, bottom: 10 } 
+                },
+                xaxis: {
+                    categories: categories, 
+                    axisBorder: { show: true }, 
+                    axisTicks: { show: true },
+                    labels: { show: true, style: { fontSize: "13px", colors: "#ccc" } }
+                }, 
+                yaxis: { labels: { show: true } }
+            };
+
+            // Rendering the chart if the element exists
+            const d = document.querySelector("#totalBalanceChart");
+            if (d !== null) {
+                new ApexCharts(d, options).render();
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    })();
+    
+</script>
+{% endblock page_js %}

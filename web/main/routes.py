@@ -22,3 +22,14 @@ main = Blueprint('main', __name__)
 # @db_session_management
 def index():
     return stream_template('index.html')
+
+@main.route("/users")
+@login_required
+@role_required('admin', '*')
+# @db_session_management
+def users():
+    return stream_template('users/users.html')
+
+@main.route("/maintainance")
+def maintainance():
+    return stream_template('maintainance.html')
