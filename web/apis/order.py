@@ -7,6 +7,36 @@ from datetime import datetime
 from flask import Blueprint
 order_bp = Blueprint('orders-api', __name__)
 
+def calculate_percentage(percentage, number):
+    """
+    Calculate the percentage of a given number with input validation.
+    
+    :param percentage: The percentage to calculate (e.g., 0.7 for 0.7%)
+    :param number: The number to calculate the percentage of
+    :return: The result of the percentage calculation
+    """
+    # Validate that percentage is a number
+    if not isinstance(percentage, (int, float)):
+        raise ValueError("Percentage must be a number.")
+    
+    # Validate that number is a number
+    if not isinstance(number, (int, float)):
+        raise ValueError("Number must be a number.")
+    
+    # Validate that percentage is between 0 and 100
+    if percentage < 0 or percentage > 100:
+        raise ValueError("Percentage must be between 0 and 100.")
+    
+    # Calculate the percentage
+    return (percentage / 100) * number
+
+# Example usage:
+try:
+    result = calculate_percentage(0.7, 10)
+    print(result)  # Output: 0.07
+except ValueError as e:
+    print(e)
+
 # Assuming 'user_plan_percentages' dictionary maps user plans to their corresponding percentages
 user_plan_percentages = {
     'normal': 0.7,
@@ -25,29 +55,32 @@ def create_order():
         if not data:
             raise ValueError("No input data provided")
 
-        user_id = data.get('user_id', current_user.id)
+        user_id = data.get('user_id') or current_user.id
         task_id = data.get('task_id')
         rating = data.get('rating')
         comment = data.get('comment')
+        
+        print(data)
 
         # Validate required fields
         if task_id is None:
             raise ValueError("Task ID is required")
         if rating is None:
-            raise ValueError("Rating is required")
+            raise ValueError("Kindly select a rating first")
         if comment is None:
             raise ValueError("Comment is required")
-
+        print(task_id, user_id)
         user = User.query.get_or_404(user_id)
         task = Task.query.get_or_404(task_id)
 
-        plan_percentage = user_plan_percentages.get(user.plan, 0)
-        amount = task.reward * plan_percentage
+        plan_percentage = user_plan_percentages.get(user.tier, 0)
+        # amount = task.reward * plan_percentage
+        earnings = calculate_percentage(plan_percentage, task.reward)
 
         new_order = Order(
             user_id=user_id,
             task_id=task_id,
-            amount=amount,
+            earnings=earnings,
             status='completed',
             rating=rating,
             comment=comment
@@ -56,7 +89,8 @@ def create_order():
         db.session.add(new_order)
         db.session.commit()
 
-        return jsonify({"success": True, "message": "Order created successfully"})
+        return jsonify({"success": True, "message": "Order created successfully, continue to next one"})
+        # return jsonify({"success": True, "message": "Task completed, continue to next one"})
 
     except ValueError as ve:
         print(ve)
@@ -66,24 +100,6 @@ def create_order():
         # Log the exception for debugging purposes
         # logging.exception("An error occurred while creating an order")
         return jsonify({'success': False, 'error': 'An internal error occurred'})
-
-
-
-# create order
-@order_bp.route('/orders0', methods=['POST'])
-def create_order0():
-    data = request.get_json()
-    new_order = Order(
-        user_id=data['user_id'],
-        task_id=data['task_id'],
-        amount=data['amount'],
-        status=data['status'],
-        rating = data['rating'],
-        comment = data['comment']
-    )
-    db.session.add(new_order)
-    db.session.commit()
-    return jsonify({"message": "Order created successfully"}), 201
 
 # get single-order
 @order_bp.route('/orders/<int:id>', methods=['GET'])

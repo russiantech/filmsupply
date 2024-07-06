@@ -270,48 +270,64 @@
 <script>
     const baseUrl = `${window.location.origin}`;
     let currentTaskId = null;
-
     document.addEventListener('DOMContentLoaded', () => {
         fetchAndDisplayTask();
+        getCompletedTasks()
     });
 
     async function fetchAndDisplayTask() {
         try {
             const response = await fetch(`${baseUrl}/tasks-pending`);
             if (!response.ok) {
+                response_modal("Failed to fetch tasks")
                 throw new Error('Failed to fetch tasks');
             }
-            const task = await response.json();
-            if (!task || Object.keys(task).length === 0) {
+            const data = await response.json();
+            const task = data.task;
+            const totalTasks = data.total_tasks;
+            const completedTasks = data.completed_tasks;
+
+            if (!task) {
                 const taskContainer = document.getElementById('task-container');
                 if (taskContainer) {
                     taskContainer.innerHTML = '<p class="text-warning text-bold">Congratulations! All tasks completed!</p>';
                 }
                 return;
             }
-            displayTask(task);
+
+            displayTask(task, totalTasks, completedTasks);
+
         } catch (error) {
+            response_modal(error)
             console.error('Error fetching task:', error);
         }
     }
 
-    function displayTask(task) {
+    function displayTask(task, totalTasks, completedTasks) {
         const taskContainer = document.getElementById('task-container');
         if (!taskContainer) {
             console.error('Task container not found');
+            response_modal('Task container not found')
             return;
         }
 
         currentTaskId = task.id;
         taskContainer.innerHTML = `
+        <div class="d-flex align-items-center">
+                    <img src="./static/img/start/${task.image}" alt="${task.title}" height="32" width="32" class="me-2 rounded">
+                    <div class="d-flex flex-column">
+                        <span class="fw-medium lh-1">${task.description}</span>
+                    </div>
+                </div>
+                <div class="col-xl">
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <small class="mb-0 text-warning">
                         Select rating, add comment to earn
-                        <b class="badge bg-label-primary me-3" id="taskReward">${(task.reward * 0.003).toFixed(2)} of ${task.reward}</b>
+                        <b class="badge bg-label-primary me-3" id="taskReward">${task.reward_percentage.toFixed(2)} of ${task.reward}</b>
                     </small>
                     <span>
-                        Task <h4 class="badge bg-label-primary me-3" id="taskIndex">${task.id}</h4>
+                        Task <h4 class="badge bg-label-primary me-3" id="taskIndex">${completedTasks + 1} of ${totalTasks}</h4>
                     </span>
                 </div>
                 <div class="card-body">
@@ -334,6 +350,7 @@
                         <button type="submit" class="btn btn-outline-warning">Upload</button>
                     </form>
                 </div>
+            </div>
             </div>
         `;
 
@@ -365,7 +382,7 @@
         const rating = document.getElementById('rating').value;
 
         const orderData = {
-            user_id: 1, // Assuming a static user ID for this example
+            user_id: null, // Assuming a static user ID for this example
             task_id: parseInt(taskId),
             rating: parseInt(rating),
             comment: comment
@@ -382,19 +399,160 @@
 
             if (!response.ok) {
                 const errorMessage = await response.text();
+                response_modal(errorMessage)
                 throw new Error(`Failed to create order: ${errorMessage}`);
             }
 
-            const result = await response.json();
-            console.log(result);
+            const data = await response.json();
+            response_modal(data.success ? data.message : data.error);
+            if (!data.success) console.error('Error:', data.error);
+            console.log(data);
+
 
             // After successful submission, fetch and display the next task
             fetchAndDisplayTask();
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
-            alert('Failed to create order. Please try again.');
+            // alert('Failed to create order. Please try again.');
+            response_modal(error.error)
         }
     }
+
+
+    async function getCompletedTasks() {
+            try {
+                const response = await fetch(`${baseUrl}/tasks-completed`);
+                const completedTasks = await response.json();
+
+                completedTasks.error ? response_modal(completedTasks.error) : '';
+                if (!completedTasks.success) return console.error('Error:', data.error);
+                // console.log(completedTasks);
+
+                const tbody = document.getElementById('completed-tasks');
+                tbody.innerHTML = '';
+
+                completedTasks.tasks.forEach((task, index) => {
+                    const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="./static/img/start/${task.image}" alt="${task.title}" height="32" width="32" class="me-2 rounded">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-medium lh-1">${task.title}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><small class="text-muted">${task.rating}/5.0</small></td>
+                            <td><small class="text-muted">${task.amount}</small></td>
+                            <td><span class="badge bg-label-warning">${task.earnings}</span></td>
+                            <td>Completed</td>
+                            <td>${task.created}</td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+            } catch (error) {
+                response_modal(error)
+                console.error('Error fetching completed tasks:', error);
+            }
+        }
+        
 </script>
 
+<script>
+    "use strict";
+
+    (async function () {
+        try {
+            // Fetch the data from the endpoint
+            const response = await fetch('/analyze_data');
+            const data = await response.json();
+
+            if (data.error) {
+                console.error('Error fetching data:', data.error);
+                return;
+            }
+
+            // Update the totals in the HTML
+            document.getElementById('totalEarnings').textContent = `$${data.earnings.total.toFixed(2)}`;
+            document.getElementById('totalDeposits').textContent = `$${data.deposits.total.toFixed(2)}`;
+
+            console.log(data)
+            // Extract the required values from the response
+            const depositsData = [
+                data.deposits.mean, 
+                data.deposits.median, 
+                data.deposits.std_dev, 
+                data.deposits.total
+            ];
+            const earningsData = [
+                data.earnings.mean, 
+                data.earnings.median, 
+                data.earnings.std_dev, 
+                data.earnings.total
+            ];
+            const categories = ["Mean", "Median", "Std Dev", "Total"];
+
+            // Dark mode configuration (simplified)
+            const isDarkStyle = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const colors = isDarkStyle ? ["#4f51c0", "#e1e2ff"] : ["#696cff", "#a5a7ff"];
+
+            // Chart configuration
+            const options = {
+                series: [{
+                    name: "Deposits",
+                    data: depositsData
+                }, {
+                    name: "Earnings",
+                    data: earningsData
+                }],
+                chart: { 
+                    height: 350, 
+                    type: "line", 
+                    dropShadow: { 
+                        enabled: true, 
+                        top: 10, 
+                        left: 5, 
+                        blur: 3, 
+                        color: "#4f51c0", 
+                        opacity: .15 
+                    }, 
+                    toolbar: { show: false } 
+                }, 
+                dataLabels: { enabled: true }, 
+                stroke: { width: 2, curve: "smooth" }, 
+                legend: { show: true }, 
+                colors: colors, 
+                markers: { 
+                    size: 6, 
+                    colors: "transparent", 
+                    strokeColors: "transparent", 
+                    strokeWidth: 4, 
+                    hover: { size: 7 } 
+                }, 
+                grid: { 
+                    show: true, 
+                    padding: { top: -10, left: 0, right: 0, bottom: 10 } 
+                },
+                xaxis: {
+                    categories: categories, 
+                    axisBorder: { show: true }, 
+                    axisTicks: { show: true },
+                    labels: { show: true, style: { fontSize: "13px", colors: "#ccc" } }
+                }, 
+                yaxis: { labels: { show: true } }
+            };
+
+            // Rendering the chart if the element exists
+            const d = document.querySelector("#totalBalanceChart");
+            if (d !== null) {
+                new ApexCharts(d, options).render();
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    })();
+</script>
 {% endblock page_js %}

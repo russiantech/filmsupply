@@ -403,7 +403,7 @@
             try {
                 // const taskResponse = await fetch(`${baseUrl}/tasks/${taskId}?user_id=${userId}`);
                 const taskResponse = await fetch(`${baseUrl}/tasks-pending`);
-                if (!taskResponse.ok) {
+                if (!taskResponse.ok) { 
                     throw new Error('Task not found');
                 }
 

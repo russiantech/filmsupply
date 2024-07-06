@@ -63,6 +63,9 @@ def create_app():
     from web.apis.notify import notify_bp
     app.register_blueprint(notify_bp)
     
+    from web.apis.transactions import trxn_bp
+    app.register_blueprint(trxn_bp)
+    
     from web.auth.routes import auth
     app.register_blueprint(auth)
 

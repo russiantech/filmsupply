@@ -21,4 +21,4 @@ main = Blueprint('main', __name__)
 # @role_required('*')
 # @db_session_management
 def index():
-    return stream_template('index.bak1.html')
+    return stream_template('index.html')

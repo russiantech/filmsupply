@@ -33,7 +33,7 @@
          "#696cff");
 
     // Selecting the total balance chart element
-    var d = document.querySelector("#totalBalanceChart");
+    var d = document.querySelector("#totalBalanceChart1");
     
     // Chart configuration
     var c = {

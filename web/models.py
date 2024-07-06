@@ -41,6 +41,7 @@ class User(db.Model, UserMixin):
     orders = db.relationship('Order', backref='user', lazy=True)
     account_details = db.relationship('AccountDetail', backref='user', lazy=True)
     payments = db.relationship('Payment', backref='user', lazy=True)
+    transactions = db.relationship('Transaction', backref='user', lazy=True)
 
     notifications = db.relationship('Notification', backref='user', lazy=True)
     roles = db.relationship('Role', secondary=user_roles, back_populates='user', lazy='dynamic')
@@ -129,6 +130,19 @@ class Payment(db.Model):
 from sqlalchemy import Enum
 from enum import Enum as PyEnum
 
+class Transaction(db.Model):
+    __tablename__ = 'transactions'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    transaction_type = db.Column(db.String(50), nullable=False)
+    amount = db.Column(db.Numeric(15, 2), nullable=False)
+    # transaction_date = db.Column(db.DateTime, default=datetime.utcnow)
+    description = db.Column(db.Text)
+    deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
+
+    created = db.Column(db.DateTime(timezone=True), default=func.now())
+    updated = db.Column(db.DateTime(timezone=True), default=func.now())
+
 class AccountType(PyEnum):
     EXCHANGE = "exchange"
     REVOLUT = "revolut"
@@ -154,6 +168,18 @@ class AccountDetail(db.Model):
     def __repr__(self):
         return f'<AccountDetail {self.name} - {self.account_type}>'
 
+class Task(db.Model):
+    __tablename__ = 'tasks'
+    id = db.Column(db.Integer, primary_key=True)
+    image = db.Column(db.String(128), index=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    reward = db.Column(db.Float, nullable=False)
+    orders = db.relationship('Order', backref='task', lazy=True)
+    deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
+    created = db.Column(db.DateTime(timezone=True), default=func.now())
+    updated = db.Column(db.DateTime(timezone=True), default=func.now())
+
 
 class Order(db.Model):
     __tablename__ = 'orders'
@@ -162,7 +188,7 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=False)
     # task_id = db.Column(db.Integer, nullable=False)
-    amount = db.Column(db.Float, nullable=False)
+    earnings = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False)
     
     # Rating attributes
@@ -176,17 +202,5 @@ class Order(db.Model):
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now(), onupdate=func.now())
 
-
-class Task(db.Model):
-    __tablename__ = 'tasks'
-    id = db.Column(db.Integer, primary_key=True)
-    image = db.Column(db.String(128), index=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    reward = db.Column(db.Float, nullable=False)
-    
-    deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
-    created = db.Column(db.DateTime(timezone=True), default=func.now())
-    updated = db.Column(db.DateTime(timezone=True), default=func.now())
     
 
