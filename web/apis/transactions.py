@@ -112,7 +112,7 @@ def statistics():
 @trxn_bp.route('/analyze_data', methods=['GET'])
 def analyze_data():
 
-    import random
+    """ import random
     def insert_random_transactions(num_transactions):
         transaction_types = ['deposit', 'withdrawal']
         descriptions = [
@@ -122,7 +122,7 @@ def analyze_data():
         
         for _ in range(num_transactions):
             # user_id = random.randint(1, 10)  # Assuming you have user IDs from 1 to 10
-            user_id = 3  # Assuming you have user IDs from 1 to 10
+            user_id = 1  # Assuming you have user IDs from 1 to 10
             transaction_type = random.choice(transaction_types)
             amount = round(random.uniform(10.00, 1000.00), 2)
             description = random.choice(descriptions)
@@ -137,12 +137,11 @@ def analyze_data():
         
         db.session.commit()
 
-    insert_random_transactions(20)  # Insert 20 random transactions
+    insert_random_transactions(20)  # Insert 20 random transactions """
 
     user_id = current_user.id
-
-    # Retrieve deposits and earnings from the database
-    # Retrieve deposits and earnings from the database
+    
+   # Retrieve deposits and earnings from the database
     deposits_query = db.session.query(Transaction.amount).filter(
         Transaction.user_id == user_id,
         Transaction.transaction_type == 'deposit'
@@ -157,24 +156,20 @@ def analyze_data():
     deposits = [float(deposit[0]) for deposit in deposits_query] if deposits_query else []
     earnings = [float(earning[0]) for earning in earnings_query] if earnings_query else []
 
-    # Check if we have data
-    if not deposits or not earnings:
-        return jsonify({'error': 'Insufficient data for analysis'}), 404
-
     # Convert to numpy arrays for easy calculations
     deposits_array = np.array(deposits)
     earnings_array = np.array(earnings)
 
     # Calculate statistics for deposits
-    deposit_mean = round(np.mean(deposits_array), 2) if deposits_array.size else float('nan')
-    deposit_median = round(np.median(deposits_array), 2) if deposits_array.size else float('nan')
-    deposit_std_dev = round(np.std(deposits_array), 2) if deposits_array.size else float('nan')
+    deposit_mean = round(np.mean(deposits_array), 2) if deposits_array.size else 0
+    deposit_median = round(np.median(deposits_array), 2) if deposits_array.size else 0
+    deposit_std_dev = round(np.std(deposits_array), 2) if deposits_array.size else 0
     total_deposits = round(np.sum(deposits_array), 2)
 
     # Calculate statistics for earnings
-    earning_mean = round(np.mean(earnings_array), 2) if earnings_array.size else float('nan')
-    earning_median = round(np.median(earnings_array), 2) if earnings_array.size else float('nan')
-    earning_std_dev = round(np.std(earnings_array), 2) if earnings_array.size else float('nan')
+    earning_mean = round(np.mean(earnings_array), 2) if earnings_array.size else 0
+    earning_median = round(np.median(earnings_array), 2) if earnings_array.size else 0
+    earning_std_dev = round(np.std(earnings_array), 2) if earnings_array.size else 0
     total_earnings = round(np.sum(earnings_array), 2)
 
     # Ensure arrays are of the same length for correlation calculation
@@ -183,7 +178,7 @@ def analyze_data():
     earnings_array = earnings_array[:min_length]
 
     # Calculate correlation if arrays are not empty after truncation
-    correlation = round(np.corrcoef(deposits_array, earnings_array)[0, 1], 2) if deposits_array.size and earnings_array.size else float('nan')
+    correlation = round(np.corrcoef(deposits_array, earnings_array)[0, 1], 2) if deposits_array.size and earnings_array.size else 0
 
     # Return analysis as JSON
     analysis_results = {

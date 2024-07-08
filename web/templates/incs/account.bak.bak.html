@@ -1,0 +1,268 @@
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="col-md-7 col-lg-7 col-sm-12 mb-4 mb-md-0">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="" enctype="multipart/form-data">
+                        <div class="col-xl">
+                            <div class="card-header d-flex justify-content-between align-items-left">
+                                <h5 class="mb-0">Account Details</h5>
+                                <small class="text-warning float-end">
+                                    Level one (Normal)</small>
+                            </div>
+                            <div class="row">
+                                <div class="d-flex align-items-start align-items-sm-center gap-4 mb-3">
+                                    <img src="./static/img/avatars/0.jpg" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar">
+                                    <div class="button-wrapper">
+                                        <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                            <span class="d-none d-sm-block">Upload
+                                                new photo</span>
+                                            <i class="bx bx-upload d-block d-sm-none"></i>
+                                            <input type="file" id="upload" class="account-file-input" hidden=""
+                                                accept="image/png, image/jpeg">
+                                        </label>
+                                        <button type="button" class="btn btn-label-secondary account-image-reset mb-4" control-id="ControlID-16">
+                                            <i class="bx bx-reset d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block">Reset</span>
+                                        </button>
+
+                                        <p class="text-muted mb-0">
+                                            Allowed JPG, GIF or PNG. Max size of 800K</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 col-lg-6 col-md-6">
+                                    <label class="form-label" for="name">First & Last
+                                        Name</label>
+                                    <div class="input-group input-group-merge">
+                                        <span id="name2" class="input-group-text"><i class="bx bx-user"></i></span>
+                                        <input type="text" class="form-control" id="name" placeholder="First & Last Name" aria-label="first and last names" aria-describedby="name2" />
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 col-lg-6 col-md-6">
+                                    <label class="form-label" for="gender">Gender</label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="gender" class="form-select" id="gender">
+                                            <option selected>Choose...
+                                            </option>
+                                            <option value="male">Male
+                                            </option>
+                                            <option value="female">
+                                                Female</option>
+                                            <option value="other">Other
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-lg-6 col-md-6">
+                                    <label class="form-label" for="basic-icon-default-email">Email</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                        <input type="text" name="email" id="basic-icon-default-email" class="form-control" placeholder="john.doe" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />
+                                    </div>
+                                    <div class="form-text">You can use letters, numbers & periods</div>
+                                </div>
+
+                                <div class="mb-3 col-lg-6 col-md-6">
+                                    <label class="form-label" for="basic-icon-default-phone">Phone
+                                        No</label>
+                                    <div class="input-group input-group-merge">
+                                        <span id="basic-icon-default-phone2" class="input-group-text"><i
+                                                class="bx bx-phone"></i></span>
+                                        <input type="text" name="phone" id="basic-icon-default-phone" class="form-control phone-mask" placeholder="658 799 8941" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="col-xl">
+                            <h5 class="mb-3">Security</h5>
+                            <div class="row">
+
+                                <div class="mb-3 col-lg-6 col-md-6">
+                                    <label class="form-label" for="name">Login
+                                        Password</label>
+                                    <div class="input-group input-group-merge">
+                                        <span id="name2" class="input-group-text"><i class="bx bx-user"></i></span>
+                                        <input type="text" class="form-control" id="password" name="password" placeholder="Login Password" aria-label="first and last names" aria-describedby="name2" />
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 col-lg-6 col-md-6">
+                                    <label class="form-label" for="gender">Withdrawal
+                                        Password</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="text" class="form-control" id="withdrawal_password" placeholder="Withdrawal Password" aria-label="Withdrawal Passwords" aria-describedby="name2" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <br>
+
+                        <div class="col-xl">
+                            <h5 class="mb-3">Receiving Payments</h5>
+                            <div class="row">
+                                <div class="nav-align-top mb-4">
+                                    <ul class="nav nav-pills mb-3" role="tablist">
+                                        <li class="nav-item" role="presentation">
+
+                                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-paypal" aria-controls="navs-pills-paypal" aria-selected="true">Paypal</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-cash_app" aria-controls="navs-pills-cash_app" aria-selected="false" tabindex="-1">Cash App</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-xchange_wallet" aria-controls="navs-pills-xchange_wallet" aria-selected="false" tabindex="-1">Exchange Wallet</button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+
+                                        <div class="tab-pane fade show active" id="navs-pills-paypal" role="tabpanel">
+                                            <div class="row">
+                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                    <label class="form-label" for="name">Paypal phone</label>
+                                                    <div class="input-group input-group-merge">
+                                                        <span id="name2" class="input-group-text"><i class="bx bx-user"></i></span>
+                                                        <input type="text" class="form-control" id="paypal_phone" placeholder="Enter Your Paypal Phone Number" aria-label="Paypal Phone" aria-describedby="name2" />
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                    <label class="form-label" for="basic-icon-default-phone">Paypal email address</label>
+                                                    <div class="input-group input-group-merge">
+                                                        <span id="basic-icon-default-phone2" class="input-group-text"><i
+                                                            class="bx bx-wallet"></i></span>
+                                                        <input type="email" name="paypal_email" id="basic-icon-default-phone" class="form-control phone-mask" placeholder="enter your paypal email" aria-label="paypal_email" aria-describedby="basic-icon-default-phone2" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tab-pane fade" id="navs-pills-cash_app" role="tabpanel">
+                                            <div class="row">
+                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                    <label class="form-label" for="name">Cash App Username($Cashtag)</label>
+                                                    <div class="input-group input-group-merge">
+                                                        <span id="name2" class="input-group-text"><i class="bx bx-user"></i></span>
+                                                        <input type="text" class="form-control" id="cashapp_username" placeholder="Enter Your Cashapp tag(username)" aria-label="Cash App Username" aria-describedby="name2" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 col-lg-6 col-md-6">
+                                                    <label class="form-label" for="basic-icon-default-phone">Cashapp email address</label>
+                                                    <div class="input-group input-group-merge">
+                                                        <span id="basic-icon-default-phone2" class="input-group-text"><i
+                                                            class="bx bx-wallet"></i></span>
+                                                        <input type="email" name="cashapp_email" id="basic-icon-default-phone" class="form-control phone-mask" placeholder="enter your cash-app email" aria-label="cashapp_email" aria-describedby="basic-icon-default-phone2" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="navs-pills-xchange_wallet" role="tabpanel">
+                                            <div class="col-xl">
+                                                <div class="row">
+
+                                                    <div class="mb-3 col-lg-6 col-md-6">
+                                                        <label class="form-label" for="name">Name</label>
+                                                        <div class="input-group input-group-merge">
+                                                            <span id="name2" class="input-group-text"><i class="bx bx-user"></i></span>
+                                                            <input type="text" class="form-control" id="name" placeholder="enter name" aria-label="first and last names" aria-describedby="name2" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-3 col-lg-6 col-md-6">
+                                                        <label class="form-label" for="basic-icon-default-phone">Phone</label>
+                                                        <div class="input-group input-group-merge">
+                                                            <span id="basic-icon-default-phone2" class="input-group-text"><i
+                                                                class="bx bx-phone"></i></span>
+                                                            <input type="text" name="phone" id="basic-icon-default-phone" class="form-control phone-mask" placeholder="enter wallet phone" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2" />
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="mb-3 col-lg-6 col-md-6">
+                                                        <label class="form-label" for="basic-icon-default-email">Exchange</label>
+                                                        <div class="input-group input-group-merge">
+                                                            <span class="input-group-text"><i class="bx bx-wallet"></i></span>
+                                                            <input type="text" name="exchange" id="basic-icon-default-email" class="form-control" placeholder="exchange" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-3 col-lg-6 col-md-6">
+                                                        <label class="form-label" for="basic-icon-default-phone">Exchange
+                                                        Address</label>
+                                                        <div class="input-group input-group-merge">
+                                                            <span id="basic-icon-default-phone2" class="input-group-text"><i
+                                                                class="bx bx-wallet"></i></span>
+                                                            <input type="text" name="exchange_address" id="basic-icon-default-phone" class="form-control phone-mask" placeholder="exchange address" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2" />
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <button type="submit" class="btn btn-outline-warning">Save
+                            Changes</button>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Balance -->
+        <div class="col-md-5 col-lg-5 col-sm-12 mb-4 mb-md-0">
+            <div class="card h-100">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="card-title m-0 me-2">Total Balance</h5>
+                    <div class="dropdown">
+                        <button class="btn p-0" type="button" id="totalBalance" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="totalBalance">
+                            <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-start">
+                        <div class="d-flex pe-4">
+                            <div class="me-3">
+                                <span class="badge bg-label-warning p-2"><i
+                class="bx bx-wallet text-warning"></i></span>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">$2.54k</h6>
+                                <small>Wallet(Earnings)</small>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <span class="badge bg-label-secondary p-2"><i
+                class="bx bx-dollar text-secondary"></i></span>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">$4.2k</h6>
+                                <small>Deposits</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="totalBalanceChart_0" class="border-bottom mb-3 totalBalanceChart"></div>
+                </div>
+            </div>
+        </div>
+        <!--/ Total Balance -->
+    </div>
+</div>

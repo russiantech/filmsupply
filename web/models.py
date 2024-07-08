@@ -77,7 +77,6 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.name}', '{self.email}', '{self.photo}')"
 
-
 class Notification(db.Model):
     __tablename__ = 'notiications'
     id = db.Column(db.Integer, primary_key=True)
@@ -127,7 +126,6 @@ class Payment(db.Model):
     deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())
-
 
 from sqlalchemy import Enum
 from enum import Enum as PyEnum

@@ -341,16 +341,18 @@ def query(user_id):
 def fetch_notifications():
     notifications = Notification.query.filter_by(
         user_id=current_user.id, is_read=False, deleted=False
-        ).order_by(Notification.created.desc()).all()
+    ).order_by(Notification.created.desc()).limit(3).all()
+    
     notifications_list = [{
         'id': notification.id,
         'message': notification.message,
         'is_read': notification.is_read,
-        'file_path': notification.file_path,
+        'title': notification.title,
         'created': notification.created.strftime('%a, %b %d %I:%M %p')
     } for notification in notifications]
 
     return jsonify({"notifications": notifications_list}), 200
+
 
 @auth.route('/mark_as_read/<int:notification_id>', methods=['PUT'])
 @role_required('*')

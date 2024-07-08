@@ -3,25 +3,16 @@ from flask_login import current_user, login_required
 from web.models import ( User, Task , Order)
 from web import db, csrf
 from datetime import datetime
-
+from web.apis.utils import round_up, user_plan_percentages, calculate_percentage
 from flask import Blueprint
 task_bp = Blueprint('task-api', __name__)
-
-
-# Assuming 'user_plan_percentages' dictionary maps user plans to their corresponding percentages
-user_plan_percentages = {
-    'normal': 0.7,
-    'vip': 0.9,
-    'vvip': 1.5,
-    'vvvip': 2.0
-}
-
 
 @task_bp.route('/tasks-completed', methods=['GET'])
 def get_tasks_completed():
     try:
         """Return the list of completed tasks for the user"""
-        user_id = request.args.get('user_id', type=int, default=current_user.id)  # Replace with actual user logic
+        user_id = request.args.get('user_id', type=int, default=current_user.id)
+        
         completed_tasks = Order.query.filter_by(user_id=user_id).all()
         tasks_list = [{
             'id': order.task.id,
@@ -41,12 +32,12 @@ def get_tasks_completed():
         return jsonify({'success':False, 'error': str(e)})
 
 @task_bp.route('/tasks-pending', methods=['GET'])
+@login_required
 def get_next_pending_task():
     try:
-            
         """ Return the next pending task for the user along with task stats """
         user_id = request.args.get('user_id', type=int, default=current_user.id)  # Replace with actual user logic
-        print(user_id)
+        # print(user_id)
         # Fetch the user's plan
         user = User.query.get(user_id) or current_user
         user_plan = user.tier if user else 'normal'  # Default to 'normal' plan if user not found
@@ -55,20 +46,23 @@ def get_next_pending_task():
         
         completed_task_ids = [order.task_id for order in Order.query.filter_by(user_id=user_id).all()]
 
-        print("completed task ids:", completed_task_ids)
+        # print("completed task ids:", completed_task_ids)
 
         total_tasks = Task.query.count()
         completed_tasks = len(completed_task_ids)
         next_task = Task.query.filter(~Task.id.in_(completed_task_ids) ).first()
         
         if next_task:
+            #calculate earnings
+            plan_percentage = user_plan_percentages.get(user_plan, 0)
+            earnings = calculate_percentage(plan_percentage, next_task.reward)
             task_data = {
                 'id': next_task.id,
                 'image': next_task.image,
                 'title': next_task.title,
                 'description': next_task.description,
                 'reward': next_task.reward,
-                'reward_percentage': next_task.reward * plan_percentage
+                'earnings': round_up(earnings)
             }
             return jsonify({
                 'task': task_data,

@@ -324,7 +324,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <small class="mb-0 text-warning">
                         Select rating, add comment to earn
-                        <b class="badge bg-label-primary me-3" id="taskReward">${task.reward_percentage.toFixed(2)} of ${task.reward}</b>
+                        <b class="badge bg-label-primary me-3" id="taskReward">$${task.earnings.toFixed(2)} of $${task.reward.toFixed(2)}</b>
                     </small>
                     <span>
                         Task <h4 class="badge bg-label-primary me-3" id="taskIndex">${completedTasks + 1} of ${totalTasks}</h4>
@@ -475,8 +475,19 @@
             }
 
             // Update the totals in the HTML
+            /*
             document.getElementById('totalEarnings').textContent = `$${data.earnings.total.toFixed(2)}`;
             document.getElementById('totalDeposits').textContent = `$${data.deposits.total.toFixed(2)}`;
+        
+            $('#totalBalanceChart, .totalBalanceChart').text(`$${data.deposits.total.toFixed(2)}`);
+            //document.getElementById('totalDeposits').textContent = `$${data.deposits.total.toFixed(2)}`;
+            */
+            // Update the totals in the HTML
+            $('#totalEarnings').text(`$${data.earnings.total.toFixed(2)}`);
+
+            // Update the total deposits
+            $('.totalDeposits').text(`$${data.deposits.total.toFixed(2)}`);
+
 
             console.log(data)
             // Extract the required values from the response
@@ -545,10 +556,22 @@
             };
 
             // Rendering the chart if the element exists
-            const d = document.querySelector("#totalBalanceChart");
+            // Selecting the chart elements
+            const elements = $('#totalBalanceChart, .totalBalanceChart');
+
+            if (elements.length > 0) {
+                elements.each(function() {
+                    new ApexCharts($(this)[0], options).render();
+                });
+            }
+
+            /*
+            // const d = document.querySelectorAll("#totalBalanceChart", ".totalBalanceChart");
+            const d =  $('#totalBalanceChart, .totalBalanceChart');
+
             if (d !== null) {
                 new ApexCharts(d, options).render();
-            }
+            } */
 
         } catch (error) {
             console.error('Error:', error);

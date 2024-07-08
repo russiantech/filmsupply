@@ -45,22 +45,30 @@ data-theme="theme-default" data-assets-path="./static/" data-template="vertical-
                                 
                                 $('#notification-list').append(
                                     `
-                                    <a  data-notification-id="${notification.id}" href="${window.location.origin}/${notification.file_path}" class="btn-read iq-sub-card">
-                                        <div class="media align-items-center cust-card py-3 border-bottom">
-                                            <div class="">
-                                                <img class="avatar-50 rounded-small"
-                                                    src="{{url_for('static', filename='images/logo/favicon.png' )}}" alt="academy">
-                                            </div>
-                                            <div class="media-body ml-3">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <h6 class="mb-0">${"Query alert"}</h6>
-                                                    <small class="text-dark">${notification.created_at}</small>
+                                    <li data-notification-id="${notification.id}" class="list-group-item list-group-item-action dropdown-notifications-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar">
+                                                    <img src="./static/img/favicon/favicon.png" alt=""
+                                                        class="w-px-40 h-auto rounded-circle">
                                                 </div>
-                                                <small class="mb-0 text-warning"> ${notification.message}  </small>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">${notification.title}🎉</h6>
+                                                <p class="mb-0">${notification.message}</p>
+                                                <small class="text-muted">${notification.created}</small>
+                                            </div>
+                                            <div class="flex-shrink-0 dropdown-notifications-actions">
+                                                <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                                        class="badge badge-dot"></span></a>
+                                                <a href="javascript:void(0)" class="dropdown-notifications-archive">
+                                                    <span class="bx bx-x"></span></a>
                                             </div>
                                         </div>
-                                    </a>
-                                    ` )
+                                    </li>
+                                    `
+                                );
+
                             });
     
                             // $('#notification-count', '.notification-count').text(data.notifications.length);
