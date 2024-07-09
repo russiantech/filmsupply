@@ -1,7 +1,5 @@
 from datetime import datetime
-import random
-import string
-import jwt, time
+import random, uuid, string, jwt, time
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
@@ -16,6 +14,12 @@ user_roles = db.Table(
     keep_existing=True
 )
 
+def generate_user_id():
+    return str(uuid.uuid4())
+
+def generate_refcode():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -26,31 +30,36 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True, nullable=False, index=True)
     phone = db.Column(db.String(20), unique=True, index=True)
     image = db.Column(db.String(1000))
-    
     password = db.Column(db.String(500), nullable=False)
     withdrawal_password = db.Column(db.String(20))
-
     tier = db.Column(db.String(50), nullable=False, default='normal')
     balance = db.Column(db.Float, default=0.0)
-
     admin = db.Column(db.Boolean(), default=False)
     gender = db.Column(db.String(50))
     about = db.Column(db.String(5000))
-    
     verified = db.Column(db.Boolean(), default=False)
     ip = db.Column(db.String(50), default='0.0.0')
     
     orders = db.relationship('Order', backref='user', lazy=True)
     account_details = db.relationship('AccountDetail', backref='user', lazy=True)
-    payments = db.relationship('Payment', backref='user', lazy=True)
+    # account_details = db.relationship('AccountDetail', backref='user', uselist=False, lazy=True)
     transactions = db.relationship('Transaction', backref='user', lazy=True)
-
     notifications = db.relationship('Notification', backref='user', lazy=True)
     roles = db.relationship('Role', secondary=user_roles, back_populates='user', lazy='dynamic')
-
     created = db.Column(db.DateTime(timezone=True), default=func.now())
-    updated = db.Column(db.DateTime(timezone=True), onupdate = func.now(),  default=func.now())
+    updated = db.Column(db.DateTime(timezone=True), onupdate=func.now(), default=func.now())
     deleted = db.Column(db.Boolean(), default=False)
+
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if not self.user_id or self.user_id == '0000':
+            self.user_id = generate_user_id()
+        if not self.refcode or self.refcode == '0000':
+            self.refcode = generate_refcode()
+
+
+    def get_account_details(self):
+        return {detail.account_type: detail for detail in self.account_details}
 
     def get_id(self):
         return str(self.id)
@@ -145,28 +154,37 @@ class Transaction(db.Model):
 
 class AccountType(PyEnum):
     EXCHANGE = "exchange"
-    REVOLUT = "revolut"
-    WISE = "wise"
+    PAYPAL = "paypal"
+    CASH_APP = "cash_app"
+
 
 class AccountDetail(db.Model):
     __tablename__ = 'accountdetails'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    account_type = db.Column(Enum(AccountType), nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    phone = db.Column(db.String(20), nullable=True)
+    account_type = db.Column(Enum(AccountType), nullable=False, default=AccountType.PAYPAL)
+
+    account_name = db.Column(db.String(100), nullable=False)
+    account_phone = db.Column(db.String(20), nullable=True)
     exchange = db.Column(db.String(100), nullable=True)
     exchange_address = db.Column(db.String(255), nullable=True)
+
     bank_account = db.Column(db.String(50), nullable=True)
     short_code = db.Column(db.String(20), nullable=True)
     link = db.Column(db.String(255), nullable=True)
-    wise_email = db.Column(db.String(100), nullable=True)
+    
+    cash_app_email = db.Column(db.String(100), nullable=True)
+    cash_app_username = db.Column(db.String(100), nullable=True)
+    
+    paypal_phone = db.Column(db.String(100), nullable=True)
+    paypal_email = db.Column(db.String(100), nullable=True)
     
     deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
     created = db.Column(db.DateTime(timezone=True), default=func.now())
-    updated = db.Column(db.DateTime(timezone=True), default=func.now())
+    updated = db.Column(db.DateTime(timezone=True), default=func.now(), onupdate=func.now())
+
     def __repr__(self):
-        return f'<AccountDetail {self.name} - {self.account_type}>'
+        return f'<AccountDetail {self.account_name} - {self.account_type}>'
 
 class Task(db.Model):
     __tablename__ = 'tasks'

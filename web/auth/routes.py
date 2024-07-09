@@ -138,11 +138,11 @@ def signout():
     db.session.commit()
     return redirect(url_for('auth.signin'))
 
-@auth.route("/<string:username>/update", methods=['GET', 'POST'])
+@auth.route("/<string:username>/update1", methods=['GET', 'POST'])
 @login_required
 @admin_or_current_user()
 # @db_session_management
-def update(username):
+def update1(username):
     try:
 
         user = User.query.filter(User.username==username).first_or_404()

@@ -130,10 +130,10 @@ def create_user():
         return jsonify({"success": False, "error": str(e)})
 
 
-@user_bp.route('/<string:username>/update_user0', methods=['POST'])
+@user_bp.route('/<string:username>/update_user', methods=['POST'])
 @csrf.exempt
 @admin_or_current_user()
-def update_user0(username):
+def update_user(username):
     try:
         data = request.json
         user = db.session.query(User).options(joinedload(User.account_details)).filter_by(username=username).first_or_404()
@@ -187,10 +187,10 @@ def update_user0(username):
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-@user_bp.route('/<string:username>/update', methods=['PUT'])
+@user_bp.route('/<string:username>/update0', methods=['PUT'])
 @csrf.exempt
 @admin_or_current_user()
-def update(username):
+def update0(username):
     
     try:
         print(username)
@@ -258,34 +258,51 @@ def update(username):
         user.ip = ip_adrs.user_ip()
 
         # Update account details
-        # Handle account details
-        account_details_data = data.get('account_details', [])
-        existing_details = {detail.account_type: detail for detail in user.account_details}
+        # Ensure account_details is initialized
+        if user.account_details is None:
+            user.account_details = []
 
-        for detail_data in account_details_data:
-            account_type = detail_data.get('account_type')
-            if account_type in existing_details:
-                account_detail = existing_details[account_type]
-            else:
-                account_detail = AccountDetail(user_id=user.user_id, account_type=account_type)
-                user.account_details.append(account_detail)
-                db.session.add(account_detail)
+        # Update account details
+        if user.account_details:
+            # Update the first existing account detail (assuming there's only one per user)
+            account_details_data = {
+                'user_id': data.get('user_id', current_user.id),
+                'account_name': data.get('account_name'),
+                'account_phone': data.get('account_phone'),
+                'exchange': data.get('exchange'),
+                'exchange_address': data.get('exchange_address'),
+                'cash_app_email': data.get('cash_app_email'),
+                'cash_app_username': data.get('cash_app_username'),
+                'paypal_phone': data.get('paypal_phone'),
+                'paypal_email': data.get('paypal_email')
+            }
 
-            # Update account detail fields, handle possible NULL values
-            account_detail.account_name = detail_data.get('account_name')
-            account_detail.account_phone = detail_data.get('account_phone')
-            account_detail.exchange = detail_data.get('exchange')
-            account_detail.exchange_address = detail_data.get('exchange_address')
-            account_detail.bank_account = detail_data.get('bank_account')
-            account_detail.short_code = detail_data.get('short_code')
-            account_detail.link = detail_data.get('link')
-            account_detail.cash_app_email = detail_data.get('cash_app_email')
-            account_detail.cash_app_username = detail_data.get('cash_app_username')
-            account_detail.paypal_phone = detail_data.get('paypal_phone')
-            account_detail.paypal_email = detail_data.get('paypal_email')
+            account_detail = user.account_details[0]
+
+            for field, value in account_details_data.items():
+                if value is not None:
+                    setattr(account_detail, field, value)
+        else:
+            # Insert new if none exists
+            account_detail = AccountDetail(
+                user_id=data.get('user_id', current_user.id),
+                account_name=data.get('account_name'),
+                account_phone=data.get('account_phone'),
+                exchange=data.get('exchange'),
+                exchange_address=data.get('exchange_address'),
+                cash_app_email=data.get('cash_app_email'),
+                cash_app_username=data.get('cash_app_username'),
+                paypal_phone=data.get('paypal_phone'),
+                paypal_email=data.get('paypal_email')
+            )
+
+            user.account_details.append(account_detail)
+            db.session.add(account_detail)
 
         db.session.commit()
-        return jsonify({"success": True, "message": "User updated successfully."}), 200
+
+
+        return jsonify({"success": True, "message": "User updated successfully"}), 200
 
     except Exception as e:
         print(e)

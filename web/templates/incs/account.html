@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <div class="row">
 
-                        <form method="post" action="" enctype="multipart/form-data">
+                        <form id="updateForm" method="post" action="'./{{current_user.username}}/update'" enctype="multipart/form-data">
                             <div class="col-xl">
                                 <div class="card-header d-flex justify-content-between align-items-left">
                                     <h5 class="mb-0">Account Details</h5>
@@ -21,16 +21,16 @@
                                                 <span class="d-none d-sm-block">Upload
                                                     new photo</span>
                                                 <i class="bx bx-upload d-block d-sm-none"></i>
-                                                <input type="file" id="upload" class="account-file-input" hidden=""
-                                                    accept="image/png, image/jpeg">
+                                                    <input type="file" id="upload" 
+                                                    onchange="displaySelectedImage(event, 'uploadedAvatar')" accept="image/*"
+                                                    name="image" class="account-file-input" hidden="">
                                             </label>
                                             <button type="button" class="btn btn-label-secondary account-image-reset mb-4" control-id="ControlID-16">
                                                 <i class="bx bx-reset d-block d-sm-none"></i>
                                                 <span class="d-none d-sm-block">Reset</span>
                                             </button>
 
-                                            <p class="text-muted mb-0">
-                                                Allowed JPG, GIF or PNG. Max size of 800K</p>
+                                            <p class="text-muted mb-0"> Allowed JPG, GIF or PNG. Max size of 800K</p>
                                         </div>
                                     </div>
 
@@ -39,14 +39,16 @@
                                             Name</label>
                                         <div class="input-group input-group-merge">
                                             <span id="name2" class="input-group-text"><i class="bx bx-user"></i></span>
-                                            <input type="text" class="form-control" id="name" placeholder="First & Last Name" aria-label="first and last names" aria-describedby="name2" />
+                                            <input type="text" class="form-control" id="name" name="name" placeholder="First & Last Name" aria-label="first and last names" aria-describedby="name2" />
                                         </div>
                                     </div>
 
                                     <div class="mb-3 col-lg-6 col-md-6">
-                                        <label class="form-label" for="gender">Gender</label>
+                                        <label class="form-label" for="gender">Username</label>
                                         <div class="input-group input-group-merge">
-                                            <select name="gender" class="form-select" id="gender">
+                                            <input type="text" name="username" id="username" class="form-control"
+                                             placeholder="enter username" aria-label="user.name" aria-describedby="basic-icon-default-email2" />
+                                            {#<select name="gender" class="form-select" id="gender">
                                                 <option selected>Choose...
                                                 </option>
                                                 <option value="male">Male
@@ -55,7 +57,7 @@
                                                     Female</option>
                                                 <option value="other">Other
                                                 </option>
-                                            </select>
+                                            </select>#}
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +66,8 @@
                                         <label class="form-label" for="basic-icon-default-email">Email</label>
                                         <div class="input-group input-group-merge">
                                             <span class="input-group-text"><i class="bx bx-envelope"></i></span>
-                                            <input type="text" name="email" id="basic-icon-default-email" class="form-control" placeholder="john.doe" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />
+                                            <input type="text" name="email" id="basic-icon-default-email" class="form-control"
+                                             placeholder="john.doe" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />
                                         </div>
                                         <div class="form-text">You can use letters, numbers & periods</div>
                                     </div>
@@ -99,7 +102,8 @@
                                         <label class="form-label" for="gender">Withdrawal
                                             Password</label>
                                         <div class="input-group input-group-merge">
-                                            <input type="text" class="form-control" id="withdrawal_password" placeholder="Withdrawal Password" aria-label="Withdrawal Passwords" aria-describedby="name2" />
+                                            <input type="text" class="form-control" name="withdrawal_password" id="withdrawal_password" placeholder="Withdrawal Password" 
+                                            aria-label="Withdrawal Passwords" aria-describedby="name2" />
                                         </div>
                                     </div>
                                 </div>
@@ -133,7 +137,8 @@
                                                             <label class="form-label" for="name">Paypal phone</label>
                                                             <div class="input-group input-group-merge">
                                                                 <span id="name2" class="input-group-text"><i class="bx bx-user"></i></span>
-                                                                <input type="text" class="form-control" id="paypal_phone" placeholder="Enter Your Paypal Phone Number" aria-label="Paypal Phone" aria-describedby="name2" />
+                                                                <input type="text" class="form-control" name="paypal_phone" id="paypal_phone" placeholder="Enter Your Paypal Phone Number" 
+                                                                aria-label="Paypal Phone" aria-describedby="name2" />
                                                             </div>
                                                         </div>
                                                         <div class="mb-3 col-lg-6 col-md-6">
@@ -154,7 +159,7 @@
                                                             <label class="form-label" for="name">Cash App Username($Cashtag)</label>
                                                             <div class="input-group input-group-merge">
                                                                 <span id="name2" class="input-group-text"><i class="bx bx-user"></i></span>
-                                                                <input type="text" class="form-control" id="cashapp_username" placeholder="Enter Your Cashapp tag(username)" aria-label="Cash App Username" aria-describedby="name2" />
+                                                                <input type="text" class="form-control" id="cash_app_username" placeholder="Enter Your Cashapp tag(username)" aria-label="Cash App Username" aria-describedby="name2" />
                                                             </div>
                                                         </div>
 
@@ -163,7 +168,7 @@
                                                             <div class="input-group input-group-merge">
                                                                 <span id="basic-icon-default-phone2" class="input-group-text"><i
                                                                     class="bx bx-wallet"></i></span>
-                                                                <input type="email" name="cashapp_email" id="basic-icon-default-phone" class="form-control phone-mask" placeholder="enter your cash-app email" aria-label="cashapp_email" aria-describedby="basic-icon-default-phone2" />
+                                                                <input type="email" name="cash_app_email" id="basic-icon-default-phone" class="form-control phone-mask" placeholder="enter your cash-app email" aria-label="cashapp_email" aria-describedby="basic-icon-default-phone2" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -177,7 +182,8 @@
                                                             <label class="form-label" for="name">Name</label>
                                                             <div class="input-group input-group-merge">
                                                                 <span id="name2" class="input-group-text"><i class="bx bx-user"></i></span>
-                                                                <input type="text" class="form-control" id="name" placeholder="enter name" aria-label="first and last names" aria-describedby="name2" />
+                                                                <input type="text" class="form-control" id="account_name" name="account_name" placeholder="enter name" 
+                                                                aria-label="first and last names" aria-describedby="name2" />
                                                             </div>
                                                         </div>
 
@@ -186,17 +192,17 @@
                                                             <div class="input-group input-group-merge">
                                                                 <span id="basic-icon-default-phone2" class="input-group-text"><i
                                                                     class="bx bx-phone"></i></span>
-                                                                <input type="text" name="phone" id="basic-icon-default-phone" class="form-control phone-mask" placeholder="enter wallet phone" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2" />
+                                                                <input type="text" name="account_phone" id="account_phone" class="form-control phone-mask" placeholder="enter wallet phone" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2" />
                                                             </div>
                                                         </div>
 
                                                     </div>
                                                     <div class="row">
                                                         <div class="mb-3 col-lg-6 col-md-6">
-                                                            <label class="form-label" for="basic-icon-default-email">Exchange</label>
+                                                            <label class="form-label" for="exchange">Exchange</label>
                                                             <div class="input-group input-group-merge">
                                                                 <span class="input-group-text"><i class="bx bx-wallet"></i></span>
-                                                                <input type="text" name="exchange" id="basic-icon-default-email" class="form-control" placeholder="exchange" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />
+                                                                <input type="text" name="exchange" id="exchange" class="form-control" placeholder="exchange" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />
                                                             </div>
                                                         </div>
 
@@ -206,7 +212,7 @@
                                                             <div class="input-group input-group-merge">
                                                                 <span id="basic-icon-default-phone2" class="input-group-text"><i
                                                                     class="bx bx-wallet"></i></span>
-                                                                <input type="text" name="exchange_address" id="basic-icon-default-phone" class="form-control phone-mask" placeholder="exchange address" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2" />
+                                                                <input type="text" name="exchange_address" id="exchange_address" class="form-control phone-mask" placeholder="exchange address" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2" />
                                                             </div>
                                                         </div>
 
@@ -225,6 +231,7 @@
                                 Changes</button>
 
                         </form>
+
                     </div>
 
                 </div>

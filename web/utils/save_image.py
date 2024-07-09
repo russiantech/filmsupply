@@ -32,29 +32,6 @@ def save_photo(form_file):
     except UnidentifiedImageError:
         return flash(f'Invalid File Type {form_file} ')
     
-def save_photo_0(form_file):
-    try:
-        if form_file:
-            random_hex = secrets.token_hex(2)
-            _, f_ext = os.path.splitext(form_file.filename) if form_file.filename else current_user.photo
-            #filename = secure_filename(_ + random_hex + f_ext).lower()
-            filename = secure_filename(current_user.username + '_'+ _ + random_hex + f_ext).lower() 
-            #->username + 'underscore(_) + origial-file-name + file-extension
-
-            if not path.exists(f"{current_app.root_path + 'static/images/user'}"):
-                # os.makedirs(current_app.root_path, 'static/images/user')
-                os.makedirs(current_app.root_path, 'static/images/user')
-            
-            photo_path = path.join(current_app.root_path, 'static/images/user', filename)
-
-            size = (320, 320)
-            i = Image.open(form_file)
-            i.thumbnail(size)
-            i.save(photo_path)
-            return filename, photo_path
-        pass
-    except UnidentifiedImageError:
-        return jsonify({"error": f"{UnidentifiedImageError}"})
 
 def save_file(form_file, upload_path='uploads', username=None):
     try:
