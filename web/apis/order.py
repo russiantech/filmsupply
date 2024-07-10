@@ -37,7 +37,7 @@ def create_order():
         user = User.query.get_or_404(user_id)
         task = Task.query.get_or_404(task_id)
 
-        plan_percentage = user_plan_percentages.get(user.tier, 0)
+        plan_percentage = user_plan_percentages.get(user.membership, 0)
         # amount = task.reward * plan_percentage
         earnings = calculate_percentage(plan_percentage, task.reward)
         msg =f"Deposit of ${round_up(earnings)} successful for rating"
@@ -157,3 +157,20 @@ def delete_order(id):
     db.session.commit()
     return jsonify({'message': 'Order deleted successfully!'})
 
+
+@order_bp.route('/order/reset/<int:user_id>', methods=['DELETE'])
+def reset_order(user_id):
+    try:
+        # Find all tasks completed by the user
+        completed_orders =  Order.query.filter_by(user_id=user_id).all()
+        
+        # Delete all completed tasks
+        for order in completed_orders:
+            db.session.delete(order)
+        
+        db.session.commit()
+        
+        return jsonify({'message': 'User rating reset successfully'}), 200
+    except Exception as e:
+        db.session.rollback()  # Rollback the session in case of an error
+        return jsonify({'message': 'An error occurred', 'error': str(e)}), 500

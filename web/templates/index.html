@@ -256,179 +256,6 @@
 {% endblock content %}
 
 {% block page_js %}
-<script>
-    /*
-$(document).ready(function () {
-    // Function to fetch user data
-    function fetchUserData() {
-        let url = './{{current_user.username}}/get_user'; // Update with your endpoint
-        
-        $.ajax({
-            type: 'GET',
-            url: url,
-            success: function (response) {
-                if (response.success) {
-                    let data = response.user;
-                    // Bind data to form fields
-                    for (let key in data) {
-                        if (data.hasOwnProperty(key)) {
-                            let input = $(`[name="${key}"]`);
-                            
-                            if (input.length) {
-                                if (input.attr('type') === 'file') {
-                                    // Handle file inputs (e.g., setting file paths) if necessary
-                                    // Note: File inputs cannot be set programmatically for security reasons
-                                } else {
-                                    input.val(data[key]);
-                                }
-                            }
-                        }
-                    }
-
-                    // Handle account details separately
-                    if (data.account_details && data.account_details.length > 0) {
-                        data.account_details.forEach(detail => {
-                            for (let key in detail) {
-                                if (detail.hasOwnProperty(key)) {
-                                    let input = $(`[name="${key}"]`);
-                                    
-                                    if (input.length) {
-                                        input.val(detail[key]);
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    // Handle special cases (e.g., image path)
-                    if (data.image) {
-                        $('#uploadedAvatar').attr('src', './static/images/user/' + data.image);
-                    }
-                } else {
-                    console.error('Failed to fetch user data:', response.error);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error fetching user data:', xhr.responseText);
-            }
-        });
-    }
-
-    // Call fetchUserData when document is ready
-    fetchUserData();
-});
-*/
-</script>
-<script>
-    $(document).ready(function () {
-        // Function to fetch user data and populate the form
-        function fetchUserData() {
-            let url = './{{current_user.username}}/get_user'; // Update with your endpoint
-            
-            $.ajax({
-                type: 'GET',
-                url: url,
-                success: function (response) {
-                    if (response.success) {
-                        let data = response.user;
-
-                        // Bind data to form fields
-                        for (let key in data) {
-                            if (data.hasOwnProperty(key)) {
-                                let input = $(`[name="${key}"]`);
-                                
-                                if (input.length) {
-                                    if (input.attr('type') !== 'file') {
-                                        input.val(data[key]);
-                                    }
-                                }
-                            }
-                        }
-
-                        // Bind account details to form fields
-                        let accountDetails = data.account_details;
-                        accountDetails.forEach(detail => {
-                            for (let key in detail) {
-                                if (detail.hasOwnProperty(key)) {
-                                    let input = $(`[name="${key}"]`);
-                                    
-                                    if (input.length) {
-                                        if (input.attr('type') !== 'file') {
-                                            input.val(detail[key]);
-                                        }
-                                    }
-                                }
-                            }
-                        });
-
-                        // Handle special cases (e.g., image path)
-                        if (data.image) {
-                            $('#uploadedAvatar').attr('src', './static/images/user/' + data.image);
-                        }
-                    } else {
-                        console.error('Failed to fetch user data:', response.error);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching user data:', xhr.responseText);
-                }
-            });
-        }
-
-        // Call fetchUserData when document is ready
-        fetchUserData();
-
-        // Handle form submission
-        $('#updateUserForm').submit(function (event) {
-            event.preventDefault();
-
-            let formData = {
-                username: $('#username').val(),
-                name: $('#name').val(),
-                email: $('#email').val(),
-                phone: $('#phone').val(),
-                // Add other user fields as needed
-
-                account_details: [
-                    {
-                        account_type: 'PAYPAL',
-                        paypal_email: $('#paypal_email').val(),
-                        paypal_phone: $('#paypal_phone').val()
-                    },
-                    {
-                        account_type: 'CASH_APP',
-                        cash_app_email: $('#cash_app_email').val(),
-                        cash_app_username: $('#cash_app_username').val()
-                    },
-                    {
-                        account_type: 'EXCHANGE_WALLET',
-                        account_name: $('#account_name').val(),
-                        account_phone: $('#account_phone').val(),
-                        exchange: $('#exchange').val(),
-                        exchange_address: $('#exchange_address').val()
-                    }
-                ]
-            };
-
-            $.ajax({
-                type: 'POST',
-                url: './{{current_user.username}}/update_user',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function (response) {
-                    if (response.success) {
-                        alert('User updated successfully');
-                    } else {
-                        console.error('Failed to update user:', response.error);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error updating user:', xhr.responseText);
-                }
-            });
-        });
-    });
-</script>
 
 <script>
     function displaySelectedImage(event, elementId) {
@@ -448,7 +275,11 @@ $(document).ready(function () {
             reader.readAsDataURL(fileInput.files[0]);
         }
     }
-
+    /*
+    // Serialize form data
+    let formDataArray = $(this).serializeArray();
+    let formData = {};
+    */
     function updateUser() {
         // Extract form data (including file input)
         const formData = new FormData();
@@ -467,15 +298,16 @@ $(document).ready(function () {
         }
     
         $.ajax({
-            url: form.action, // Use the form's action attribute as the URL
+            
+            //url: form.action, // Use the form's action attribute as the URL
             type: 'PUT',
             data: formData,
-            url :'./{{current_user.username}}/update',
+            url :'./{{current_user.username}}/update_user',
             processData: false,
             contentType: false,
     
             success: function(data) {
-                console.error('data:', data);
+                //console.error('data:', data);
                 if (data.success) {
                     response_modal(data.message);
                 } else {
@@ -494,41 +326,6 @@ $(document).ready(function () {
     $(document).on('submit', 'form', function(e) {
         e.preventDefault(); updateUser();
     });
-</script>
-
-<script>
-    
-    $(document).ready(function () {
-    $('#updateForm1').on('submit', function (e) {
-        e.preventDefault();
-
-        var formData = new FormData(this);
-        let url = './{{current_user.username}}/update';
-        //
-        // Log FormData content
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
-
-        $.ajax({
-            type: 'PUT',
-            url: url,  // replace with your actual endpoint
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                response_modal(response.message);
-                response_modal(response.success ? response.message : response.error);
-                if (!response.success) console.error('Error:', response.error);
-                console.log(response);
-            },
-            error: function (xhr, status, error) {
-                response_modal('An error occurred: ' + xhr.responseText);
-            }
-        });
-    });
-});
-
 </script>
 
 <style>
@@ -747,15 +544,6 @@ $(document).ready(function () {
                 console.error('Error fetching data:', data.error);
                 return;
             }
-
-            // Update the totals in the HTML
-            /*
-            document.getElementById('totalEarnings').textContent = `$${data.earnings.total.toFixed(2)}`;
-            document.getElementById('totalDeposits').textContent = `$${data.deposits.total.toFixed(2)}`;
-        
-            $('#totalBalanceChart, .totalBalanceChart').text(`$${data.deposits.total.toFixed(2)}`);
-            //document.getElementById('totalDeposits').textContent = `$${data.deposits.total.toFixed(2)}`;
-            */
             // Update the totals in the HTML
             $('#totalEarnings').text(`$${data.earnings.total.toFixed(2)}`);
 
@@ -851,6 +639,74 @@ $(document).ready(function () {
             console.error('Error:', error);
         }
     })();
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Function to fetch user data and populate the form
+        function fetchUserData() {
+            let url = './{{current_user.username}}/get_user_x'; // Update with your endpoint
+            
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (response) {
+                    if (response.success) {
+                        let data = response.user;
+
+                        // Bind data to form fields
+                        for (let key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                let input = $(`[name="${key}"]`);
+                                
+                                if (input.length) {
+                                    if (input.attr('type') !== 'file') {
+                                        input.val(data[key]);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Bind account details to form fields
+                        if (data.account_details && data.account_details.length > 0) {
+                            let accountDetails = data.account_details[0]; // Assuming one set of account details
+
+                            for (let key in accountDetails) {
+                                if (accountDetails.hasOwnProperty(key)) {
+                                    let input = $(`[name="${key}"]`);
+                                    
+                                    if (input.length) {
+                                        if (input.attr('type') !== 'file') {
+                                            input.val(accountDetails[key]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Handle special cases (e.g., image path)
+                        if (data.image) {
+                            $('#uploadedAvatar').attr('src', './static/img/avatars/' + data.image);
+                            $('.uploadedAvatar').attr('src', './static/img/avatars/' + data.image);
+                        }
+
+                        response_modal(response.success ? response.message : response.error);
+
+                    } else {
+                        if (!response.success) console.error('Error:', response.error);
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    response_modal(error);
+                    console.error('Error fetching user data:', xhr.responseText);
+                }
+            });
+        }
+
+        // Call fetchUserData when document is ready
+        fetchUserData();
+    });
 </script>
 
 {% endblock page_js %}

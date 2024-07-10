@@ -23,7 +23,7 @@ def generate_refcode():
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(50), default='0000')
+    uu_id = db.Column(db.String(50), default='0000')
     refcode = db.Column(db.String(50), default='0000')
     name = db.Column(db.String(100), index=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
@@ -32,8 +32,9 @@ class User(db.Model, UserMixin):
     image = db.Column(db.String(1000))
     password = db.Column(db.String(500), nullable=False)
     withdrawal_password = db.Column(db.String(20))
-    tier = db.Column(db.String(50), nullable=False, default='normal')
-    balance = db.Column(db.Float, default=0.0)
+    membership = db.Column(db.String(50), nullable=False, default='normal')
+    # balance = db.Column(db.Float, default=315.0)
+    balance = db.Column(db.Numeric(15, 2), default=315.00, nullable=False)
     admin = db.Column(db.Boolean(), default=False)
     gender = db.Column(db.String(50))
     about = db.Column(db.String(5000))
@@ -46,9 +47,24 @@ class User(db.Model, UserMixin):
     transactions = db.relationship('Transaction', backref='user', lazy=True)
     notifications = db.relationship('Notification', backref='user', lazy=True)
     roles = db.relationship('Role', secondary=user_roles, back_populates='user', lazy='dynamic')
+    # tasks = db.relationship('Task', backref='user', lazy=True)
+
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), onupdate=func.now(), default=func.now())
     deleted = db.Column(db.Boolean(), default=False)
+
+
+    @property
+    def completed_task_ids(self):
+        return [order.task_id for order in Order.query.filter_by(user_id=self.id).all()]
+
+    @property
+    def total_tasks(self):
+        return Task.query.count()
+
+    @property
+    def pending_tasks(self):
+        return self.total_tasks - len(self.completed_task_ids)
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -65,7 +81,7 @@ class User(db.Model, UserMixin):
         return str(self.id)
 
     def is_admin(self):
-        return any(role.type == 'admin' for role in self.roles)
+        return any(role.level == 'admin' for role in self.roles)
 
     def generate_token(self, exp=600, type='reset'):
         payload = {'uid': self.id, 'exp': time.time() + exp, 'type': type }
@@ -189,6 +205,7 @@ class AccountDetail(db.Model):
 class Task(db.Model):
     __tablename__ = 'tasks'
     id = db.Column(db.Integer, primary_key=True)
+    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     image = db.Column(db.String(128), index=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -212,9 +229,6 @@ class Order(db.Model):
     # Rating attributes
     rating = db.Column(db.Integer, nullable=True)
     comment = db.Column(db.Text, nullable=True)
-
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # user = db.relationship('User', back_populates='pages')
 
     deleted = db.Column(db.Boolean(), default=False)  # False: not deleted, True: deleted
     created = db.Column(db.DateTime(timezone=True), default=func.now())

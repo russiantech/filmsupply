@@ -35,7 +35,7 @@ def get_next_pending_task():
     print(user_id)
     # Fetch the user's plan
     user = User.query.get(user_id) or current_user
-    user_plan = user.tier if user else 'normal'  # Default to 'normal' plan if user not found
+    user_plan = user.membership if user else 'normal'  # Default to 'normal' plan if user not found
 
     plan_percentage = user_plan_percentages.get(user_plan, 0.7)  # Default to 0.7 if plan not found
     

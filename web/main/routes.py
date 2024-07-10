@@ -6,7 +6,7 @@ import traceback
 from datetime import datetime, date, timedelta
 
 from web.models import (
-    Task, 
+    User, 
 )
 
 from web import db, csrf
@@ -21,12 +21,11 @@ main = Blueprint('main', __name__)
 # @role_required('*')
 # @db_session_management
 def index():
+    user = User.query.filter(User.username==current_user.username).first_or_404()
     return stream_template('index.html')
 
 @main.route("/users")
-@login_required
-@role_required('admin', '*')
-# @db_session_management
+@role_required('admin')
 def users():
     return stream_template('users/users.html')
 

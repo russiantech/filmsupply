@@ -130,12 +130,24 @@ def create_user():
         return jsonify({"success": False, "error": str(e)})
 
 
-@user_bp.route('/<string:username>/update_user', methods=['POST'])
+@user_bp.route('/<string:username>/update_user', methods=['PUT'])
 @csrf.exempt
 @admin_or_current_user()
 def update_user(username):
     try:
-        data = request.json
+        
+        if request.content_type == 'application/json':
+            data = request.get_json()
+
+        elif 'multipart/form-data' in request.content_type:
+            data = request.form.to_dict()
+
+        else:
+            return jsonify({"success": False, "message": "Content-Type must be application/json or multipart/form-data"})
+
+        if not data:
+            return jsonify({"success": False, "message": "No data received"})
+
         user = db.session.query(User).options(joinedload(User.account_details)).filter_by(username=username).first_or_404()
 
         # Update user details
@@ -185,14 +197,15 @@ def update_user(username):
         return jsonify({"success": True, "message": "User updated successfully."}), 200
 
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+        return jsonify({"success": False, "error": str(e)})
 
-@user_bp.route('/<string:username>/update_u', methods=['PUT'])
+@user_bp.route('/<string:username>/update', methods=['PUT'])
 @csrf.exempt
 @admin_or_current_user()
-def update_u(username):
+def update(username):
     
     try:
+        print(username)
         if not current_user.is_admin and current_user.username != username:
             return jsonify({"success": False, "error": "Unauthorized"})
 
@@ -236,10 +249,8 @@ def update_u(username):
         if 'withdrawal_password' in data:
             user.withdrawal_password = bcrypt.generate_password_hash(data['withdrawal_password'])
 
-        # Handle image upload
+
         if 'image' in request.files:
-            print(request.files)
-            # image_filename = save_image.save_photo(request.files['image'])
             image_filename = save_image.save_file(request.files['image'], './static/img/avatars/', current_user.username)
             user.image = image_filename
 
@@ -256,51 +267,33 @@ def update_u(username):
         user.ip = ip_adrs.user_ip()
 
         # Update account details
-        # Ensure account_details is initialized
-        if user.account_details is None:
-            user.account_details = []
+        account_details_data = data.get('account_details', [])
+        existing_details = {detail.account_type: detail for detail in user.account_details}
 
-        # Update account details
-        if user.account_details:
-            # Update the first existing account detail (assuming there's only one per user)
-            account_details_data = {
-                'user_id': data.get('user_id', current_user.id),
-                'account_name': data.get('account_name'),
-                'account_phone': data.get('account_phone'),
-                'exchange': data.get('exchange'),
-                'exchange_address': data.get('exchange_address'),
-                'cash_app_email': data.get('cash_app_email'),
-                'cash_app_username': data.get('cash_app_username'),
-                'paypal_phone': data.get('paypal_phone'),
-                'paypal_email': data.get('paypal_email')
-            }
+        for detail_data in account_details_data:
+            account_type = detail_data.get('account_type')
+            if account_type in existing_details:
+                account_detail = existing_details[account_type]
+            else:
+                account_detail = AccountDetail(user_id=user.user_id, account_type=account_type)
+                user.account_details.append(account_detail)
+                db.session.add(account_detail)
 
-            account_detail = user.account_details[0]
-
-            for field, value in account_details_data.items():
-                if value is not None:
-                    setattr(account_detail, field, value)
-        else:
-            # Insert new if none exists
-            account_detail = AccountDetail(
-                user_id=data.get('user_id', current_user.id),
-                account_name=data.get('account_name'),
-                account_phone=data.get('account_phone'),
-                exchange=data.get('exchange'),
-                exchange_address=data.get('exchange_address'),
-                cash_app_email=data.get('cash_app_email'),
-                cash_app_username=data.get('cash_app_username'),
-                paypal_phone=data.get('paypal_phone'),
-                paypal_email=data.get('paypal_email')
-            )
-
-            user.account_details.append(account_detail)
-            db.session.add(account_detail)
+            # Update account detail fields, handle possible NULL values
+            account_detail.account_name = detail_data.get('account_name')
+            account_detail.account_phone = detail_data.get('account_phone')
+            account_detail.exchange = detail_data.get('exchange')
+            account_detail.exchange_address = detail_data.get('exchange_address')
+            account_detail.bank_account = detail_data.get('bank_account')
+            account_detail.short_code = detail_data.get('short_code')
+            account_detail.link = detail_data.get('link')
+            account_detail.cash_app_email = detail_data.get('cash_app_email')
+            account_detail.cash_app_username = detail_data.get('cash_app_username')
+            account_detail.paypal_phone = detail_data.get('paypal_phone')
+            account_detail.paypal_email = detail_data.get('paypal_email')
 
         db.session.commit()
-
-
-        return jsonify({"success": True, "message": "User updated successfully"}), 200
+        return jsonify({"success": True, "message": "User updated successfully."}), 200
 
     except Exception as e:
         print(e)
@@ -373,7 +366,6 @@ def get_user(username):
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-
 @user_bp.route("/auth", methods=['POST'])
 @csrf.exempt
 def auth():
@@ -435,7 +427,7 @@ def signout():
 @db_session_management
 def oauth2_authorize(provider):
     if not current_user.is_anonymous:
-        return redirect(url_for('auth.update', usrname=current_user.username))
+        return redirect(url_for('auth.update', username=current_user.username))
 
     provider_data = oauth2providers.get(provider)
     if provider_data is None:

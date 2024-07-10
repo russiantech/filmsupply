@@ -8,7 +8,7 @@ from jsonschema import validate, ValidationError
 
 from web.apis.errors import bad_request
 from web import db, bcrypt
-from web.models import Role, User, Notification, AccountType, AccountDetail
+from web.models import Transaction, Role, User, Task, Order, Notification, AccountType, AccountDetail
 from sqlalchemy.orm import joinedload
 
 from web.utils import save_image, email, ip_adrs
@@ -61,7 +61,7 @@ update_user_schema = {
         "phone": {"type": "string"},
         "name": {"type": "string"},
         "gender": {"type": "string"},
-        "tier": {"type": "string"},
+        "membership": {"type": "string"},
         "balance": {"type": "number"},
         "about": {"type": "string"},
         "verified": {"type": "boolean"},
@@ -129,71 +129,12 @@ def create_user():
         db.session.rollback()
         return jsonify({"success": False, "error": str(e)})
 
-
-@user_bp.route('/<string:username>/update_user0', methods=['POST'])
-@csrf.exempt
-@admin_or_current_user()
-def update_user0(username):
-    try:
-        data = request.json
-        user = db.session.query(User).options(joinedload(User.account_details)).filter_by(username=username).first_or_404()
-
-        # Update user details
-        user.username = data.get('username', user.username)
-        user.name = data.get('name', user.name)
-        user.email = data.get('email', user.email)
-        user.phone = data.get('phone', user.phone)
-        user.tier = data.get('tier', user.tier)
-        user.balance = data.get('balance', user.balance)
-        user.gender = data.get('gender', user.gender)
-        user.about = data.get('about', user.about)
-        user.verified = data.get('verified', user.verified)
-        user.ip = data.get('ip', user.ip)
-        user.admin = data.get('admin', user.admin)
-        user.image = data.get('image', user.image)
-        user.refcode = data.get('refcode', user.refcode)
-
-        # Ensure account_details is initialized
-        if user.account_details is None:
-            user.account_details = []
-
-        account_details_data = data.get('account_details', [])
-
-        # Existing account details indexed by account type
-        existing_details = {detail.account_type: detail for detail in user.account_details}
-
-        for detail_data in account_details_data:
-            account_type = detail_data.get('account_type')
-            if account_type in existing_details:
-                account_detail = existing_details[account_type]
-            else:
-                account_detail = AccountDetail(user_id=user.user_id, account_type=account_type)
-                user.account_details.append(account_detail)
-                db.session.add(account_detail)
-
-            # Update the account detail fields
-            account_detail.account_name = detail_data.get('account_name', account_detail.account_name)
-            account_detail.account_phone = detail_data.get('account_phone', account_detail.account_phone)
-            account_detail.exchange = detail_data.get('exchange', account_detail.exchange)
-            account_detail.exchange_address = detail_data.get('exchange_address', account_detail.exchange_address)
-            account_detail.cash_app_email = detail_data.get('cash_app_email', account_detail.cash_app_email)
-            account_detail.cash_app_username = detail_data.get('cash_app_username', account_detail.cash_app_username)
-            account_detail.paypal_phone = detail_data.get('paypal_phone', account_detail.paypal_phone)
-            account_detail.paypal_email = detail_data.get('paypal_email', account_detail.paypal_email)
-
-        db.session.commit()
-        return jsonify({"success": True, "message": "User updated successfully."}), 200
-
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
-
-@user_bp.route('/<string:username>/update', methods=['PUT'])
+@user_bp.route('/<string:username>/update_user', methods=['PUT'])
 @csrf.exempt
 @admin_or_current_user()
 def update(username):
-    
     try:
-        print(username)
+        
         if not current_user.is_admin and current_user.username != username:
             return jsonify({"success": False, "error": "Unauthorized"})
 
@@ -216,10 +157,10 @@ def update(username):
         except ValidationError as e:
             return jsonify({"success": False, "error": str(e)})
             #return jsonify({"success": False, "error": e.message})
-    
+
         # Check for uniqueness of phone, email, and username
         if db.session.scalar(sa.select(User).where(User.phone == data.get('phone'), User.username != username)):
-            print(data.get('phone'), User.phone)
+            # print(data.get('phone'), User.phone)
             return jsonify({"success": False, "error": "The phone number is already in use. Please use a different phone number."}), 200
 
         if db.session.scalar(sa.select(User).where(User.email == data.get('email'), User.username != username)):
@@ -237,12 +178,8 @@ def update(username):
         if 'withdrawal_password' in data:
             user.withdrawal_password = bcrypt.generate_password_hash(data['withdrawal_password'])
 
-        # Handle image upload
-        print(request.files)
         if 'image' in request.files:
-            print(request.files)
-            image_filename = save_image.save_photo(request.files['image'])
-            image_filename = save_file(request.files['image'], './static/img/avaters/', current_user.username)
+            image_filename = save_image.save_file(request.files['image'], './static/img/avatars/', current_user.username)
             user.image = image_filename
 
         user.name = data.get('name', user.name)
@@ -250,7 +187,7 @@ def update(username):
         user.name = data.get('name', user.name)
         user.email = data.get('email', user.email)
         user.phone = data.get('phone', user.phone)
-        user.tier = data.get('tier', user.tier)
+        user.membership = data.get('membership', user.membership)
         user.balance = data.get('balance', user.balance)
         user.gender = data.get('gender', user.gender)
         user.about = data.get('about', user.about)
@@ -258,33 +195,74 @@ def update(username):
         user.ip = ip_adrs.user_ip()
 
         # Update account details
-        # Handle account details
-        account_details_data = data.get('account_details', [])
-        existing_details = {detail.account_type: detail for detail in user.account_details}
+        # Ensure account_details is initialized
+        if user.account_details is None:
+            user.account_details = []
 
-        for detail_data in account_details_data:
-            account_type = detail_data.get('account_type')
-            if account_type in existing_details:
-                account_detail = existing_details[account_type]
-            else:
-                account_detail = AccountDetail(user_id=user.user_id, account_type=account_type)
-                user.account_details.append(account_detail)
-                db.session.add(account_detail)
+        # Update account details
+        account_details_data = data.get('account_details', {})
 
-            # Update account detail fields, handle possible NULL values
-            account_detail.account_name = detail_data.get('account_name')
-            account_detail.account_phone = detail_data.get('account_phone')
-            account_detail.exchange = detail_data.get('exchange')
-            account_detail.exchange_address = detail_data.get('exchange_address')
-            account_detail.bank_account = detail_data.get('bank_account')
-            account_detail.short_code = detail_data.get('short_code')
-            account_detail.link = detail_data.get('link')
-            account_detail.cash_app_email = detail_data.get('cash_app_email')
-            account_detail.cash_app_username = detail_data.get('cash_app_username')
-            account_detail.paypal_phone = detail_data.get('paypal_phone')
-            account_detail.paypal_email = detail_data.get('paypal_email')
+        if user.account_details:
+            # Update the existing account detail (assuming there's only one per user)
+            account_detail = user.account_details[0]
+            for field, value in account_details_data.items():
+                if value is not None:
+                    setattr(account_detail, field, value)
+        else:
+            # Insert new if none exists
+            account_detail = AccountDetail(
+                user_id=user.id,
+                **account_details_data
+            )
+            user.account_details.append(account_detail)
+            db.session.add(account_detail)
 
         db.session.commit()
+        
+       # Ensure account_details is initialized
+        if user.account_details is None:
+            user.account_details = []
+
+        # Update account details
+        if user.account_details:
+            # Update the first existing account detail (assuming there's only one per user)
+            account_details_data = {
+                'user_id': data.get('user_id', current_user.id),
+                'account_name': data.get('account_name'),
+                'account_phone': data.get('account_phone'),
+                'exchange': data.get('exchange'),
+                'exchange_address': data.get('exchange_address'),
+                'cash_app_email': data.get('cash_app_email'),
+                'cash_app_username': data.get('cash_app_username'),
+                'paypal_phone': data.get('paypal_phone'),
+                'paypal_email': data.get('paypal_email')
+            }
+
+            account_detail = user.account_details[0]
+
+            for field, value in account_details_data.items():
+                if value is not None:
+                    setattr(account_detail, field, value)
+        else:
+            # Insert new if none exists
+            account_detail = AccountDetail(
+                user_id=data.get('user_id', current_user.id),
+                account_name=data.get('account_name'),
+                account_phone=data.get('account_phone'),
+                exchange=data.get('exchange'),
+                exchange_address=data.get('exchange_address'),
+                cash_app_email=data.get('cash_app_email'),
+                cash_app_username=data.get('cash_app_username'),
+                paypal_phone=data.get('paypal_phone'),
+                paypal_email=data.get('paypal_email')
+            )
+
+            user.account_details.append(account_detail)
+            db.session.add(account_detail)
+
+        db.session.commit()
+        
+        
         return jsonify({"success": True, "message": "User updated successfully."}), 200
 
     except Exception as e:
@@ -292,14 +270,11 @@ def update(username):
         db.session.rollback()
         return jsonify({"success": False, "error": str(e)})
 
-
-from flask import Blueprint, jsonify, request
-from sqlalchemy.orm import joinedload
-
-@user_bp.route('/<string:username>/get_user', methods=['GET'])
+""" ------------------------------------------------------------------------- """
+@user_bp.route('/<string:username>/get_user_x', methods=['GET'])
 @csrf.exempt
 @admin_or_current_user()
-def get_user(username):
+def get_user_x(username):
     try:
         # Fetch the user by username and eagerly load account details
         user = db.session.query(User).options(joinedload(User.account_details)).filter_by(username=username).first_or_404()
@@ -311,7 +286,7 @@ def get_user(username):
             "name": user.name,
             "email": user.email,
             "phone": user.phone,
-            "tier": user.tier,
+            "membership": user.membership,
             "balance": user.balance,
             "gender": user.gender,
             "about": user.about,
@@ -323,43 +298,41 @@ def get_user(username):
             "withdrawal_password": "+ + + + +",
             "refcode": user.refcode,
             "uuid": user.user_id,
-            "created": user.created.strftime('%Y-%m-%d %H:%M:%S') if user.created else None
+            "created": user.created.strftime('%Y-%m-%d %H:%M:%S') if user.created else None,
+            "account_details": []
         }
 
         # Function to convert account details to dictionary
         def account_detail_to_dict(account_detail):
-            if account_detail.account_type == AccountType.PAYPAL:
-                return {
-                    "paypal_email": account_detail.paypal_email,
-                    "paypal_phone": account_detail.paypal_phone,
-                }
-            elif account_detail.account_type == AccountType.CASH_APP:
-                return {
-                    "cash_app_email": account_detail.cash_app_email,
-                    "cash_app_username": account_detail.cash_app_username,
-                }
-            elif account_detail.account_type == AccountType.EXCHANGE_WALLET:
-                return {
-                    "account_name": account_detail.account_name,
-                    "account_phone": account_detail.account_phone,
-                    "exchange": account_detail.exchange,
-                    "exchange_address": account_detail.exchange_address,
-                }
-            return {}
+            return {
+                "account_type": account_detail.account_type.name if account_detail.account_type else None,
+                "exchange": account_detail.exchange,
+                "exchange_address": account_detail.exchange_address,
+                "bank_account": account_detail.bank_account,
+                "short_code": account_detail.short_code,
+                "link": account_detail.link,
+                "account_name": account_detail.account_name,
+                "account_phone": account_detail.account_phone,
+                "cash_app_email": account_detail.cash_app_email,
+                "cash_app_username": account_detail.cash_app_username,
+                "paypal_phone": account_detail.paypal_phone,
+                "paypal_email": account_detail.paypal_email,
+                "deleted": account_detail.deleted,
+                "created": account_detail.created.strftime('%Y-%m-%d %H:%M:%S') if account_detail.created else None,
+                "updated": account_detail.updated.strftime('%Y-%m-%d %H:%M:%S') if account_detail.updated else None
+            }
 
-        # Convert account details to list of dictionaries
-        account_details_list = [account_detail_to_dict(detail) for detail in user.account_details]
+        # Update user details with account details
+        if user.account_details:
+            for detail in user.account_details:
+                user_details["account_details"].append(account_detail_to_dict(detail))
 
-        # Add account details to user details
-        user_details["account_details"] = account_details_list
-
+        # Return the user details as a JSON response
         return jsonify({"success": True, "user": user_details}), 200
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
-
-
-
+""" ---------------------------------------------------------------------------------- """
 
 @user_bp.route("/auth", methods=['POST'])
 @csrf.exempt
@@ -408,6 +381,55 @@ def auth():
         return jsonify({'success': False, 'error': str(e)})
 
 
+@user_bp.route('/api/users', methods=['GET'])
+@role_required('admin')
+def get_users():
+    users = User.query.all()
+    user_list = [{
+        'contact': user.username or user.email or user.phone,
+        'image': user.image,
+        'balance': user.balance,
+        'membership': user.membership,
+        'pending_tasks': get_pending_tasks(user.id)  # Calculate pending tasks
+    } for user in users]
+    return jsonify(user_list)
+
+def get_pending_tasks(user_id):
+    # Get all task IDs
+    total_task_ids = {task.id for task in Task.query.filter_by(deleted=False).all()}
+    # Get completed task IDs for the user
+    completed_task_ids = {order.task_id for order in Order.query.filter_by(user_id=user_id).all()}
+    # Pending tasks are those in total_task_ids but not in completed_task_ids
+    pending_task_ids = total_task_ids - completed_task_ids
+    return len(pending_task_ids)
+
+
+
+@user_bp.route('/api/stats', methods=['GET'])
+def get_stats():
+    try:
+        total_deposits = db.session.query(
+            db.func.sum(Transaction.amount)
+        ).filter(Transaction.transaction_type == 'deposit', Transaction.deleted == False).scalar() or 0.0
+        
+        total_withdrawals = db.session.query(
+            db.func.sum(Transaction.amount)
+        ).filter(Transaction.transaction_type == 'withdrawal', Transaction.deleted == False).scalar() or 0.0
+        
+        total_signups = db.session.query(db.func.count(User.id)).scalar() or 0
+        total_tasks = db.session.query(db.func.count(Task.id)).scalar() or 0
+        
+        stats = {
+            'total_deposits': total_deposits,
+            'total_withdrawals': total_withdrawals,
+            'total_signups': total_signups,
+            'total_tasks': total_tasks
+        }
+        return jsonify(stats), 200
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 @user_bp.route("/signout")
 @login_required
 @db_session_management
@@ -422,7 +444,7 @@ def signout():
 @db_session_management
 def oauth2_authorize(provider):
     if not current_user.is_anonymous:
-        return redirect(url_for('auth.update', usrname=current_user.username))
+        return redirect(url_for('auth.update', username=current_user.username))
 
     provider_data = oauth2providers.get(provider)
     if provider_data is None:
@@ -603,6 +625,7 @@ def mark_notification_as_read(notification_id):
             return jsonify({'success': False, 'error': 'Notification not found'}), 404
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
+
 
 @user_bp.route('/impersonate', methods=['POST'])
 @login_required

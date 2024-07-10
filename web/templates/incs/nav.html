@@ -8,7 +8,7 @@
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <div class="avatar avatar-online">
-                    <img src="./static/img/avatars/0.jpg" alt="" class="w-px-40 h-auto rounded-circle">
+                    <img src="./static/img/avatars/0.jpg" alt="" class="uploadedAvatar w-px-40 h-auto rounded-circle">
                 </div>
             </a>
 
@@ -18,19 +18,25 @@
                     <div class="dropdown-divider"></div>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="pages-profile-user.html">
+                    <a class="dropdown-item" href="{}">
                         <i class="bx bx-user me-2"></i>
                         <span class="align-middle">{{current_user.name or current_user.username or current_user.email}}</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="pages-account-settings-account.html">
+                    <a class="dropdown-item" href="settings">
                         <i class="bx bx-cog me-2"></i>
                         <span class="align-middle">Settings</span>
                     </a>
                 </li>
+                <li>
+                    <a class="dropdown-item" href="{{url_for('main.users')}}">
+                        <i class="bx bx-cog me-2"></i>
+                        <span class="align-middle">Manage Users</span>
+                    </a>
+                </li>
                 {#<li>
-                    <a class="dropdown-item" href="pages-account-settings-billing.html">
+                    <a class="dropdown-item" href="">
                         <span class="d-flex align-items-center align-middle">
                             <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
                             <span class="flex-grow-1 align-middle">Billing</span>

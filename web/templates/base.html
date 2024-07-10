@@ -138,7 +138,7 @@ data-theme="theme-default" data-assets-path="./static/" data-template="vertical-
         });
         
     
-        $(document).on('click', '.impersonate', function (){
+        $(document).on('click', '#impersonate', function (){
             var user_id = $(this).data('user-id');
             var action = $(this).data('action');
             $.ajax({
@@ -151,7 +151,7 @@ data-theme="theme-default" data-assets-path="./static/" data-template="vertical-
                 }),
                 success: function(data) {
                     if (data.success) {
-                        showCrudModal(data.message);
+                        response_modal(data.message);
                         console.log(data);
                         if (action === 'revert') {
                             window.location.reload();  // Reload the page to update the view for the original user
@@ -159,12 +159,12 @@ data-theme="theme-default" data-assets-path="./static/" data-template="vertical-
                             window.location.href = './';  // Redirect to the dashboard or another page after impersonation
                         }
                     } else {
-                        showCrudModal(data.error);
+                        response_modal(data.error);
                         console.error('Error:', data.error);
                     }
                 },
                 error: function(xhr, status, error) {
-                    showCrudModal(error);
+                    response_modal(error);
                     console.error('Error:', error);
                 }
             });
