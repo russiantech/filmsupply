@@ -5,6 +5,7 @@ flask_session/
 migrations/
 migrations
 __pycache__/
+_
 *.py[cod]
 *$py.class
 
