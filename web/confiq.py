@@ -19,7 +19,7 @@ SQLALCHEMY_DATABASE_ENGINE = {
     'rollback_on_exception': True,
 }
 
-SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URI')
+# SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URI')
 
 SQLALCHEMY_DATABASE_URI = (
         f"mysql+mysqlconnector://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}"

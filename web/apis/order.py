@@ -159,6 +159,7 @@ def delete_order(id):
 
 
 @order_bp.route('/order/reset/<int:user_id>', methods=['DELETE'])
+@csrf.exempt
 def reset_order(user_id):
     try:
         # Find all tasks completed by the user
@@ -170,7 +171,7 @@ def reset_order(user_id):
         
         db.session.commit()
         
-        return jsonify({'message': 'User rating reset successfully'}), 200
+        return jsonify({'success':True, 'message': 'User rating reset successfully'}), 200
     except Exception as e:
         db.session.rollback()  # Rollback the session in case of an error
-        return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
+        return jsonify({'success':False, 'error': 'An error occurred', 'error': str(e)}), 500

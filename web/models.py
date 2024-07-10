@@ -14,8 +14,13 @@ user_roles = db.Table(
     keep_existing=True
 )
 
-def generate_user_id():
-    return str(uuid.uuid4())
+def generate_user_id(length=4):
+    if length < 1:
+        raise ValueError("Length must be at least 1")
+    range_start = 10**(length-1)
+    range_end = (10**length) - 1
+    return str(random.randint(range_start, range_end))
+
 
 def generate_refcode():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
@@ -68,8 +73,8 @@ class User(db.Model, UserMixin):
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
-        if not self.user_id or self.user_id == '0000':
-            self.user_id = generate_user_id()
+        if not self.uu_id or self.uu_id == '0000':
+            self.uu_id = generate_user_id(5)
         if not self.refcode or self.refcode == '0000':
             self.refcode = generate_refcode()
 

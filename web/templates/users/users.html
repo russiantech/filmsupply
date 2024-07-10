@@ -155,98 +155,72 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-  fetch('/api/users')
+    fetch('/api/users')
       .then(response => response.json())
       .then(users => {
-          const tableBody = document.getElementById('user-table-body');
-          const defaultIcon = '0.png'; // Replace with the path to your default icon
+        const tableBody = document.getElementById('user-table-body');
+        const defaultIcon = '0.png'; // Replace with the path to your default icon
 
-          users.forEach(user => {
-            const userImage = user.image ? user.image : defaultIcon;
-              const row = document.createElement('tr');
+        users.forEach(user => {
+          const userImage = user.image ? user.image : defaultIcon;
+          const row = document.createElement('tr');
 
-              row.innerHTML = `
-                  <td>
-                    
-                    <img src="./static/img/avatars/${userImage}" alt="${user.contact}" height="32" width="32" class="me-2 rounded">
+          row.innerHTML = `
+            <td>
+              <img src="./static/img/avatars/${userImage}" alt="${user.contact}" height="32" width="32" class="me-2 rounded">
+              <span class="fw-medium"> ${user.contact}</span>
+            </td>
+            <td>$${user.balance}</td>
+            <td>${user.membership}</td>
+            <td>${user.pending_tasks}</td>
+            <td>
+              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Reset rating" title="Reset rating" data-user-id="${user.id}">
+                  <button class='border-none bg-transparent' onclick="resetOrder(${user.id})">
+                    <i class="bx bx-rocket text-primary border border-primary rounded-circle border-dashed mb-0"></i>
+                  </button>
+                </li>
+                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="impersonation" title="impersonation">
+                  <button class='border-none bg-transparent'>
+                    <i class="bx bx-user text-primary border border-warning rounded-circle border-dashed mb-0"></i>
+                  </button>
+                </li>
+                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="notify" title="notify">
+                  <button class='border-none bg-transparent'>
+                    <i class="bx bx-bell text-primary border border-primary rounded-circle border-dashed mb-0"></i>
+                  </button>
+                </li>
+              </ul>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
 
-                    <span class="fw-medium"> ${user.contact}</span>
-                  </td>
-                  <td>$${user.balance}</td>
-                  <td>${user.membership}</td>
-                  <td>${user.pending_tasks}</td>
-                  <td>
-                      <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                          <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" 
-                          aria-label="Reset rating" data-bs-original-title="Reset rating">
-                              <span><i class="bx bx-rocket text-primary border border-primary rounded-circle border-dashed mb-0"></i></span>
-                          </li>
-
-                          <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" 
-    aria-label="Reset tasks" data-bs-original-title="Reset tasks" onclick="resetOrder(${user.id})">
-    <span><i class="bx bx-rocket text-primary border border-primary rounded-circle border-dashed mb-0"></i></span>
-</li>
-
-                          <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" 
-                          aria-label="notify" data-bs-original-title="notify">
-                              <span><i class="bx bx-bell text-primary border border-primary rounded-circle border-dashed mb-0"></i></span>
-                          </li>
-                      </ul>
-                  </td>
-              `;
-              tableBody.appendChild(row);
-          });
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
       })
       .catch(error => console.error('Error fetching users:', error));
   });
-    </script>
 
-<script>
-  const baseUrl = `${window.location.origin}`;
-
-  document.addEventListener('DOMContentLoaded', () => {
-      fetchAndDisplayStats();
-  });
-
-  async function fetchAndDisplayStats() {
-      try {
-          const response = await fetch(`${baseUrl}/api/stats`);
-          if (!response.ok) {
-              throw new Error('Failed to fetch stats');
-          }
-          const data = await response.json();
-          displayStats(data);
-      } catch (error) {
-          console.error('Error fetching stats:', error);
-          response_modal(error.message);
+  function resetOrder(user_id) {
+    fetch(`/order/reset/${user_id}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message) {
+        response_modal(data.message);
+      } else {
+        response_modal(data.error);
       }
-  }
-
-  function displayStats(stats) {
-      document.getElementById('total-deposits').textContent = `$${stats.total_deposits.toLocaleString()}`;
-      document.getElementById('total-withdrawals').textContent = `$${stats.total_withdrawals.toLocaleString()}`;
-      document.getElementById('total-signups').textContent = stats.total_signups.toLocaleString();
-      document.getElementById('total-tasks').textContent = stats.total_tasks.toLocaleString();
+    })
+    .catch(error => {
+      response_modal(error);
+    });
   }
 </script>
-
-<script>
-  function resetOrder(userId) {
-      fetch(`/order/reset/${userId}`, {
-          method: 'DELETE',
-      })
-      .then(response => response.json())
-      .then(data => {
-          if (data.message) {
-            response_modal(data.message);
-          } else {
-            response_modal(data.error);
-          }
-      })
-      .catch(error => {
-        response_modal(error);
-      });
-  }
-  </script>
 
 {% endblock page_js %}

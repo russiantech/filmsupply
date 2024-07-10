@@ -76,8 +76,8 @@ update_user_schema = {
 @csrf.exempt
 def create_user():
     
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+    if  current_user.is_authenticated:
+        return jsonify({"success": False, "message": "Already authenticated", "redirect": url_for('main.index')})
 
     if request.content_type != 'application/json':
         return jsonify({"success": False, "message": "Content-Type must be application/json"})
@@ -338,8 +338,12 @@ def get_user_x(username):
 @csrf.exempt
 def auth():
     try:
-        if not current_user.is_anonymous:
-            return redirect(url_for('main.index'))
+
+        if  current_user.is_authenticated:
+            return jsonify({"success": False, "message": "Already authenticated", "redirect": url_for('main.index')})
+
+        """ if not current_user.is_anonymous:
+            return jsonify({"success": False, "message": "Already authenticated", "redirect": url_for('main.index')}) """
 
         # Check if the request content type is application/json
         if request.content_type != 'application/json':
@@ -347,6 +351,7 @@ def auth():
 
         # Parse JSON data from the request
         data = request.get_json()
+        print(data)
 
         # Validate the data against the schema
         try:
@@ -381,11 +386,14 @@ def auth():
         return jsonify({'success': False, 'error': str(e)})
 
 
+
 @user_bp.route('/api/users', methods=['GET'])
+@csrf.exempt
 @role_required('admin')
 def get_users():
     users = User.query.all()
     user_list = [{
+        'id': user.id,
         'contact': user.username or user.email or user.phone,
         'image': user.image,
         'balance': user.balance,

@@ -24,27 +24,19 @@
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="settings">
+                    <a class="dropdown-item" data-tab="#navs-pills-top-account">
                         <i class="bx bx-cog me-2"></i>
                         <span class="align-middle">Settings</span>
                     </a>
                 </li>
+
+
                 <li>
-                    <a class="dropdown-item" href="{{url_for('main.users')}}">
+                    <a class="dropdown-item" id="navs-pills-top-account" role="tabpanel" >
                         <i class="bx bx-cog me-2"></i>
                         <span class="align-middle">Manage Users</span>
                     </a>
                 </li>
-                {#<li>
-                    <a class="dropdown-item" href="">
-                        <span class="d-flex align-items-center align-middle">
-                            <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                            <span class="flex-grow-1 align-middle">Billing</span>
-                            <span
-                                class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                        </span>
-                    </a>
-                </li>#}
                 <li>
                     <div class="dropdown-divider"></div>
                 </li>
@@ -155,3 +147,14 @@
     </div>
 
 </nav>
+
+<script>
+    document.querySelectorAll('.dropdown-item0').forEach(item => {
+      item.addEventListener('click', function (event) {
+        event.preventDefault();
+        const tabId = this.getAttribute('data-tab');
+        const tabTrigger = new bootstrap.Tab(document.querySelector(tabId + '-tab'));
+        tabTrigger.show();
+      });
+    });
+  </script>
